@@ -13,21 +13,15 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin") 
-public class AdminController {
+public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
     @Autowired
-    public AdminController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
-    /**
-     * Maneja la solicitud GET para mostrar el dashboard del administrador.
-     * Obtiene la lista de todos los usuarios y la pasa a la vista.
-     * @param model El objeto Model para pasar datos a la vista.
-     * @return El nombre de la plantilla Thymeleaf para renderizar.
-     */
     @GetMapping("/dashboard")
     public String mostrarDashboard(Model model) {
         List<UsuarioModel> listaUsuarios = usuarioService.obtenerTodosLosUsuarios();
