@@ -9,7 +9,6 @@ public class LoginController {
 
     @GetMapping({"/", "/login"})
     public String mostrarLogin() {
-        // devuelve el nombre del archivo login.html (sin la extensión)
         return "login";
     }
 }

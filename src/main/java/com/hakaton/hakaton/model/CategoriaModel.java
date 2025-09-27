@@ -1,33 +1,31 @@
 package com.hakaton.hakaton.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.List;
+
 
 @Entity
-@Table(name = "Categorias")
+@Table(name = "categorias")
 @Getter
 @Setter
+@NoArgsConstructor
 public class CategoriaModel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria")
     private Long idCategoria;
-    
-    @Column(name = "nombre_categoria", nullable = false, unique = true, length = 100)
+
+    @NotBlank(message = "El nombre de la categoría es obligatorio")
+    @Size(max = 100, message = "El nombre de la categoría no puede exceder los 100 caracteres")
+    @Column(name = "nombre_categoria", nullable = false, length = 100, unique = true)
     private String nombreCategoria;
-    
-    // Relación con hackatones
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<HackatonModel> hackatones;
-    
-    // Constructor por defecto
-    public CategoriaModel() {
-    }
-    
-    // Constructor con parámetros
+
+
     public CategoriaModel(String nombreCategoria) {
         this.nombreCategoria = nombreCategoria;
     }

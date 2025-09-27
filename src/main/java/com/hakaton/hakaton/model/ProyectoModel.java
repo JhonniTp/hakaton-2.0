@@ -1,53 +1,64 @@
 package com.hakaton.hakaton.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Representa un proyecto entregado por un equipo en un hackatón.
+ */
 @Entity
-@Table(name = "Proyectos")
+@Table(name = "proyectos")
 @Getter
 @Setter
+@NoArgsConstructor
 public class ProyectoModel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_proyecto")
     private Long idProyecto;
-    
-    @OneToOne
-    @JoinColumn(name = "id_equipo", nullable = false, unique = true)
-    private EquipoModel equipo;
-    
-    @Column(name = "nombre_proyecto", nullable = false, length = 255)
+
+    @NotBlank(message = "El nombre del proyecto es obligatorio")
+    @Size(max = 255, message = "El nombre del proyecto no puede exceder los 255 caracteres")
+    @Column(name = "nombre_proyecto", nullable = false)
     private String nombreProyecto;
-    
+
+    @Lob
     @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
-    
-    @Column(name = "url_entregable", length = 255)
+
+    @NotNull(message = "El equipo es obligatorio")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_equipo", nullable = false, unique = true)
+    private EquipoModel equipo;
+
+    @Size(max = 255, message = "La URL del entregable no puede exceder los 255 caracteres")
+    @Column(name = "url_entregable")
     private String urlEntregable;
-    
-    @Column(name = "url_presentacion", length = 255)
+
+    @Size(max = 255, message = "La URL de la presentación no puede exceder los 255 caracteres")
+    @Column(name = "url_presentacion")
     private String urlPresentacion;
-    
+
     @Column(name = "fecha_entrega")
     private LocalDateTime fechaEntrega;
-    
-    // Constructor por defecto
-    public ProyectoModel() {
-        this.fechaEntrega = LocalDateTime.now();
-    }
-    
-    // Constructor con parámetros
-    public ProyectoModel(EquipoModel equipo, String nombreProyecto, String descripcion, 
-                        String urlEntregable, String urlPresentacion) {
-        this.equipo = equipo;
+
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EvaluacionModel> evaluaciones = new ArrayList<>();
+
+
+    public ProyectoModel(String nombreProyecto, EquipoModel equipo) {
         this.nombreProyecto = nombreProyecto;
-        this.descripcion = descripcion;
-        this.urlEntregable = urlEntregable;
-        this.urlPresentacion = urlPresentacion;
+        this.equipo = equipo;
         this.fechaEntrega = LocalDateTime.now();
     }
 }

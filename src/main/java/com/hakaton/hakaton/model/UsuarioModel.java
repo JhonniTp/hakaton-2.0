@@ -1,68 +1,111 @@
 package com.hakaton.hakaton.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Usuarios")
+@Table(name = "usuarios") 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UsuarioModel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Long idUsuario;
-    
+
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    
+
+    @NotBlank(message = "El apellido es obligatorio")
+    @Size(max = 100, message = "El apellido no puede exceder los 100 caracteres")
     @Column(name = "apellido", nullable = false, length = 100)
     private String apellido;
-    
-    @Column(name = "correo_electronico", nullable = false, unique = true, length = 255)
+
+    @NotBlank(message = "El correo electrónico es obligatorio")
+    @Email(message = "El formato del correo electrónico no es válido")
+    @Size(max = 255, message = "El correo no puede exceder los 255 caracteres")
+    @Column(name = "correo_electronico", nullable = false, unique = true)
     private String correoElectronico;
-    
-    @Column(name = "documento_dni", length = 255)
+
+    @Size(max = 255, message = "El hash de la contraseña no puede exceder los 255 caracteres")
+    @Column(name = "contrasena_hash", length = 255)
+    private String contrasenaHash;
+
+    @Size(max = 255, message = "El DNI no puede exceder los 255 caracteres")
+    @Column(name = "documento_dni", length = 255) 
     private String documentoDni;
-    
-    @Column(name = "telefono", length = 255)
+
+    @Size(max = 255, message = "El teléfono no puede exceder los 255 caracteres")
+    @Column(name = "telefono", length = 255) 
     private String telefono;
-    
+
     @Column(name = "google_id", unique = true, length = 255)
     private String googleId;
-    
+
+    @NotNull(message = "El rol es obligatorio")
     @Enumerated(EnumType.STRING)
-    @Column(name = "rol", nullable = false, columnDefinition = "ENUM('administrador', 'participante', 'jurado')")
-    private Rol rol = Rol.participante;
-    
+    @Column(name = "rol", nullable = false, length = 20)
+    private Rol rol = Rol.PARTICIPANTE;
+
     @Column(name = "perfil_experiencia", columnDefinition = "TEXT")
     private String perfilExperiencia;
-    
+
     @Column(name = "url_codigo_qr", length = 255)
     private String urlCodigoQr;
-    
-    @Column(name = "fecha_creacion")
+
+    @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
-    
-    // Enumeración para los roles
+
+
     public enum Rol {
-        administrador, participante, jurado
+        ADMINISTRADOR, PARTICIPANTE, JURADO
     }
-    
-    // Constructor por defecto
-    public UsuarioModel() {
-        this.fechaCreacion = LocalDateTime.now();
-    }
-    
-    // Constructor con parámetros básicos
+
+
     public UsuarioModel(String nombre, String apellido, String correoElectronico, Rol rol) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correoElectronico = correoElectronico;
         this.rol = rol;
+    }
+
+
+    @PrePersist
+    protected void onCreate() {
         this.fechaCreacion = LocalDateTime.now();
     }
+
+
+    @Transient 
+    public String getNombreCompleto() {
+        return nombre + " " + apellido;
+    }
+    
+
+    public boolean esAdministrador() {
+        return Rol.ADMINISTRADOR.equals(this.rol);
+    }
+    
+
+    public boolean esJurado() {
+        return Rol.JURADO.equals(this.rol);
+    }
+    
+
+    public boolean esParticipante() {
+        return Rol.PARTICIPANTE.equals(this.rol);
+    }
 }
+

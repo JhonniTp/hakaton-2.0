@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="es" >
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CERTUS HACKATON - Panel Administrativo</title>
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
@@ -77,9 +73,9 @@
     <!-- Sidebar -->
     <div class="fixed inset-y-0 left-0 z-50 w-64 sidebar-gradient transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0" id="sidebar">
         <!-- Logo Header -->
-        <div class="flex items-center justify-center h-20 px-6 border-b border-gray-700">
+        <div class="flex items-center justify-center h-20 px-6 border-b border-gray-700" style="margin-top: 4%">
             <div class="text-center">
-                <h1 class="text-xl font-bold text-primary-white">CERTUS</h1>
+                <img th:src="@{/img/certuslogo.png}" alt="Logo de la Hackaton" width="150">
                 <h2 class="text-lg font-semibold text-secondary-cyan">HACKATON</h2>
             </div>
         </div>
@@ -436,7 +432,7 @@
                 </div>
             </div>
 
-            <!-- Judges Section -->
+            <!-- jurados por hacer Section -->
             <div id="judges-section" class="hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 lg:p-6 border-b border-gray-200 space-y-4 sm:space-y-0">
@@ -557,170 +553,270 @@
                 </div>
             </div>
 
-<!-- Sección de Gestión de Hackatones -->
-<div id="hackathons-section" class="hidden">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div class="p-4 lg:p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 class="text-lg font-semibold text-gray-dark">Gestión de Hackatones</h3>
-            <button onclick="openHackatonModal()" class="bg-primary-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                <i class="fas fa-plus mr-2"></i> Nuevo Hackatón
-            </button>
-        </div>
-        
-        <div class="p-4 lg:p-6">
-            <!-- Filtros y búsqueda -->
-            <div class="mb-6 flex flex-col md:flex-row gap-4">
-                <div class="relative flex-grow">
-                    <input type="text" id="hackaton-search" placeholder="Buscar hackatones..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
-                </div>
-                <select id="hackaton-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    <option value="all">Todos los estados</option>
-                    <option value="proximo">Próximos</option>
-                    <option value="en_curso">En curso</option>
-                    <option value="finalizado">Finalizados</option>
-                </select>
-            </div>
-            
-            <!-- Tabla de hackatones -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fechas</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participantes</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200" id="hackaton-table-body">
-                        <!-- Los hackatones se cargarán dinámicamente aquí -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Paginación -->
-            <div class="mt-6 flex justify-between items-center">
-                <div class="text-sm text-gray-500">
-                    Mostrando <span id="hackaton-start">0</span> a <span id="hackaton-end">0</span> de <span id="hackaton-total">0</span> resultados
-                </div>
-                <div class="flex space-x-2">
-                    <button id="hackaton-prev" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button id="hackaton-next" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para Crear/Editar Hackaton -->
-    <div id="hackaton-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-dark" id="hackaton-modal-title">Nuevo Hackatón</h3>
-            </div>
-            <form id="hackaton-form" class="p-6 space-y-4">
-                <input type="hidden" id="hackaton-id">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="hackaton-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                        <input type="text" id="hackaton-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="hackaton-category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-                        <select id="hackaton-category" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                            <!-- Las categorías se cargarán dinámicamente -->
-                        </select>
-                    </div>
-                </div>
-                
-                <div>
-                    <label for="hackaton-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                    <textarea id="hackaton-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent"></textarea>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="hackaton-image" class="block text-sm font-medium text-gray-700 mb-1">URL de la Imagen</label>
-                        <input type="url" id="hackaton-image" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="hackaton-judge" class="block text-sm font-medium text-gray-700 mb-1">Jurado Asignado</label>
-                        <select id="hackaton-judge" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                            <option value="">Seleccionar jurado</option>
-                            <!-- Los jurados se cargarán dinámicamente -->
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="hackaton-start-date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
-                        <input type="datetime-local" id="hackaton-start-date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="hackaton-end-date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Fin</label>
-                        <input type="datetime-local" id="hackaton-end-date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="hackaton-max-participants" class="block text-sm font-medium text-gray-700 mb-1">Máximo de Participantes</label>
-                        <input type="number" id="hackaton-max-participants" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="hackaton-team-size" class="block text-sm font-medium text-gray-700 mb-1">Tamaño de Equipos</label>
-                        <input type="number" id="hackaton-team-size" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                    </div>
-                </div>
-                
-                <div>
-                    <label for="hackaton-status" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                    <select id="hackaton-status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                        <option value="proximo">Próximo</option>
-                        <option value="en_curso">En curso</option>
-                        <option value="finalizado">Finalizado</option>
-                    </select>
-                </div>
-            </form>
-            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
-                <button onclick="closeHackatonModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">Cancelar</button>
-                <button onclick="saveHackaton()" class="px-4 py-2 bg-primary-blue text-white rounded-md hover:bg-blue-700">Guardar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmación para Eliminar -->
-    <div id="hackaton-delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-1/3 p-6">
-            <h3 class="text-lg font-semibold text-gray-dark mb-4">Confirmar Eliminación</h3>
-            <p class="text-gray-600 mb-6">¿Estás seguro de que deseas eliminar este hackatón? Esta acción no se puede deshacer.</p>
-            <div class="flex justify-end space-x-3">
-                <button onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">Cancelar</button>
-                <button onclick="confirmDeleteHackaton()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Eliminar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-            <div id="participants-section" class="hidden">
+            <!-- Sección de Gestión de Hackatones -->
+            <div id="hackathons-section" class="hidden"> <!-- en proceso -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de usuarios</h3>
+                    <div class="p-4 lg:p-6 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de Hackatones</h3>
+                        <button onclick="openHackatonModal()" class="bg-primary-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Nuevo Hackatón
+                        </button>
                     </div>
+                    
                     <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+                        <!-- Filtros y búsqueda -->
+                        <div class="mb-6 flex flex-col md:flex-row gap-4">
+                            <div class="relative flex-grow">
+                                <input type="text" id="hackaton-search" placeholder="Buscar hackatones..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                            </div>
+                            <select id="hackaton-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <option value="all">Todos los estados</option>
+                                <option value="proximo">Próximos</option>
+                                <option value="en_curso">En curso</option>
+                                <option value="finalizado">Finalizados</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Tabla de hackatones -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fechas</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participantes</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="hackaton-table-body">
+                                    <!-- Los hackatones se cargarán dinámicamente aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginación -->
+                        <div class="mt-6 flex justify-between items-center">
+                            <div class="text-sm text-gray-500">
+                                Mostrando <span id="hackaton-start">0</span> a <span id="hackaton-end">0</span> de <span id="hackaton-total">0</span> resultados
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="hackaton-prev" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button id="hackaton-next" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para Crear/Editar Hackaton -->
+                <div id="hackaton-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-dark" id="hackaton-modal-title">Nuevo Hackatón</h3>
+                        </div>
+                        <form id="hackaton-form" class="p-6 space-y-4">
+                            <input type="hidden" id="hackaton-id">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="hackaton-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                                    <input type="text" id="hackaton-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="hackaton-category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                                    <select id="hackaton-category" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                        <!-- Las categorías se cargarán dinámicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="hackaton-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                                <textarea id="hackaton-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="hackaton-image" class="block text-sm font-medium text-gray-700 mb-1">URL de la Imagen</label>
+                                    <input type="url" id="hackaton-image" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="hackaton-judge" class="block text-sm font-medium text-gray-700 mb-1">Jurado Asignado</label>
+                                    <select id="hackaton-judge" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                        <option value="">Seleccionar jurado</option>
+                                        <!-- Los jurados se cargarán dinámicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="hackaton-start-date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
+                                    <input type="datetime-local" id="hackaton-start-date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="hackaton-end-date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Fin</label>
+                                    <input type="datetime-local" id="hackaton-end-date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="hackaton-max-participants" class="block text-sm font-medium text-gray-700 mb-1">Máximo de Participantes</label>
+                                    <input type="number" id="hackaton-max-participants" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="hackaton-team-size" class="block text-sm font-medium text-gray-700 mb-1">Tamaño de Equipos</label>
+                                    <input type="number" id="hackaton-team-size" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="hackaton-status" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                                <select id="hackaton-status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                    <option value="proximo">Próximo</option>
+                                    <option value="en_curso">En curso</option>
+                                    <option value="finalizado">Finalizado</option>
+                                </select>
+                            </div>
+                        </form>
+                        <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                            <button onclick="closeHackatonModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">Cancelar</button>
+                            <button onclick="saveHackaton()" class="px-4 py-2 bg-primary-blue text-white rounded-md hover:bg-blue-700">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Confirmación para Eliminar -->
+                <div id="hackaton-delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-1/3 p-6">
+                        <h3 class="text-lg font-semibold text-gray-dark mb-4">Confirmar Eliminación</h3>
+                        <p class="text-gray-600 mb-6">¿Estás seguro de que deseas eliminar este hackatón? Esta acción no se puede deshacer.</p>
+                        <div class="flex justify-end space-x-3">
+                            <button onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">Cancelar</button>
+                            <button onclick="confirmDeleteHackaton()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Eliminar</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Sección de Gestión de Usuarios -->
+            <div id="participants-section" class="hidden"> <!-- completado por el momento solo de listar usuarios con los roles copilados  ✅-->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-4 lg:p-6 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de Usuarios</h3>
+                        <button onclick="openUserModal()" class="bg-primary-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Nuevo Usuario
+                        </button>
+                    </div>
+                    
+                    <div class="p-4 lg:p-6">
+                        <!-- Filtros y búsqueda -->
+                        <div class="mb-6 flex flex-col md:flex-row gap-4">
+                            <div class="relative flex-grow">
+                                <input type="text" id="user-search" placeholder="Buscar usuarios..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                            </div>
+                            <select id="user-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <option value="all">Todos los roles</option>
+                                <option value="administrador">Administradores</option>
+                                <option value="participante">Participantes</option>
+                                <option value="jurado">Jurados</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Tabla de usuarios -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DNI</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Google ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perfil</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">QR</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="user-table-body" th:if="${!usuarios.isEmpty()}">
+                                    <!-- Iteración sobre la lista de usuarios con Thymeleaf -->
+                                    <tr th:each="usuario : ${usuarios}">
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${usuario.idUsuario}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${usuario.nombre}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${usuario.apellido}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${usuario.correoElectronico}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${usuario.telefono ?: 'N/A'}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${usuario.documentoDni ?: 'N/A'}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap">
+                                            <span th:text="${usuario.rol}"
+                                                th:classappend="${usuario.rol.name() == 'administrador' ? 'bg-red-100 text-red-800' : (usuario.rol.name() == 'jurado' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800')}"
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"></span>
+                                        </td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${usuario.googleId ?: 'N/A'}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 truncate" th:title="${usuario.perfilExperiencia}" th:text="${usuario.perfilExperiencia != null ? #strings.abbreviate(usuario.perfilExperiencia, 25) : 'N/A'}"></td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-blue-500">
+                                            <a th:if="${usuario.urlCodigoQr}" th:href="${usuario.urlCodigoQr}" target="_blank" class="hover:underline">Ver</a>
+                                            <span th:unless="${usuario.urlCodigoQr}">N/A</span>
+                                        </td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span th:text="${#temporals.format(usuario.fechaCreacion, 'dd/MM/yy HH:mm')}"></span>
+                                        </td>
+                                        <!-- Columna Acciones con Iconos -->
+                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                            <button th:onclick="editUser([[${usuario}]])" class="text-indigo-600 hover:text-indigo-800 transition duration-150 ease-in-out" title="Editar">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button th:onclick="openDeleteUserModal([[${usuario.idUsuario}]])" class="text-red-600 hover:text-red-800 transition duration-150 ease-in-out ml-4" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                            <button th:onclick="openRoleModal([[${usuario.idUsuario}]], [[${usuario.rol}]])" class="text-gray-600 hover:text-gray-800 transition duration-150 ease-in-out ml-4" title="Cambiar Rol">
+                                                <i class="fas fa-user-shield"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <!-- Mensaje si no hay usuarios -->
+                                <tbody th:if="${usuarios.isEmpty()}">
+                                    <tr>
+                                        <td colspan="12" class="text-center py-10 text-gray-500">
+                                            No se encontraron usuarios para mostrar.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginación (la lógica debe ser implementada en backend/JS) -->
+                        <div class="mt-6 flex justify-between items-center">
+                            <div class="text-sm text-gray-500">
+                                Mostrando <span id="user-start">1</span> a <span id="user-end" th:text="${usuarios.size()}">0</span> de <span id="user-total" th:text="${usuarios.size()}">0</span> resultados
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="user-prev" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50" disabled>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button id="user-next" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50" disabled>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección para equiposs -->
             <div id="teams-section" class="hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     <div class="p-4 lg:p-6 border-b border-gray-200">
@@ -732,6 +828,7 @@
                 </div>
             </div>
 
+            <!-- Sección para evaluaciones -->
             <div id="evaluations-section" class="hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     <div class="p-4 lg:p-6 border-b border-gray-200">
@@ -743,6 +840,7 @@
                 </div>
             </div>
 
+            <!-- Sección para reportes -->
             <div id="reports-section" class="hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     <div class="p-4 lg:p-6 border-b border-gray-200">
@@ -754,6 +852,7 @@
                 </div>
             </div>
 
+            <!-- Sección para configuración -->
             <div id="settings-section" class="hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     <div class="p-4 lg:p-6 border-b border-gray-200">
@@ -767,443 +866,94 @@
         </main>
     </div>
 
-    <!-- Mobile Sidebar Overlay -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <!-- Modals -->
-    <!-- Create Hackathon Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="createHackathonModal">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-dark">Crear Nuevo Hackaton</h3>
-                <button onclick="closeModal('createHackathonModal')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <form class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Nombre del Hackaton</label>
-                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="Ej: HackTech 2024">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Categoría</label>
-                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                                <option>Tecnología</option>
-                                <option>Innovación</option>
-                                <option>Sostenibilidad</option>
-                                <option>Salud</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Fecha de Inicio</label>
-                            <input type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Fecha de Fin</label>
-                            <input type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-dark mb-2">Descripción</label>
-                        <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="Describe el hackaton, objetivos y premios..."></textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Máximo Participantes</label>
-                            <input type="number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="200">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Tamaño de Equipo</label>
-                            <input type="number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="4">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-dark mb-2">Imagen de Portada</label>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                            <p class="text-gray-500">Arrastra una imagen o haz clic para seleccionar</p>
-                            <input type="file" class="hidden" accept="image/*">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="flex justify-end space-x-4 p-6 border-t border-gray-200">
-                <button onclick="closeModal('createHackathonModal')" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
-                    Cancelar
-                </button>
-                <button onclick="createHackathon()" class="px-6 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Crear Hackaton
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Details Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="viewDetailsModal">
-        <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-dark">Detalles del Hackaton</h3>
-                <button onclick="closeModal('viewDetailsModal')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <!-- Hackathon Header -->
-                <div class="relative h-48 hackathon-image rounded-lg mb-6 overflow-hidden">
-                    <div class="absolute inset-0 gradient-overlay"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <i class="fas fa-code text-white text-6xl opacity-50"></i>
-                    </div>
-                    <div class="absolute bottom-6 left-6 text-white">
-                        <h4 class="text-2xl font-bold">HackTech 2024</h4>
-                        <p class="text-lg opacity-90">15-17 Marzo 2024</p>
-                    </div>
-                    <div class="absolute top-6 right-6">
-                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Activo</span>
-                    </div>
-                </div>
-
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-secondary-cyan">89</p>
-                        <p class="text-sm text-gray-medium">Participantes</p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-accent-pink">23</p>
-                        <p class="text-sm text-gray-medium">Equipos</p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-primary-blue">18</p>
-                        <p class="text-sm text-gray-medium">Proyectos</p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-gray-dark">5</p>
-                        <p class="text-sm text-gray-medium">Jurados</p>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="mb-6">
-                    <h5 class="text-lg font-semibold text-gray-dark mb-3">Descripción</h5>
-                    <p class="text-gray-medium leading-relaxed">
-                        HackTech 2024 es un evento de innovación tecnológica donde los participantes desarrollarán soluciones creativas 
-                        a problemas reales utilizando las últimas tecnologías. Durante 48 horas, los equipos trabajarán intensivamente 
-                        para crear prototipos funcionales que serán evaluados por un panel de expertos de la industria.
-                    </p>
-                </div>
-
-                <!-- Timeline -->
-                <div class="mb-6">
-                    <h5 class="text-lg font-semibold text-gray-dark mb-3">Cronograma</h5>
-                    <div class="space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-3 h-3 bg-secondary-cyan rounded-full"></div>
-                            <div>
-                                <p class="font-medium text-gray-dark">Viernes 15 - 18:00</p>
-                                <p class="text-sm text-gray-medium">Inauguración y formación de equipos</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-3 h-3 bg-accent-pink rounded-full"></div>
-                            <div>
-                                <p class="font-medium text-gray-dark">Sábado 16 - 09:00</p>
-                                <p class="text-sm text-gray-medium">Desarrollo de proyectos</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-3 h-3 bg-primary-blue rounded-full"></div>
-                            <div>
-                                <p class="font-medium text-gray-dark">Domingo 17 - 15:00</p>
-                                <p class="text-sm text-gray-medium">Presentaciones y premiación</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Judges -->
-                <div>
-                    <h5 class="text-lg font-semibold text-gray-dark mb-3">Jurados Asignados</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="flex items-center space-x-3 bg-gray-50 rounded-lg p-3">
-                            <div class="w-10 h-10 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-semibold">
-                                DR
-                            </div>
-                            <div>
-                                <p class="font-medium text-gray-dark">Dr. Roberto Martínez</p>
-                                <p class="text-xs text-gray-medium">Especialista en IA</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 bg-gray-50 rounded-lg p-3">
-                            <div class="w-10 h-10 bg-accent-pink rounded-full flex items-center justify-center text-white font-semibold">
-                                AG
-                            </div>
-                            <div>
-                                <p class="font-medium text-gray-dark">Ana García</p>
-                                <p class="text-xs text-gray-medium">Desarrollo Web</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 bg-gray-50 rounded-lg p-3">
-                            <div class="w-10 h-10 bg-primary-blue rounded-full flex items-center justify-center text-white font-semibold">
-                                CL
-                            </div>
-                            <div>
-                                <p class="font-medium text-gray-dark">Carlos López</p>
-                                <p class="text-xs text-gray-medium">UX/UI Design</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-end space-x-4 p-6 border-t border-gray-200">
-                <button onclick="closeModal('viewDetailsModal')" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
-                    Cerrar
-                </button>
-                <button onclick="openEditModal()" class="px-6 py-3 bg-accent-pink hover:bg-pink-600 text-white rounded-lg font-medium transition-colors">
-                    <i class="fas fa-edit mr-2"></i>Editar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Hackathon Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="editHackathonModal">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-dark">Editar Hackaton</h3>
-                <button onclick="closeModal('editHackathonModal')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <form class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Nombre del Hackaton</label>
-                            <input type="text" value="HackTech 2024" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Estado</label>
-                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                                <option selected>Activo</option>
-                                <option>Próximo</option>
-                                <option>Finalizado</option>
-                                <option>Cancelado</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Fecha de Inicio</label>
-                            <input type="date" value="2024-03-15" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Fecha de Fin</label>
-                            <input type="date" value="2024-03-17" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-dark mb-2">Descripción</label>
-                        <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">HackTech 2024 es un evento de innovación tecnológica donde los participantes desarrollarán soluciones creativas a problemas reales...</textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Máximo Participantes</label>
-                            <input type="number" value="200" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Tamaño de Equipo</label>
-                            <input type="number" value="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="flex justify-between p-6 border-t border-gray-200">
-                <button onclick="confirmDelete()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
-                    <i class="fas fa-trash mr-2"></i>Eliminar
-                </button>
-                <div class="flex space-x-4">
-                    <button onclick="closeModal('editHackathonModal')" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
-                        Cancelar
-                    </button>
-                    <button onclick="updateHackathon()" class="px-6 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
-                        <i class="fas fa-save mr-2"></i>Guardar Cambios
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="deleteConfirmModal">
-        <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
-            <div class="p-6">
-                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
-                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-dark text-center mb-2">¿Eliminar Hackaton?</h3>
-                <p class="text-gray-medium text-center mb-6">
-                    Esta acción no se puede deshacer. Se eliminarán todos los datos asociados incluyendo participantes, equipos y evaluaciones.
-                </p>
-                <div class="flex space-x-4">
-                    <button onclick="closeModal('deleteConfirmModal')" class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
-                        Cancelar
-                    </button>
-                    <button onclick="deleteHackathon()" class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
-                        Eliminar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Judge Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="addJudgeModal">
-        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-dark">Agregar Nuevo Jurado</h3>
-                <button onclick="closeModal('addJudgeModal')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <form class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Nombre</label>
-                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-pink focus:border-transparent" placeholder="Nombre completo">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Email</label>
-                            <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-pink focus:border-transparent" placeholder="email@ejemplo.com">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-dark mb-2">Especialidad</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-pink focus:border-transparent" placeholder="Ej: Inteligencia Artificial">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-dark mb-2">Experiencia</label>
-                        <textarea rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-pink focus:border-transparent" placeholder="Describe la experiencia profesional del jurado..."></textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Empresa</label>
-                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-pink focus:border-transparent" placeholder="Empresa actual">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-dark mb-2">Cargo</label>
-                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-pink focus:border-transparent" placeholder="Cargo actual">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="flex justify-end space-x-4 p-6 border-t border-gray-200">
-                <button onclick="closeModal('addJudgeModal')" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
-                    Cancelar
-                </button>
-                <button onclick="addJudge()" class="px-6 py-3 bg-accent-pink hover:bg-pink-600 text-white rounded-lg font-medium transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Agregar Jurado
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    // Variables globales para la gestión de hackatones
-    let hackatons = [];
-    let currentHackatonPage = 1;
-    const hackatonsPerPage = 10;
-    let currentHackatonId = null;
+<script>
+    // Variables globales para la gestión de usuarios
+    let users = [];
+    let currentUserPage = 1;
+    const usersPerPage = 10;
+    let currentUserId = null;
 
     // Funciones para abrir/cerrar modales
-    function openHackatonModal(hackatonId = null) {
-        currentHackatonId = hackatonId;
-        const modal = document.getElementById('hackaton-modal');
-        const title = document.getElementById('hackaton-modal-title');
+    function openUserModal(userId = null) {
+        currentUserId = userId;
+        const modal = document.getElementById('user-modal');
+        const title = document.getElementById('user-modal-title');
         
-        if (hackatonId) {
-            title.textContent = 'Editar Hackatón';
-            loadHackatonData(hackatonId);
+        if (userId) {
+            title.textContent = 'Editar Usuario';
+            loadUserData(userId);
         } else {
-            title.textContent = 'Nuevo Hackatón';
-            document.getElementById('hackaton-form').reset();
-            document.getElementById('hackaton-id').value = '';
+            title.textContent = 'Nuevo Usuario';
+            document.getElementById('user-form').reset();
+            document.getElementById('user-id').value = '';
         }
         
         modal.classList.remove('hidden');
     }
 
-    function closeHackatonModal() {
-        document.getElementById('hackaton-modal').classList.add('hidden');
+    function closeUserModal() {
+        document.getElementById('user-modal').classList.add('hidden');
     }
 
-    function openDeleteModal(hackatonId) {
-        currentHackatonId = hackatonId;
-        document.getElementById('hackaton-delete-modal').classList.remove('hidden');
+    function openDeleteUserModal(userId) {
+        currentUserId = userId;
+        document.getElementById('user-delete-modal').classList.remove('hidden');
     }
 
-    function closeDeleteModal() {
-        document.getElementById('hackaton-delete-modal').classList.add('hidden');
+    function closeDeleteUserModal() {
+        document.getElementById('user-delete-modal').classList.add('hidden');
     }
 
-    // Cargar datos de un hackatón específico
-    function loadHackatonData(hackatonId) {
-        // Aquí implementarías la llamada a la API para obtener los datos del hackatón
-        fetch(`/admin/hackatones/detalles/${hackatonId}`)
+    function openRoleModal(userId) {
+        currentUserId = userId;
+        document.getElementById('user-role-modal').classList.remove('hidden');
+    }
+
+    function closeRoleModal() {
+        document.getElementById('user-role-modal').classList.add('hidden');
+    }
+
+    // Cargar datos de un usuario específico
+    function loadUserData(userId) {
+        // Aquí implementarías la llamada a la API para obtener los datos del usuario
+        fetch(`/admin/usuarios/detalles/${userId}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('hackaton-id').value = data.idHackaton;
-                document.getElementById('hackaton-name').value = data.nombre;
-                document.getElementById('hackaton-description').value = data.descripcion;
-                document.getElementById('hackaton-image').value = data.urlImg;
-                document.getElementById('hackaton-category').value = data.categoria.idCategoria;
-                document.getElementById('hackaton-judge').value = data.juradoAsignado ? data.juradoAsignado.idUsuario : '';
-                document.getElementById('hackaton-start-date').value = formatDateTimeForInput(data.fechaInicio);
-                document.getElementById('hackaton-end-date').value = formatDateTimeForInput(data.fechaFin);
-                document.getElementById('hackaton-max-participants').value = data.maximoParticipantes;
-                document.getElementById('hackaton-team-size').value = data.grupoCantidadParticipantes;
-                document.getElementById('hackaton-status').value = data.estado.toLowerCase();
+                document.getElementById('user-id').value = data.idUsuario;
+                document.getElementById('user-name').value = data.nombre;
+                document.getElementById('user-lastname').value = data.apellido;
+                document.getElementById('user-email').value = data.correoElectronico;
+                document.getElementById('user-phone').value = data.telefono || '';
+                document.getElementById('user-dni').value = data.documentoDni || '';
+                document.getElementById('user-role').value = data.rol.toLowerCase();
+                document.getElementById('user-experience').value = data.perfilExperiencia || '';
+                document.getElementById('user-google-id').value = data.googleId || '';
+                document.getElementById('user-qr').value = data.urlCodigoQr || '';
             })
             .catch(error => {
-                console.error('Error al cargar los datos del hackatón:', error);
-                alert('Error al cargar los datos del hackatón');
+                console.error('Error al cargar los datos del usuario:', error);
+                alert('Error al cargar los datos del usuario');
             });
     }
 
-    // Guardar hackatón (crear o actualizar)
-    function saveHackaton() {
+    // Guardar usuario (crear o actualizar)
+    function saveUser() {
         const formData = {
-            nombre: document.getElementById('hackaton-name').value,
-            descripcion: document.getElementById('hackaton-description').value,
-            urlImg: document.getElementById('hackaton-image').value,
-            categoria: { idCategoria: parseInt(document.getElementById('hackaton-category').value) },
-            juradoAsignado: document.getElementById('hackaton-judge').value ? 
-                { idUsuario: parseInt(document.getElementById('hackaton-judge').value) } : null,
-            fechaInicio: document.getElementById('hackaton-start-date').value,
-            fechaFin: document.getElementById('hackaton-end-date').value,
-            maximoParticipantes: parseInt(document.getElementById('hackaton-max-participants').value),
-            grupoCantidadParticipantes: parseInt(document.getElementById('hackaton-team-size').value),
-            estado: document.getElementById('hackaton-status').value
+            nombre: document.getElementById('user-name').value,
+            apellido: document.getElementById('user-lastname').value,
+            correoElectronico: document.getElementById('user-email').value,
+            telefono: document.getElementById('user-phone').value,
+            documentoDni: document.getElementById('user-dni').value,
+            rol: document.getElementById('user-role').value,
+            perfilExperiencia: document.getElementById('user-experience').value,
+            googleId: document.getElementById('user-google-id').value,
+            urlCodigoQr: document.getElementById('user-qr').value
         };
 
-        const hackatonId = document.getElementById('hackaton-id').value;
-        const url = hackatonId ? `/admin/hackatones/actualizar/${hackatonId}` : '/admin/hackatones/crear';
-        const method = hackatonId ? 'PUT' : 'POST';
+        const userId = document.getElementById('user-id').value;
+        const url = userId ? `/admin/usuarios/actualizar/${userId}` : '/admin/usuarios/crear';
+        const method = userId ? 'PUT' : 'POST';
 
         fetch(url, {
             method: method,
@@ -1214,118 +964,150 @@
         })
         .then(response => {
             if (response.ok) {
-                closeHackatonModal();
-                loadHackatons(); // Recargar la lista de hackatones
-                showNotification('Hackatón guardado exitosamente', 'success');
+                closeUserModal();
+                loadUsers(); // Recargar la lista de usuarios
+                showNotification('Usuario guardado exitosamente', 'success');
             } else {
-                throw new Error('Error al guardar el hackatón');
+                throw new Error('Error al guardar el usuario');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showNotification('Error al guardar el hackatón', 'error');
+            showNotification('Error al guardar el usuario', 'error');
         });
     }
 
-    // Eliminar hackatón
-    function confirmDeleteHackaton() {
-        fetch(`/admin/hackatones/eliminar/${currentHackatonId}`, {
+    // Eliminar usuario
+    function confirmDeleteUser() {
+        fetch(`/admin/usuarios/eliminar/${currentUserId}`, {
             method: 'DELETE'
         })
         .then(response => {
             if (response.ok) {
-                closeDeleteModal();
-                loadHackatons(); // Recargar la lista de hackatones
-                showNotification('Hackatón eliminado exitosamente', 'success');
+                closeDeleteUserModal();
+                loadUsers(); // Recargar la lista de usuarios
+                showNotification('Usuario eliminado exitosamente', 'success');
             } else {
-                throw new Error('Error al eliminar el hackatón');
+                throw new Error('Error al eliminar el usuario');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showNotification('Error al eliminar el hackatón', 'error');
+            showNotification('Error al eliminar el usuario', 'error');
         });
     }
 
-    // Cargar la lista de hackatones
-    function loadHackatons() {
-        fetch('/admin/hackatones/dashboard-data')
+    // Cambiar rol de usuario
+    function confirmChangeRole() {
+        const newRole = document.getElementById('new-user-role').value;
+        
+        fetch(`/admin/usuarios/cambiar-rol/${currentUserId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ rol: newRole })
+        })
+        .then(response => {
+            if (response.ok) {
+                closeRoleModal();
+                loadUsers(); // Recargar la lista de usuarios
+                showNotification('Rol de usuario actualizado exitosamente', 'success');
+            } else {
+                throw new Error('Error al cambiar el rol del usuario');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error al cambiar el rol del usuario', 'error');
+        });
+    }
+
+    // Cargar la lista de usuarios
+    function loadUsers() {
+        fetch('/admin/usuarios/dashboard')
             .then(response => response.json())
             .then(data => {
-                hackatons = data.hackatones;
-                renderHackatonTable();
+                users = data.usuarios || data;
+                renderUserTable();
             })
             .catch(error => {
-                console.error('Error al cargar los hackatones:', error);
+                console.error('Error al cargar los usuarios:', error);
             });
     }
 
-    // Renderizar la tabla de hackatones
-    function renderHackatonTable() {
-        const tableBody = document.getElementById('hackaton-table-body');
-        const searchTerm = document.getElementById('hackaton-search').value.toLowerCase();
-        const filterStatus = document.getElementById('hackaton-filter').value;
+    // Renderizar la tabla de usuarios
+    function renderUserTable() {
+        const tableBody = document.getElementById('user-table-body');
+        const searchTerm = document.getElementById('user-search').value.toLowerCase();
+        const filterRole = document.getElementById('user-filter').value;
         
-        // Filtrar hackatones
-        let filteredHackatons = hackatons.filter(hackaton => {
-            const matchesSearch = hackaton.nombre.toLowerCase().includes(searchTerm) || 
-                                hackaton.descripcion.toLowerCase().includes(searchTerm);
-            const matchesFilter = filterStatus === 'all' || hackaton.estado === filterStatus;
+        // Filtrar usuarios
+        let filteredUsers = users.filter(user => {
+            const matchesSearch = user.nombre.toLowerCase().includes(searchTerm) || 
+                                user.apellido.toLowerCase().includes(searchTerm) ||
+                                user.correoElectronico.toLowerCase().includes(searchTerm);
+            const matchesFilter = filterRole === 'all' || user.rol === filterRole;
             return matchesSearch && matchesFilter;
         });
         
         // Paginación
-        const totalHackatons = filteredHackatons.length;
-        const totalPages = Math.ceil(totalHackatons / hackatonsPerPage);
-        const startIndex = (currentHackatonPage - 1) * hackatonsPerPage;
-        const endIndex = Math.min(startIndex + hackatonsPerPage, totalHackatons);
-        const paginatedHackatons = filteredHackatons.slice(startIndex, endIndex);
+        const totalUsers = filteredUsers.length;
+        const totalPages = Math.ceil(totalUsers / usersPerPage);
+        const startIndex = (currentUserPage - 1) * usersPerPage;
+        const endIndex = Math.min(startIndex + usersPerPage, totalUsers);
+        const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
         
         // Actualizar información de paginación
-        document.getElementById('hackaton-start').textContent = startIndex + 1;
-        document.getElementById('hackaton-end').textContent = endIndex;
-        document.getElementById('hackaton-total').textContent = totalHackatons;
+        document.getElementById('user-start').textContent = startIndex + 1;
+        document.getElementById('user-end').textContent = endIndex;
+        document.getElementById('user-total').textContent = totalUsers;
         
         // Habilitar/deshabilitar botones de paginación
-        document.getElementById('hackaton-prev').disabled = currentHackatonPage === 1;
-        document.getElementById('hackaton-next').disabled = currentHackatonPage === totalPages;
+        document.getElementById('user-prev').disabled = currentUserPage === 1;
+        document.getElementById('user-next').disabled = currentUserPage === totalPages;
         
         // Renderizar filas de la tabla
         tableBody.innerHTML = '';
-        paginatedHackatons.forEach(hackaton => {
+        paginatedUsers.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="px-4 py-3 whitespace-nowrap">
                     <div class="flex items-center">
-                        <div class="h-10 w-10 flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full object-cover" src="${hackaton.urlImg}" alt="${hackaton.nombre}">
+                        <div class="h-10 w-10 flex-shrink-0 bg-primary-blue rounded-full flex items-center justify-center">
+                            <span class="text-white font-medium">${user.nombre.charAt(0)}${user.apellido.charAt(0)}</span>
                         </div>
                         <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">${hackaton.nombre}</div>
-                            <div class="text-sm text-gray-500 truncate max-w-xs">${hackaton.descripcion}</div>
+                            <div class="text-sm font-medium text-gray-900">${user.nombre} ${user.apellido}</div>
+                            <div class="text-sm text-gray-500">${user.correoElectronico}</div>
                         </div>
                     </div>
                 </td>
-                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${hackaton.categoria.nombreCategoria}</td>
                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                    ${formatDate(hackaton.fechaInicio)}<br>${formatDate(hackaton.fechaFin)}
+                    <div>${user.telefono || 'N/A'}</div>
+                    <div>${user.documentoDni || 'N/A'}</div>
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap">
                     <span class="px-2 py-1 text-xs font-medium rounded-full 
-                        ${hackaton.estado === 'en_curso' ? 'bg-green-100 text-green-800' : 
-                          hackaton.estado === 'proximo' ? 'bg-yellow-100 text-yellow-800' : 
-                          'bg-gray-100 text-gray-800'}">
-                        ${getStatusText(hackaton.estado)}
+                        ${user.rol === 'administrador' ? 'bg-purple-100 text-purple-800' : 
+                          user.rol === 'jurado' ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-green-100 text-green-800'}">
+                        ${user.rol}
                     </span>
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                    ${hackaton.inscritos || 0}/${hackaton.maximoParticipantes}
+                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                        Activo
+                    </span>
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                    <button onclick="openHackatonModal(${hackaton.idHackaton})" class="text-primary-blue hover:text-blue-700 mr-2">
+                    <button onclick="openUserModal(${user.idUsuario})" class="text-primary-blue hover:text-blue-700 mr-2">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button onclick="openDeleteModal(${hackaton.idHackaton})" class="text-red-600 hover:text-red-800">
+                    <button onclick="openRoleModal(${user.idUsuario})" class="text-yellow-600 hover:text-yellow-800 mr-2">
+                        <i class="fas fa-user-tag"></i>
+                    </button>
+                    <button onclick="openDeleteUserModal(${user.idUsuario})" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -1335,25 +1117,6 @@
     }
 
     // Funciones auxiliares
-    function formatDateTimeForInput(dateTimeString) {
-        const date = new Date(dateTimeString);
-        return date.toISOString().slice(0, 16);
-    }
-
-    function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('es-ES', options);
-    }
-
-    function getStatusText(status) {
-        const statusMap = {
-            'proximo': 'Próximo',
-            'en_curso': 'En curso',
-            'finalizado': 'Finalizado'
-        };
-        return statusMap[status] || status;
-    }
-
     function showNotification(message, type) {
         // Implementar notificación (puedes usar Toastify, SweetAlert, o una personalizada)
         alert(`${type.toUpperCase()}: ${message}`);
@@ -1361,30 +1124,30 @@
 
     // Event listeners
     document.addEventListener('DOMContentLoaded', function() {
-        // Cargar hackatones al iniciar
-        loadHackatons();
+        // Cargar usuarios al iniciar
+        loadUsers();
         
         // Event listeners para búsqueda y filtros
-        document.getElementById('hackaton-search').addEventListener('input', renderHackatonTable);
-        document.getElementById('hackaton-filter').addEventListener('change', renderHackatonTable);
+        document.getElementById('user-search').addEventListener('input', renderUserTable);
+        document.getElementById('user-filter').addEventListener('change', renderUserTable);
         
         // Event listeners para paginación
-        document.getElementById('hackaton-prev').addEventListener('click', () => {
-            if (currentHackatonPage > 1) {
-                currentHackatonPage--;
-                renderHackatonTable();
+        document.getElementById('user-prev').addEventListener('click', () => {
+            if (currentUserPage > 1) {
+                currentUserPage--;
+                renderUserTable();
             }
         });
         
-        document.getElementById('hackaton-next').addEventListener('click', () => {
-            const totalPages = Math.ceil(hackatons.length / hackatonsPerPage);
-            if (currentHackatonPage < totalPages) {
-                currentHackatonPage++;
-                renderHackatonTable();
+        document.getElementById('user-next').addEventListener('click', () => {
+            const totalPages = Math.ceil(users.length / usersPerPage);
+            if (currentUserPage < totalPages) {
+                currentUserPage++;
+                renderUserTable();
             }
         });
     });
-    </script>
+</script>
 
     <script>
         // Sidebar toggle functionality

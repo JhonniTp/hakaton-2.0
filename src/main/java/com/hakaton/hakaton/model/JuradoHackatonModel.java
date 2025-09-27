@@ -10,37 +10,39 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "inscripciones")
+@Table(name = "jurados_hackatones")
 @Getter
 @Setter
 @NoArgsConstructor
-public class InscripcionModel {
+public class JuradoHackatonModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_inscripcion")
-    private Long idInscripcion;
+    @Column(name = "id_jurado_hackaton")
+    private Long idJuradoHackaton;
 
-    @NotNull(message = "El usuario es obligatorio")
+    @NotNull(message = "El jurado (usuario) es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private UsuarioModel usuario;
+    @JoinColumn(name = "id_jurado", nullable = false)
+    private UsuarioModel jurado;
 
     @NotNull(message = "El hackatón es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_hackaton", nullable = false)
     private HackatonModel hackaton;
 
-    @Column(name = "fecha_inscripcion", nullable = false, updatable = false)
-    private LocalDateTime fechaInscripcion;
+    @Column(name = "fecha_asignacion", nullable = false, updatable = false)
+    private LocalDateTime fechaAsignacion;
+
 
     @PrePersist
     protected void onCreate() {
-        this.fechaInscripcion = LocalDateTime.now();
+        this.fechaAsignacion = LocalDateTime.now();
     }
 
-    public InscripcionModel(UsuarioModel usuario, HackatonModel hackaton) {
-        this.usuario = usuario;
+
+    public JuradoHackatonModel(UsuarioModel jurado, HackatonModel hackaton) {
+        this.jurado = jurado;
         this.hackaton = hackaton;
     }
 }

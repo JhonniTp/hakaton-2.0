@@ -1,39 +1,39 @@
 package com.hakaton.hakaton.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
-@Table(name = "Participantes_Equipos", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id_usuario", "id_equipo"})
-})
+@Table(name = "participantes_equipos")
 @Getter
 @Setter
+@NoArgsConstructor
 public class ParticipanteEquipoModel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_participante_equipo")
     private Long idParticipanteEquipo;
-    
-    @ManyToOne
+
+    @NotNull(message = "El usuario es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private UsuarioModel usuario;
-    
-    @ManyToOne
+
+    @NotNull(message = "El equipo es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_equipo", nullable = false)
     private EquipoModel equipo;
-    
-    @Column(name = "es_lider")
-    private Boolean esLider = false;
-    
-    // Constructor por defecto
-    public ParticipanteEquipoModel() {
-    }
-    
-    // Constructor con parámetros
-    public ParticipanteEquipoModel(UsuarioModel usuario, EquipoModel equipo, Boolean esLider) {
+
+    @NotNull(message = "Debe especificarse si el participante es líder")
+    @Column(name = "es_lider", nullable = false)
+    private boolean esLider = false;
+
+    public ParticipanteEquipoModel(UsuarioModel usuario, EquipoModel equipo, boolean esLider) {
         this.usuario = usuario;
         this.equipo = equipo;
         this.esLider = esLider;

@@ -1,15 +1,25 @@
 package com.hakaton.hakaton.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
-import java.util.List;
 
+/**
+ * Representa un evento de Hackatón en el sistema.
+ * Contiene toda la información relevante del evento, como fechas, descripción y estado.
+ */
 @Entity
-@Table(name = "Hackatones")
+@Table(name = "hackatones")
 @Getter
 @Setter
+@NoArgsConstructor
 public class HackatonModel {
 
     @Id
@@ -17,74 +27,62 @@ public class HackatonModel {
     @Column(name = "id_hackaton")
     private Long idHackaton;
 
-    @Column(name = "url_img", nullable = false, length = 255)
-    private String urlImg;
-
-    @Column(name = "nombre", nullable = false, length = 255)
+    @NotBlank(message = "El nombre del hackatón es obligatorio")
+    @Size(max = 255, message = "El nombre no puede exceder los 255 caracteres")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
     @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
 
-    @ManyToOne
-    @JoinColumn(name = "id_categoria", nullable = false)
-    private CategoriaModel categoria;
+    @Size(max = 255, message = "La URL de la imagen no puede exceder los 255 caracteres")
+    @Column(name = "url_img")
+    private String urlImg;
 
+    @NotNull(message = "La fecha de inicio es obligatoria")
+    @FutureOrPresent(message = "La fecha de inicio debe ser en el presente o futuro")
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;
 
+    @NotNull(message = "La fecha de fin es obligatoria")
+    @FutureOrPresent(message = "La fecha de fin debe ser en el presente o futuro")
     @Column(name = "fecha_fin", nullable = false)
     private LocalDateTime fechaFin;
 
+    @NotNull(message = "El número máximo de participantes es obligatorio")
+    @Min(value = 1, message = "Debe haber al menos 1 participante como máximo")
     @Column(name = "maximo_participantes", nullable = false)
     private Integer maximoParticipantes;
-
+    
+    @NotNull(message = "La cantidad de participantes por grupo es obligatoria")
+    @Min(value = 1, message = "Los grupos deben tener al menos 1 participante")
     @Column(name = "grupo_cantidad_participantes", nullable = false)
     private Integer grupoCantidadParticipantes;
 
+    @NotNull(message = "El estado es obligatorio")
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, columnDefinition = "ENUM('proximo', 'en_curso', 'finalizado')")
-    private Estado estado;
+    @Column(name = "estado", nullable = false)
+    private Estado estado = Estado.PROXIMO;
 
-    @ManyToOne
-    @JoinColumn(name = "id_jurado_asignado")
-    private UsuarioModel juradoAsignado;
+    @NotNull(message = "La categoría es obligatoria")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private CategoriaModel categoria;
 
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
-    // Relaciones con otros modelos
-    @OneToMany(mappedBy = "hackaton", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<EquipoModel> equipos;
 
-    @OneToMany(mappedBy = "hackaton", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<InscripcionModel> inscripciones;
-
-    // Enumeración para el estado
     public enum Estado {
-        proximo, en_curso, finalizado
+        PROXIMO,
+        EN_CURSO,
+        FINALIZADO
     }
+    
 
-    // Constructor por defecto
-    public HackatonModel() {
-        this.fechaCreacion = LocalDateTime.now();
-        this.estado = Estado.proximo;
-    }
-
-    // Constructor con parámetros básicos
-    public HackatonModel(String urlImg, String nombre, String descripcion, CategoriaModel categoria,
-            LocalDateTime fechaInicio, LocalDateTime fechaFin, Integer maximoParticipantes,
-            Integer grupoCantidadParticipantes, Estado estado, UsuarioModel juradoAsignado) {
-        this.urlImg = urlImg;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.categoria = categoria;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.maximoParticipantes = maximoParticipantes;
-        this.grupoCantidadParticipantes = grupoCantidadParticipantes;
-        this.estado = estado;
-        this.juradoAsignado = juradoAsignado;
+    @PrePersist
+    protected void onCreate() {
         this.fechaCreacion = LocalDateTime.now();
     }
+
 }
