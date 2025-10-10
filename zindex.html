@@ -1,94 +1,988 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Portal Académico</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Corporativo - Éclat Olfactif</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        /* Corporate Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 1s ease 2.5s forwards;
+        }
+
+        .loader-content {
+            text-align: center;
+            animation: corporateEntrance 2s ease-out;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: 100;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: logoReveal 1.5s ease 0.5s forwards;
+        }
+
+        .loader-line {
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #c9a96e, #f4e4bc);
+            margin: 0 auto 1rem;
+            animation: lineExpand 1s ease 1.5s forwards;
+        }
+
+        .loader-text {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: #cccccc;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: textFadeIn 0.8s ease 2s forwards;
+        }
+
+        @keyframes corporateEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes logoReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                letter-spacing: 8px;
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                letter-spacing: 4px;
+            }
+        }
+
+        @keyframes lineExpand {
+            to {
+                width: 150px;
+            }
+        }
+
+        @keyframes textFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Main Container */
+        .catalog-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .catalog-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(201, 169, 110, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(244, 228, 188, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Header */
+        .catalog-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: headerEntrance 1.5s cubic-bezier(0.4, 0, 0.2, 1) 3s forwards;
+        }
+
+        @keyframes headerEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) rotateX(15deg);
+            }
+            60% {
+                opacity: 0.8;
+                transform: translateY(10px) rotateX(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        .catalog-title {
+            font-size: 4.5rem;
+            font-weight: 100;
+            letter-spacing: 5px;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            position: relative;
+            line-height: 1.1;
+        }
+
+        .catalog-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #c9a96e, #f4e4bc, #c9a96e);
+            animation: titleUnderline 1.2s ease 3.8s forwards;
+        }
+
+        @keyframes titleUnderline {
+            to {
+                width: 200px;
+            }
+        }
+
+        .catalog-subtitle {
+            font-size: 1.4rem;
+            color: #cccccc;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2rem;
+        }
+
+        /* Filters */
+        .catalog-filters {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: filtersSlideIn 1s ease 3.5s forwards;
+        }
+
+        @keyframes filtersSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .filter-btn {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 2px solid rgba(201, 169, 110, 0.3);
+            color: #cccccc;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 300;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(201, 169, 110, 0.1), rgba(244, 228, 188, 0.1));
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(201, 169, 110, 0.3) 0%, transparent 70%);
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .filter-btn:hover::before,
+        .filter-btn.active::before {
+            left: 0;
+        }
+
+        .filter-btn:hover::after,
+        .filter-btn.active::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: #c9a96e;
+            border-color: #c9a96e;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(201, 169, 110, 0.2);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(201, 169, 110, 0.15);
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            opacity: 0;
+            transform: translateY(80px) scale(0.9) rotateY(15deg);
+            animation: productEntrance 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card:nth-child(1) { animation-delay: 4s; }
+        .product-card:nth-child(2) { animation-delay: 4.2s; }
+        .product-card:nth-child(3) { animation-delay: 4.4s; }
+        .product-card:nth-child(4) { animation-delay: 4.6s; }
+        .product-card:nth-child(5) { animation-delay: 4.8s; }
+        .product-card:nth-child(6) { animation-delay: 5s; }
+        .product-card:nth-child(7) { animation-delay: 5.2s; }
+        .product-card:nth-child(8) { animation-delay: 5.4s; }
+
+        @keyframes productEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(80px) scale(0.9) rotateY(15deg);
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateY(20px) scale(0.95) rotateY(8deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateY(0deg);
+            }
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.1), transparent);
+            transition: left 0.8s ease;
+            z-index: 1;
+        }
+
+        .product-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(201, 169, 110, 0.05) 0%, transparent 50%, rgba(244, 228, 188, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .product-card:hover {
+            transform: translateY(-20px) scale(1.05) rotateY(-2deg);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 50px rgba(201, 169, 110, 0.2);
+            border-color: rgba(201, 169, 110, 0.4);
+        }
+
+        .product-card:hover::before {
+            left: 100%;
+        }
+
+        .product-card:hover::after {
+            opacity: 1;
+        }
+
+        .product-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(201, 169, 110, 0.08) 0%, rgba(244, 228, 188, 0.08) 100%);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(201, 169, 110, 0.1);
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(201, 169, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(244, 228, 188, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .product-card:hover .product-image::before {
+            opacity: 1;
+        }
+
+        .bottle-svg {
+            width: 120px;
+            height: 200px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
+        }
+
+        .product-card:hover .bottle-svg {
+            transform: scale(1.15) rotateY(10deg) rotateX(5deg);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+        }
+
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 200;
+            margin-bottom: 0.8rem;
+            letter-spacing: 3px;
+            color: #ffffff;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover .product-name {
+            color: #c9a96e;
+            transform: translateY(-2px);
+        }
+
+        .product-family {
+            color: #c9a96e;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .product-description {
+            color: #cccccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease 0.1s;
+        }
+
+        .product-card:hover .product-description {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #f4e4bc;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease 0.2s;
+        }
+
+        .product-card:hover .product-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, #c9a96e, #f4e4bc);
+            color: #0a0a0a;
+            border: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-size: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #f4e4bc, #c9a96e);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(201, 169, 110, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 0.8rem 2rem;
+            background: transparent;
+            color: #c9a96e;
+            border: 1px solid #c9a96e;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-size: 0.8rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(201, 169, 110, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .catalog-title {
+                font-size: 2.5rem;
+                letter-spacing: 3px;
+            }
+
+            .catalog-filters {
+                gap: 1rem;
+            }
+
+            .filter-btn {
+                padding: 1rem 2rem;
+                font-size: 0.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .catalog-container {
+                padding: 2rem 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card {
+                padding: 2rem;
+            }
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-  
-  <!-- Contenedor principal -->
-  <div class="bg-white shadow-2xl rounded-2xl w-full max-w-md overflow-hidden">
-    
-    <!-- Header institucional -->
-    <div class="bg-gradient-to-r from-blue-800 to-blue-900 px-8 py-6 text-center">
-      <div class="bg-white rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center shadow-lg">
-        <svg class="h-12 w-12 text-blue-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-        </svg>
-      </div>
-      <h1 class="text-2xl font-bold text-white mb-1">Portal Académico</h1>
-      <p class="text-blue-100 text-sm">Sistema Institucional de Gestión</p>
+<body>
+    <!-- Corporate Loader -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-logo serif">ÉCLAT OLFACTIF</div>
+            <div class="loader-line"></div>
+            <div class="loader-text">Catálogo Corporativo</div>
+        </div>
     </div>
 
-    <!-- Formulario -->
-    <div class="px-8 py-8">
-      <form>
-        <!-- Campo de usuario/email -->
-        <div class="mb-6">
-          <label for="usuario" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">
-            Usuario Institucional
-          </label>
-          <input 
-            type="text" 
-            id="usuario" 
-            name="usuario" 
-            placeholder="estudiante.apellido@universidad.edu" 
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-            required>
+    <!-- Main Catalog Container -->
+    <div class="catalog-container">
+        <!-- Header -->
+        <div class="catalog-header">
+            <h1 class="catalog-title serif">Catálogo Exclusivo</h1>
+            <p class="catalog-subtitle">Colección Premium 2024</p>
         </div>
 
-        <!-- Campo de contraseña -->
-        <div class="mb-6">
-          <label for="password" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">
-            Contraseña
-          </label>
-          <input 
-            type="password" 
-            id="password" 
-            name="password" 
-            placeholder="••••••••••" 
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-            required>
+        <!-- Filters -->
+        <div class="catalog-filters">
+            <button class="filter-btn active" data-filter="all">Todas las Fragancias</button>
+            <button class="filter-btn" data-filter="floral">Florales</button>
+            <button class="filter-btn" data-filter="woody">Amaderadas</button>
+            <button class="filter-btn" data-filter="fresh">Frescas</button>
+            <button class="filter-btn" data-filter="oriental">Orientales</button>
         </div>
 
-        <!-- Recordar sesión -->
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center">
-            <input type="checkbox" id="recordar" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-            <label for="recordar" class="ml-2 text-sm text-gray-600">Recordar sesión</label>
-          </div>
-          <a href="#" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
+        <!-- Products Grid -->
+        <div class="products-grid">
+            <div class="product-card" data-category="floral">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="floral1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fdf2f8"/>
+                                    <stop offset="100%" style="stop-color:#f3e8ff"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#floral1)" stroke="#e879f9"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#be185d"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Rose Éternelle</h3>
+                    <p class="product-family">Floral Sofisticada</p>
+                    <p class="product-description">Una fragancia floral elegante que captura la esencia de un jardín de rosas al amanecer, con toques modernos irresistibles.</p>
+                    <p class="product-price">€185</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('rose-eternelle')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('rose-eternelle')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Botón de ingreso -->
-        <button 
-          type="submit" 
-          class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg">
-          Acceder al Portal
-        </button>
-      </form>
+            <div class="product-card" data-category="woody">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="woody1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fef3c7"/>
+                                    <stop offset="100%" style="stop-color:#d97706"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#woody1)" stroke="#92400e"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#451a03"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Bois Mystique</h3>
+                    <p class="product-family">Amaderada Profunda</p>
+                    <p class="product-description">Una fragancia amaderada misteriosa que evoca la serenidad de un bosque ancestral con especias exóticas.</p>
+                    <p class="product-price">€210</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('bois-mystique')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('bois-mystique')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
 
-      <!-- Enlaces adicionales -->
-      <div class="mt-8 pt-6 border-t border-gray-200 text-center">
-        <p class="text-sm text-gray-600 mb-3">¿Necesitas ayuda?</p>
-        <div class="flex justify-center space-x-6 text-sm">
-          <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Registro</a>
-          <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Soporte</a>
-          <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Mesa de ayuda</a>
+            <div class="product-card" data-category="fresh">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="fresh1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ecfdf5"/>
+                                    <stop offset="100%" style="stop-color:#6ee7b7"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#fresh1)" stroke="#10b981"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#047857"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Citrus Lumière</h3>
+                    <p class="product-family">Fresca Mediterránea</p>
+                    <p class="product-description">Una explosión de frescura mediterránea que despierta los sentidos con energía y vitalidad.</p>
+                    <p class="product-price">€165</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('citrus-lumiere')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('citrus-lumiere')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="oriental">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="oriental1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fef7cd"/>
+                                    <stop offset="100%" style="stop-color:#f59e0b"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#oriental1)" stroke="#d97706"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#92400e"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Ambre Royal</h3>
+                    <p class="product-family">Oriental Opulenta</p>
+                    <p class="product-description">Una fragancia oriental que evoca la grandeza de palacios orientales con especias exóticas y resinas preciosas.</p>
+                    <p class="product-price">€235</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('ambre-royal')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('ambre-royal')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="floral">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="floral2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fef3f2"/>
+                                    <stop offset="100%" style="stop-color:#fda4af"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#floral2)" stroke="#f43f5e"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#be123c"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Jasmin Noir</h3>
+                    <p class="product-family">Floral Seductora</p>
+                    <p class="product-description">Una interpretación moderna del jazmín clásico con sensualidad nocturna y toques especiados inolvidables.</p>
+                    <p class="product-price">€195</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('jasmin-noir')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('jasmin-noir')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="woody">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="woody2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f5f5f4"/>
+                                    <stop offset="100%" style="stop-color:#78716c"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#woody2)" stroke="#57534e"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#292524"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Cèdre Intense</h3>
+                    <p class="product-family">Amaderada Refinada</p>
+                    <p class="product-description">Una fragancia amaderada intensa que celebra la nobleza del cedro con elegancia masculina atemporal.</p>
+                    <p class="product-price">€220</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('cedre-intense')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('cedre-intense')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="fresh">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="fresh2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f0fdfa"/>
+                                    <stop offset="100%" style="stop-color:#5eead4"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#fresh2)" stroke="#14b8a6"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#0f766e"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Aqua Vitae</h3>
+                    <p class="product-family">Fresca Acuática</p>
+                    <p class="product-description">Una fragancia acuática que evoca la pureza del océano con notas marinas y brisa costera refrescante.</p>
+                    <p class="product-price">€175</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('aqua-vitae')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('aqua-vitae')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="oriental">
+                <div class="product-content">
+                    <div class="product-image">
+                        <svg class="bottle-svg" viewBox="0 0 120 200">
+                            <defs>
+                                <linearGradient id="oriental2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fefce8"/>
+                                    <stop offset="100%" style="stop-color:#eab308"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="60" width="80" height="120" rx="8" fill="url(#oriental2)" stroke="#ca8a04"/>
+                            <rect x="35" y="30" width="50" height="40" rx="4" fill="#a16207"/>
+                            <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
+                        </svg>
+                    </div>
+                    <h3 class="product-name serif">Oud Impérial</h3>
+                    <p class="product-family">Oriental Exclusiva</p>
+                    <p class="product-description">Una fragancia oriental exclusiva con oud auténtico y especias raras que define la opulencia y el lujo.</p>
+                    <p class="product-price">€285</p>
+                    <div class="product-actions">
+                        <button class="btn-primary" onclick="addToCart('oud-imperial')">Añadir al Carrito</button>
+                        <button class="btn-secondary" onclick="viewDetails('oud-imperial')">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <!-- Footer institucional -->
-    <div class="bg-gray-50 px-8 py-4 text-center">
-      <p class="text-xs text-gray-500">© 2025 Universidad Académica. Todos los derechos reservados.</p>
-    </div>
-  </div>
+    <script>
+        // Filter functionality with smooth animations
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
 
-</body>
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                productCards.forEach((card, index) => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                        // Reset animation
+                        card.style.animation = 'none';
+                        card.offsetHeight; // Trigger reflow
+                        card.style.animation = `productEntrance 1s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s forwards`;
+                    } else {
+                        card.style.animation = 'fadeOut 0.3s ease forwards';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Product interaction functions
+        function addToCart(productId) {
+            // Create elegant notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: linear-gradient(45deg, #c9a96e, #f4e4bc);
+                color: #0a0a0a;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                font-weight: 500;
+                letter-spacing: 1px;
+                z-index: 10000;
+                transform: translateX(100%);
+                transition: transform 0.4s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            `;
+            notification.textContent = '✓ Producto añadido al carrito';
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Animate out and remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 400);
+            }, 3000);
+        }
+
+        function viewDetails(productId) {
+            // Create elegant modal for product details
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            `;
+
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+                border: 1px solid rgba(201, 169, 110, 0.3);
+                border-radius: 12px;
+                padding: 3rem;
+                max-width: 500px;
+                text-align: center;
+                color: white;
+                transform: scale(0.8);
+                transition: transform 0.4s ease;
+            `;
+
+            modalContent.innerHTML = `
+                <h3 style="font-size: 2rem; margin-bottom: 1rem; color: #c9a96e; letter-spacing: 2px;">Detalles del Producto</h3>
+                <p style="color: #cccccc; margin-bottom: 2rem;">Información detallada sobre ${productId.replace('-', ' ')}</p>
+                <button onclick="this.parentElement.parentElement.remove()" style="
+                    padding: 1rem 2rem;
+                    background: linear-gradient(45deg, #c9a96e, #f4e4bc);
+                    color: #0a0a0a;
+                    border: none;
+                    border-radius: 4px;
+                    font-weight: 500;
+                    letter-spacing: 1px;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    Cerrar
+                </button>
+            `;
+
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+
+            // Animate in
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modalContent.style.transform = 'scale(1)';
+            }, 100);
+
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.opacity = '0';
+                    modalContent.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        document.body.removeChild(modal);
+                    }, 400);
+                }
+            });
+        }
+
+        // Add subtle parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.5;
+            
+            document.querySelector('.catalog-container::before') && 
+            (document.querySelector('.catalog-container').style.transform = `translateY(${parallax}px)`);
+        });
+
+        // Add entrance animation observer for better performance
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all product cards
+        productCards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986d10ffc520c2c1',t:'MTc1OTE2NTUzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
