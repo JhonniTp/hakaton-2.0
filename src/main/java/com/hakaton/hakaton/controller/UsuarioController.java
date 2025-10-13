@@ -25,4 +25,5 @@ public class UsuarioController {
         model.addAttribute("usuarios", listaUsuarios);
         return "admin/dashboard_admin";
     }
+
 }
