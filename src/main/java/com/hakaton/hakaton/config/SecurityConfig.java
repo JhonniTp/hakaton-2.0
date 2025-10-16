@@ -1,5 +1,3 @@
-// Crea un nuevo paquete, por ejemplo, "com.hakaton.hakaton.config"
-// y dentro crea esta clase:
 package com.hakaton.hakaton.config;
 
 import org.springframework.context.annotation.Bean;
