@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
-/**
- * Representa un evento de Hackatón en el sistema.
- * Contiene toda la información relevante del evento, como fechas, descripción y estado.
- */
+
 @Entity
 @Table(name = "hackatones")
 @Getter

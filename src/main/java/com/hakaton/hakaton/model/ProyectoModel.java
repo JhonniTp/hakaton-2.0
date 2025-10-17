@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Representa un proyecto entregado por un equipo en un hackatón.
- */
+
 @Entity
 @Table(name = "proyectos")
 @Getter

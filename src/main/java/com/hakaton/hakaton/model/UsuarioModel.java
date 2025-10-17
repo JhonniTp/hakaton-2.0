@@ -40,7 +40,7 @@ public class UsuarioModel {
     private String correoElectronico;
 
     @Size(max = 255, message = "El hash de la contraseña no puede exceder los 255 caracteres")
-    @Column(name = "contrasena_hash", length = 255)
+    @Column(name = "contrasena_hash", length = 255, nullable = true)
     private String contrasenaHash;
 
     @Size(max = 255, message = "El DNI no puede exceder los 255 caracteres")
@@ -51,7 +51,7 @@ public class UsuarioModel {
     @Column(name = "telefono", length = 255) 
     private String telefono;
 
-    @Column(name = "google_id", unique = true, length = 255)
+    @Column(name = "google_id", unique = true, length = 255, nullable = true)
     private String googleId;
 
     @NotNull(message = "El rol es obligatorio")

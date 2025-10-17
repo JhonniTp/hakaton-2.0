@@ -52,11 +52,6 @@ public class EquipoModel {
         this.fechaCreacion = LocalDateTime.now();
     }
 
-    /**
-     * Constructor para crear un nuevo equipo.
-     * @param nombreEquipo El nombre del equipo.
-     * @param hackaton El hackatón en el que participa el equipo.
-     */
     public EquipoModel(String nombreEquipo, HackatonModel hackaton) {
         this.nombreEquipo = nombreEquipo;
         this.hackaton = hackaton;

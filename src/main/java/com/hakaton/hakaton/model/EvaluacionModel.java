@@ -47,26 +47,17 @@ public class EvaluacionModel {
     @NotNull(message = "El proyecto es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proyecto", nullable = false)
-    private ProyectoModel proyecto; // Nota: Se asume que existe un ProyectoModel
+    private ProyectoModel proyecto;
 
     @Column(name = "fecha_evaluacion", nullable = false, updatable = false)
     private LocalDateTime fechaEvaluacion;
 
-    /**
-     * Establece la fecha de evaluación automáticamente antes de persistir la entidad.
-     */
     @PrePersist
     protected void onCreate() {
         this.fechaEvaluacion = LocalDateTime.now();
     }
 
-    /**
-     * Constructor para crear una nueva evaluación.
-     * @param puntuacion La puntuación asignada.
-     * @param jurado El jurado que realiza la evaluación.
-     * @param criterio El criterio que se está evaluando.
-     * @param proyecto El proyecto evaluado.
-     */
+
     public EvaluacionModel(BigDecimal puntuacion, UsuarioModel jurado, CriterioEvaluacionModel criterio, ProyectoModel proyecto) {
         this.puntuacion = puntuacion;
         this.jurado = jurado;

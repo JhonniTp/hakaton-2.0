@@ -8,7 +8,6 @@
     </div>
 
     <div class="p-4 lg:p-6">
-        <!-- Filtros y búsqueda -->
         <div class="mb-6 flex flex-col md:flex-row gap-4">
             <div class="relative flex-grow">
                 <input type="text" id="user-search" placeholder="Buscar usuarios..."
@@ -24,7 +23,6 @@
             </select>
         </div>
 
-        <!-- Tabla de usuarios -->
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -56,7 +54,6 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="user-table-body" th:if="${!usuarios.isEmpty()}">
-                    <!-- Iteración sobre la lista de usuarios con Thymeleaf -->
                     <tr th:each="usuario : ${usuarios}">
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${usuario.idUsuario}">
                         </td>
@@ -89,7 +86,6 @@
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                             <span th:text="${#temporals.format(usuario.fechaCreacion, 'dd/MM/yy HH:mm')}"></span>
                         </td>
-                        <!-- Columna Acciones con Iconos -->
                         <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <button th:onclick="editUser([[${usuario}]])"
                                 class="text-indigo-600 hover:text-indigo-800 transition duration-150 ease-in-out"
@@ -109,7 +105,6 @@
                         </td>
                     </tr>
                 </tbody>
-                <!-- Mensaje si no hay usuarios -->
                 <tbody th:if="${usuarios.isEmpty()}">
                     <tr>
                         <td colspan="12" class="text-center py-10 text-gray-500">
@@ -120,7 +115,6 @@
             </table>
         </div>
 
-        <!-- Paginación (la lógica debe ser implementada en backend/JS) -->
         <div class="mt-6 flex justify-between items-center">
             <div class="text-sm text-gray-500">
                 Mostrando <span id="user-start">1</span> a <span id="user-end" th:text="${usuarios.size()}">0</span> de

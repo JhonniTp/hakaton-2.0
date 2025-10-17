@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     Optional<UsuarioModel> findByCorreoElectronico(String correoElectronico);
+    Optional<UsuarioModel> findByGoogleId(String googleId);
     boolean existsByCorreoElectronico(String correoElectronico);
-    
-    // Asegúrate de tener estos métodos:
+
     boolean existsByTelefono(String telefono);
     boolean existsByGoogleId(String googleId);
     boolean existsByDocumentoDni(String documentoDni);

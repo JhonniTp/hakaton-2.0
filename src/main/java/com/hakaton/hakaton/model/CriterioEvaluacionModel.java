@@ -38,12 +38,7 @@ public class CriterioEvaluacionModel {
     @Column(name = "peso", nullable = false, precision = 3, scale = 2)
     private BigDecimal peso;
 
-    /**
-     * Constructor para crear un nuevo criterio de evaluación.
-     * @param nombreCriterio El nombre del criterio.
-     * @param descripcion La descripción detallada del criterio.
-     * @param peso La ponderación o importancia del criterio en la evaluación total.
-     */
+
     public CriterioEvaluacionModel(String nombreCriterio, String descripcion, BigDecimal peso) {
         this.nombreCriterio = nombreCriterio;
         this.descripcion = descripcion;
