@@ -26,6 +26,7 @@ window.handleGoogleLogin = function () {
             };
 
             showNotification('Autenticación con Google exitosa. Verificando...', 'info');
+            
             fetch('/auth/google', {
                 method: 'POST',
                 headers: {
@@ -33,34 +34,36 @@ window.handleGoogleLogin = function () {
                 },
                 body: JSON.stringify(userData),
             })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Error en la respuesta del servidor.');
-                })
-                .then(data => {
-                    console.log('Respuesta del backend recibida:', data);
-                    console.log('Rol del usuario:', data.rol);
-                    showNotification('¡Bienvenido! Redirigiendo al dashboard...', 'success');
-                    let redirectUrl = '/';
-                    if (data.rol === 'ADMIN') {
-                        redirectUrl = '/admin/dashboard';
-                    } else if (data.rol === 'PARTICIPANTE') {
-                        redirectUrl = '/participante/dashboard';
-                    } else if (data.rol === 'JURADO') {
-                        redirectUrl = '/jurado/dashboard';
-                    }
-                    console.log('Redirigiendo a:', redirectUrl);
-                    window.location.href = redirectUrl;
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    showNotification('No se pudo completar el inicio de sesión. Inténtalo de nuevo.', 'error');
-                });
+            .then(response => {
+                console.log('Respuesta cruda del servidor:', response);
+                if (!response.ok) {
+                    response.text().then(text => {
+                        console.error('Cuerpo de la respuesta de error:', text);
+                        showNotification(`Error del servidor: ${response.status}`, 'error');
+                    });
+                    return Promise.reject(new Error(`Error del servidor: ${response.status}`));
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos JSON recibidos del backend:', data);
+                if (data.redirectUrl) {
+                    showNotification('¡Bienvenido! Redirigiendo...', 'success');
+                    window.location.href = data.redirectUrl;
+                } else {
+                    throw new Error('La respuesta del servidor no contenía una URL de redirección.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error final en el proceso de login:', error);
+                if (!document.querySelector('.notification')) {
+                   showNotification('No se pudo completar el inicio de sesión.', 'error');
+                }
+            });
         })
         .catch((error) => {
-            console.error("Error durante el inicio de sesión con Google:", error);
+            console.error("Error durante el popup de inicio de sesión con Google:", error);
             showNotification('Error al iniciar sesión con Google.', 'error');
         });
 }
+

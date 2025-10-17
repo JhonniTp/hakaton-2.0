@@ -26,16 +26,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 redirectUrl = "/admin/dashboard";
                 break;
             } else if (authorityName.equals("ROLE_JURADO")) {
-                redirectUrl = "/jurado/dashboard_jurado";
+                redirectUrl = "/jurado/dashboard"; 
                 break;
             } else if (authorityName.equals("ROLE_PARTICIPANTE")) {
-                redirectUrl = "/participante/dashboard_participantes";
+                redirectUrl = "/participante/dashboard";
                 break;
             }
         }
 
         if (redirectUrl == null) {
-            throw new IllegalStateException("No se pudo determinar la URL de redirección para el rol del usuario.");
+            redirectUrl = "/"; 
         }
 
         response.sendRedirect(redirectUrl);
