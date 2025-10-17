@@ -24,7 +24,8 @@
           "backdrop-filter"
         ]
       }
-    ]
+    ],
+    "meta-viewport": "off"
   },
   "browserslist": [
     "defaults",
