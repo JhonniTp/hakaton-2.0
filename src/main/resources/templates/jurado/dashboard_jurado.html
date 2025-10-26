@@ -2,14 +2,1015 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard del Jurado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERTUS HACKATON - Portal Jurado</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#031F56',
+                        'secondary-cyan': '#00BAD6',
+                        'accent-pink': '#D62C8E',
+                        'primary-white': '#FFFFFF',
+                        'gray-light': '#F8FAFC',
+                        'gray-medium': '#64748B',
+                        'gray-dark': '#334155',
+                        'judge-gold': '#F59E0B',
+                        'judge-silver': '#6B7280',
+                        'judge-bronze': '#D97706'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+<link rel="stylesheet" th:href="@{/css/jurado-dashboard-style/dashboard_jurado.css}">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-800">Bienvenido, Jurado</h1>
-        <p class="text-lg text-gray-600 mt-2">Este es tu panel de control.</p>
-        <a th:href="@{/login}" class="mt-6 inline-block bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Cerrar Sesión</a>
+<body class="bg-gray-light font-inter">
+    <div class="fixed inset-y-0 left-0 z-50 w-72 sidebar-professional transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex items-center justify-center h-20 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 professional-gradient rounded-xl flex items-center justify-center">
+                    <i class="fas fa-gavel text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-dark">CERTUS</h1>
+                    <p class="text-xs text-gray-medium font-medium">Portal Jurado</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="mt-8 px-4">
+            <div class="space-y-2">
+                <button onclick="showSection('dashboard')" class="nav-item-judge active w-full flex items-center px-4 py-3 text-left text-gray-dark hover:text-primary-blue rounded-xl transition-colors" id="nav-dashboard">
+                    <i class="fas fa-chart-line w-5 mr-3 text-lg"></i>
+                    <span class="font-medium">Dashboard</span>
+                </button>
+                
+                <button onclick="showSection('evaluations')" class="nav-item-judge w-full flex items-center px-4 py-3 text-left text-gray-medium hover:text-primary-blue rounded-xl transition-colors" id="nav-evaluations">
+                    <i class="fas fa-clipboard-check w-5 mr-3 text-lg"></i>
+                    <span class="font-medium">Evaluaciones</span>
+                </button>
+                
+                <button onclick="showSection('projects')" class="nav-item-judge w-full flex items-center px-4 py-3 text-left text-gray-medium hover:text-primary-blue rounded-xl transition-colors" id="nav-projects">
+                    <i class="fas fa-project-diagram w-5 mr-3 text-lg"></i>
+                    <span class="font-medium">Proyectos</span>
+                </button>
+                
+                <button onclick="showSection('rankings')" class="nav-item-judge w-full flex items-center px-4 py-3 text-left text-gray-medium hover:text-primary-blue rounded-xl transition-colors" id="nav-rankings">
+                    <i class="fas fa-trophy w-5 mr-3 text-lg"></i>
+                    <span class="font-medium">Rankings</span>
+                </button>
+                
+                <button onclick="showSection('schedule')" class="nav-item-judge w-full flex items-center px-4 py-3 text-left text-gray-medium hover:text-primary-blue rounded-xl transition-colors" id="nav-schedule">
+                    <i class="fas fa-calendar-alt w-5 mr-3 text-lg"></i>
+                    <span class="font-medium">Cronograma</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="absolute bottom-8 left-4 right-4">
+            <div class="judge-card rounded-2xl p-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 professional-gradient rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                        DR
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-dark text-sm">Dr. Roberto Mendoza</h3>
+                        <p class="text-xs text-gray-medium">Jurado Principal</p>
+                        <div class="flex items-center mt-1">
+                            <div class="flex text-yellow-400 text-xs">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="text-xs text-gray-medium ml-2">15 años exp.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3 border-t border-gray-200">
+                    <button onclick="showSection('profile')" class="w-full text-center text-primary-blue hover:text-blue-800 font-medium text-sm transition-colors">
+                        Ver Perfil Completo
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="lg:ml-72">
+        <header class="judge-header text-white p-6 relative z-10">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Bienvenido, Dr. Mendoza</h1>
+                    <p class="text-lg opacity-90">Tienes <span class="font-semibold">8 proyectos</span> pendientes de evaluación</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-3 bg-white bg-opacity-20 rounded-xl hover:bg-opacity-30 transition-all">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-accent-pink rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                    </button>
+                    
+                    <button onclick="toggleUserMenu()" class="p-3 bg-white bg-opacity-20 rounded-xl hover:bg-opacity-30 transition-all">
+                        <i class="fas fa-cog text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="absolute right-6 top-20 mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-200 hidden z-50" id="userMenu">
+                <div class="py-3">
+                    <div class="px-4 py-2 border-b border-gray-200">
+                        <p class="text-sm font-semibold text-gray-dark">Dr. Roberto Mendoza</p>
+                        <p class="text-xs text-gray-medium">Jurado Principal</p>
+                    </div>
+                    <a href="#" onclick="showSection('profile')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg mx-2 mt-2">
+                        <i class="fas fa-user w-4 mr-2"></i>Mi Perfil
+                    </a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg mx-2">
+                        <i class="fas fa-cog w-4 mr-2"></i>Configuración
+                    </a>
+                    <hr class="my-2">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-sign-out-alt w-4 mr-2"></i>Cerrar Sesión
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <main class="p-6" id="mainContent">
+            <div id="dashboard-section">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="judge-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clipboard-list text-blue-600 text-xl"></i>
+                            </div>
+                            <span class="status-badge status-pending">Pendientes</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-dark mb-1">8</h3>
+                        <p class="text-sm text-gray-medium">Evaluaciones Pendientes</p>
+                        <div class="mt-3 flex items-center text-xs text-blue-600">
+                            <i class="fas fa-clock mr-1"></i>
+                            Vencen en 2 días
+                        </div>
+                    </div>
+
+                    <div class="judge-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                            </div>
+                            <span class="status-badge status-completed">Completadas</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-dark mb-1">15</h3>
+                        <p class="text-sm text-gray-medium">Evaluaciones Completadas</p>
+                        <div class="mt-3 flex items-center text-xs text-green-600">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            +3 esta semana
+                        </div>
+                    </div>
+
+                    <div class="judge-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-star text-purple-600 text-xl"></i>
+                            </div>
+                            <span class="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">Promedio</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-dark mb-1">8.7</h3>
+                        <p class="text-sm text-gray-medium">Puntuación Promedio</p>
+                        <div class="mt-3 flex items-center text-xs text-purple-600">
+                            <i class="fas fa-chart-line mr-1"></i>
+                            Calidad excelente
+                        </div>
+                    </div>
+
+                    <div class="judge-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-trophy text-orange-600 text-xl"></i>
+                            </div>
+                            <span class="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded-full">Activos</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-dark mb-1">3</h3>
+                        <p class="text-sm text-gray-medium">Hackatones Asignados</p>
+                        <div class="mt-3 flex items-center text-xs text-orange-600">
+                            <i class="fas fa-calendar mr-1"></i>
+                            Marzo 2024
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Dashboard Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Evaluaciones Pendientes -->
+                    <div class="lg:col-span-2">
+                        <div class="judge-card rounded-2xl overflow-hidden">
+                            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-dark">Evaluaciones Pendientes</h3>
+                                    <p class="text-gray-medium mt-1">Proyectos que requieren tu evaluación</p>
+                                </div>
+                                <button onclick="showSection('evaluations')" class="text-primary-blue hover:text-blue-800 font-medium text-sm">
+                                    Ver todas <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    <!-- Evaluation Item 1 -->
+                                    <div class="evaluation-card rounded-xl p-4 border border-gray-200">
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div class="flex-1">
+                                                <h4 class="font-semibold text-gray-dark mb-1">EcoApp - Sostenibilidad Urbana</h4>
+                                                <p class="text-sm text-gray-medium mb-2">Equipo: GreenTech Innovators</p>
+                                                <div class="flex items-center space-x-4 text-xs text-gray-medium">
+                                                    <span><i class="fas fa-users mr-1"></i>4 miembros</span>
+                                                    <span><i class="fas fa-code mr-1"></i>React Native</span>
+                                                    <span><i class="fas fa-clock mr-1"></i>Vence en 1 día</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end space-y-2">
+                                                <span class="status-badge status-pending">Pendiente</span>
+                                                <button onclick="openEvaluationModal('EcoApp')" class="text-primary-blue hover:text-blue-800 font-medium text-sm">
+                                                    Evaluar <i class="fas fa-arrow-right ml-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex space-x-2">
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-primary-blue">Innovación</span>
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-primary-blue">Técnico</span>
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-primary-blue">Impacto</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xs text-gray-medium">Prioridad</p>
+                                                <div class="flex text-red-400">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    <span class="ml-1 text-xs font-medium">Alta</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Evaluation Item 2 -->
+                                    <div class="evaluation-card rounded-xl p-4 border border-gray-200">
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div class="flex-1">
+                                                <h4 class="font-semibold text-gray-dark mb-1">SmartHealth - Telemedicina AI</h4>
+                                                <p class="text-sm text-gray-medium mb-2">Equipo: HealthTech Solutions</p>
+                                                <div class="flex items-center space-x-4 text-xs text-gray-medium">
+                                                    <span><i class="fas fa-users mr-1"></i>5 miembros</span>
+                                                    <span><i class="fas fa-code mr-1"></i>Python + ML</span>
+                                                    <span><i class="fas fa-clock mr-1"></i>Vence en 2 días</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end space-y-2">
+                                                <span class="status-badge status-evaluating">En Evaluación</span>
+                                                <button onclick="openEvaluationModal('SmartHealth')" class="text-secondary-cyan hover:text-cyan-600 font-medium text-sm">
+                                                    Continuar <i class="fas fa-arrow-right ml-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex space-x-2">
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-secondary-cyan">Innovación</span>
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-secondary-cyan">Técnico</span>
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-secondary-cyan">Viabilidad</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xs text-gray-medium">Progreso</p>
+                                                <div class="w-16 bg-gray-200 rounded-full h-2 mt-1">
+                                                    <div class="evaluation-progress h-2 rounded-full" style="width: 60%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Evaluation Item 3 -->
+                                    <div class="evaluation-card rounded-xl p-4 border border-gray-200">
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div class="flex-1">
+                                                <h4 class="font-semibold text-gray-dark mb-1">CryptoLearn - Educación Blockchain</h4>
+                                                <p class="text-sm text-gray-medium mb-2">Equipo: BlockChain Educators</p>
+                                                <div class="flex items-center space-x-4 text-xs text-gray-medium">
+                                                    <span><i class="fas fa-users mr-1"></i>3 miembros</span>
+                                                    <span><i class="fas fa-code mr-1"></i>Solidity + Web3</span>
+                                                    <span><i class="fas fa-clock mr-1"></i>Vence en 3 días</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end space-y-2">
+                                                <span class="status-badge status-pending">Pendiente</span>
+                                                <button onclick="openEvaluationModal('CryptoLearn')" class="text-primary-blue hover:text-blue-800 font-medium text-sm">
+                                                    Evaluar <i class="fas fa-arrow-right ml-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex space-x-2">
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-primary-blue">Innovación</span>
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-primary-blue">Educativo</span>
+                                                <span class="criteria-badge px-2 py-1 rounded-full text-xs font-medium text-primary-blue">Técnico</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xs text-gray-medium">Prioridad</p>
+                                                <div class="flex text-yellow-500">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                    <span class="ml-1 text-xs font-medium">Media</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <!-- Progreso de Evaluaciones -->
+                        <div class="judge-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-gray-dark mb-4">Progreso de Evaluaciones</h4>
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="relative w-24 h-24">
+                                    <svg class="progress-ring w-24 h-24">
+                                        <circle class="progress-circle" cx="48" cy="48" r="40" stroke="#e5e7eb" stroke-width="8"></circle>
+                                        <circle class="progress-circle" cx="48" cy="48" r="40" stroke="#10B981" stroke-width="8" 
+                                                stroke-dasharray="251.2" stroke-dashoffset="75.36"></circle>
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-xl font-bold text-gray-dark">70%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-medium">Completadas</span>
+                                    <span class="font-medium text-gray-dark">15/23</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-medium">En progreso</span>
+                                    <span class="font-medium text-secondary-cyan">3</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-medium">Pendientes</span>
+                                    <span class="font-medium text-orange-600">5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Próximas Fechas Límite -->
+                        <div class="judge-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-gray-dark mb-4">Próximas Fechas Límite</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-dark">EcoApp Evaluation</p>
+                                        <p class="text-xs text-gray-medium">Vence mañana - 18 Mar</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-dark">SmartHealth Review</p>
+                                        <p class="text-xs text-gray-medium">Vence en 2 días - 19 Mar</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-dark">Final Presentations</p>
+                                        <p class="text-xs text-gray-medium">22 Mar - 10:00 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estadísticas Rápidas -->
+                        <div class="judge-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-gray-dark mb-4">Estadísticas del Mes</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-medium">Proyectos evaluados</span>
+                                    <span class="font-semibold text-gray-dark">23</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-medium">Tiempo promedio</span>
+                                    <span class="font-semibold text-gray-dark">45 min</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-medium">Puntuación más alta</span>
+                                    <span class="font-semibold text-judge-gold">9.8</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-medium">Feedback enviado</span>
+                                    <span class="font-semibold text-green-600">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evaluaciones Section -->
+            <div id="evaluations-section" class="hidden">
+                <div class="mb-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-dark">Evaluaciones</h2>
+                            <p class="text-gray-medium">Gestiona y completa las evaluaciones de proyectos</p>
+                        </div>
+                        <div class="flex space-x-4">
+                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <option>Todos los estados</option>
+                                <option>Pendientes</option>
+                                <option>En progreso</option>
+                                <option>Completadas</option>
+                            </select>
+                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <option>Todos los hackatones</option>
+                                <option>HackTech 2024</option>
+                                <option>Innovation Challenge</option>
+                                <option>EcoHack 2024</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- Evaluation Card 1 -->
+                    <div class="evaluation-card rounded-xl border border-gray-200 overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-dark mb-1">EcoApp - Sostenibilidad</h3>
+                                    <p class="text-sm text-gray-medium">GreenTech Innovators</p>
+                                </div>
+                                <span class="status-badge status-pending">Pendiente</span>
+                            </div>
+                            
+                            <div class="space-y-3 mb-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Hackaton:</span>
+                                    <span class="font-medium text-gray-dark">EcoHack 2024</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Fecha límite:</span>
+                                    <span class="font-medium text-red-600">18 Mar, 2024</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Miembros:</span>
+                                    <span class="font-medium text-gray-dark">4 personas</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-xs text-gray-medium mb-2">Criterios de evaluación:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="criteria-badge px-2 py-1 rounded-full text-xs">Innovación</span>
+                                    <span class="criteria-badge px-2 py-1 rounded-full text-xs">Técnico</span>
+                                    <span class="criteria-badge px-2 py-1 rounded-full text-xs">Impacto</span>
+                                    <span class="criteria-badge px-2 py-1 rounded-full text-xs">Presentación</span>
+                                </div>
+                            </div>
+
+                            <button onclick="openEvaluationModal('EcoApp')" class="w-full bg-primary-blue hover:bg-blue-800 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-clipboard-check mr-2"></i>Iniciar Evaluación
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation Card 2 -->
+                    <div class="evaluation-card rounded-xl border border-gray-200 overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-dark mb-1">SmartHealth AI</h3>
+                                    <p class="text-sm text-gray-medium">HealthTech Solutions</p>
+                                </div>
+                                <span class="status-badge status-evaluating">En Progreso</span>
+                            </div>
+                            
+                            <div class="space-y-3 mb-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Hackaton:</span>
+                                    <span class="font-medium text-gray-dark">HackTech 2024</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Fecha límite:</span>
+                                    <span class="font-medium text-yellow-600">19 Mar, 2024</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Progreso:</span>
+                                    <span class="font-medium text-secondary-cyan">60% completado</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="evaluation-progress h-2 rounded-full" style="width: 60%"></div>
+                                </div>
+                            </div>
+
+                            <button onclick="openEvaluationModal('SmartHealth')" class="w-full bg-secondary-cyan hover:bg-cyan-600 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-edit mr-2"></i>Continuar Evaluación
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation Card 3 -->
+                    <div class="evaluation-card rounded-xl border border-gray-200 overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-dark mb-1">CryptoLearn Platform</h3>
+                                    <p class="text-sm text-gray-medium">BlockChain Educators</p>
+                                </div>
+                                <span class="status-badge status-completed">Completada</span>
+                            </div>
+                            
+                            <div class="space-y-3 mb-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Hackaton:</span>
+                                    <span class="font-medium text-gray-dark">Innovation Challenge</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Evaluado:</span>
+                                    <span class="font-medium text-green-600">15 Mar, 2024</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-medium">Puntuación:</span>
+                                    <span class="font-bold text-judge-gold">8.7/10</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="flex justify-center">
+                                    <div class="flex text-yellow-400">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="viewEvaluationDetails('CryptoLearn')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-dark py-3 px-4 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-eye mr-2"></i>Ver Evaluación
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proyectos Section -->
+            <div id="projects-section" class="hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-dark mb-2">Proyectos</h2>
+                    <p class="text-gray-medium">Explora todos los proyectos de los hackatones</p>
+                </div>
+
+                <div class="judge-card rounded-2xl p-6">
+                    <div class="text-center py-12">
+                        <i class="fas fa-project-diagram text-6xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-dark mb-2">Sección en Desarrollo</h3>
+                        <p class="text-gray-medium">Esta funcionalidad estará disponible próximamente</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rankings Section -->
+            <div id="rankings-section" class="hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-dark mb-2">Rankings</h2>
+                    <p class="text-gray-medium">Clasificaciones y resultados de los hackatones</p>
+                </div>
+
+                <div class="judge-card rounded-2xl p-6">
+                    <div class="text-center py-12">
+                        <i class="fas fa-trophy text-6xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-dark mb-2">Sección en Desarrollo</h3>
+                        <p class="text-gray-medium">Esta funcionalidad estará disponible próximamente</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cronograma Section -->
+            <div id="schedule-section" class="hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-dark mb-2">Cronograma</h2>
+                    <p class="text-gray-medium">Calendario de eventos y fechas importantes</p>
+                </div>
+
+                <div class="judge-card rounded-2xl p-6">
+                    <div class="text-center py-12">
+                        <i class="fas fa-calendar-alt text-6xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-dark mb-2">Sección en Desarrollo</h3>
+                        <p class="text-gray-medium">Esta funcionalidad estará disponible próximamente</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Perfil Section -->
+            <div id="profile-section" class="hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="judge-card rounded-2xl overflow-hidden">
+                        <!-- Profile Header -->
+                        <div class="professional-gradient text-white p-8">
+                            <div class="flex items-center space-x-6">
+                                <div class="w-24 h-24 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center text-white font-bold text-3xl">
+                                    DR
+                                </div>
+                                <div>
+                                    <h2 class="text-3xl font-bold mb-2">Dr. Roberto Mendoza</h2>
+                                    <p class="text-lg opacity-90 mb-2">Jurado Principal - Especialista en IA y Machine Learning</p>
+                                    <div class="flex items-center space-x-4 text-sm opacity-80">
+                                        <span><i class="fas fa-graduation-cap mr-1"></i>PhD en Ciencias de la Computación</span>
+                                        <span><i class="fas fa-briefcase mr-1"></i>15 años de experiencia</span>
+                                        <span><i class="fas fa-award mr-1"></i>50+ proyectos evaluados</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Content -->
+                        <div class="p-8">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <!-- Left Column - Profile Info -->
+                                <div class="lg:col-span-2 space-y-6">
+                                    <!-- Personal Info -->
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-dark mb-4">Información Personal</h3>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Nombre Completo</label>
+                                                <input type="text" value="Dr. Roberto Mendoza Silva" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Email</label>
+                                                <input type="email" value="roberto.mendoza@certus.edu.pe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Teléfono</label>
+                                                <input type="tel" value="+51 987 123 456" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Especialización</label>
+                                                <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                                    <option selected>Inteligencia Artificial</option>
+                                                    <option>Machine Learning</option>
+                                                    <option>Desarrollo de Software</option>
+                                                    <option>Innovación Tecnológica</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Expertise Areas -->
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-dark mb-4">Áreas de Expertise</h3>
+                                        <div class="flex flex-wrap gap-2 mb-4">
+                                            <span class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm">Inteligencia Artificial</span>
+                                            <span class="bg-secondary-cyan text-white px-3 py-1 rounded-full text-sm">Machine Learning</span>
+                                            <span class="bg-accent-pink text-white px-3 py-1 rounded-full text-sm">Deep Learning</span>
+                                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Data Science</span>
+                                            <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">Computer Vision</span>
+                                            <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm">NLP</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bio -->
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-dark mb-4">Biografía Profesional</h3>
+                                        <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">Dr. Roberto Mendoza es un reconocido experto en Inteligencia Artificial con más de 15 años de experiencia en investigación y desarrollo. Ha liderado múltiples proyectos de innovación tecnológica y ha sido jurado en más de 50 hackatones internacionales. Su expertise abarca desde machine learning hasta computer vision, con un enfoque especial en aplicaciones prácticas de IA para resolver problemas del mundo real.</textarea>
+                                    </div>
+
+                                    <!-- Save Button -->
+                                    <div class="flex justify-end">
+                                        <button onclick="saveJudgeProfile()" class="bg-primary-blue hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                            <i class="fas fa-save mr-2"></i>Guardar Cambios
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column - Stats & Achievements -->
+                                <div class="space-y-6">
+                                    <!-- Judge Stats -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="font-semibold text-gray-dark mb-4">Estadísticas como Jurado</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-medium">Hackatones evaluados</span>
+                                                <span class="font-semibold text-gray-dark">23</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-medium">Proyectos revisados</span>
+                                                <span class="font-semibold text-gray-dark">156</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-medium">Puntuación promedio</span>
+                                                <span class="font-semibold text-secondary-cyan">8.2/10</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-medium">Años de experiencia</span>
+                                                <span class="font-semibold text-accent-pink">15</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Certifications -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="font-semibold text-gray-dark mb-4">Certificaciones</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-certificate text-white text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-dark">PhD Computer Science</p>
+                                                    <p class="text-xs text-gray-medium">MIT - 2008</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-award text-white text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-dark">AI Research Excellence</p>
+                                                    <p class="text-xs text-gray-medium">IEEE - 2020</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-medal text-white text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-dark">Innovation Judge Certified</p>
+                                                    <p class="text-xs text-gray-medium">TechCrunch - 2019</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Recent Activity -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="font-semibold text-gray-dark mb-4">Actividad Reciente</h4>
+                                        <div class="space-y-3">
+                                            <div class="text-sm">
+                                                <p class="font-medium text-gray-dark">Evaluó "EcoApp"</p>
+                                                <p class="text-xs text-gray-medium">Hace 2 horas</p>
+                                            </div>
+                                            <div class="text-sm">
+                                                <p class="font-medium text-gray-dark">Completó "SmartHealth"</p>
+                                                <p class="text-xs text-gray-medium">Ayer</p>
+                                            </div>
+                                            <div class="text-sm">
+                                                <p class="font-medium text-gray-dark">Envió feedback detallado</p>
+                                                <p class="text-xs text-gray-medium">Hace 2 días</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Evaluation Modal -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="evaluationModal">
+        <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-dark" id="evaluationTitle">Evaluar Proyecto</h3>
+                <button onclick="closeEvaluationModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Project Info -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-dark mb-3">Información del Proyecto</h4>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h5 class="font-medium text-gray-dark mb-2">EcoApp - Sostenibilidad Urbana</h5>
+                                <p class="text-sm text-gray-medium mb-3">
+                                    Una aplicación móvil que ayuda a los ciudadanos a reducir su huella de carbono 
+                                    mediante el seguimiento de actividades diarias y recomendaciones personalizadas.
+                                </p>
+                                <div class="flex items-center space-x-4 text-xs text-gray-medium">
+                                    <span><i class="fas fa-users mr-1"></i>GreenTech Innovators</span>
+                                    <span><i class="fas fa-code mr-1"></i>React Native, Node.js</span>
+                                    <span><i class="fas fa-calendar mr-1"></i>EcoHack 2024</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evaluation Criteria -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-dark mb-4">Criterios de Evaluación</h4>
+                            <div class="space-y-6">
+                                <!-- Innovación -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h5 class="font-medium text-gray-dark">Innovación y Creatividad</h5>
+                                        <span class="text-sm text-gray-medium">25%</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="text-sm text-gray-medium">Puntuación:</span>
+                                        <div class="flex space-x-1" id="innovation-stars">
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="1" onclick="setRating('innovation', 1)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="2" onclick="setRating('innovation', 2)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="3" onclick="setRating('innovation', 3)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="4" onclick="setRating('innovation', 4)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="5" onclick="setRating('innovation', 5)"></i>
+                                        </div>
+                                        <input type="number" min="0" max="10" step="0.1" class="score-input w-20 px-2 py-1 text-sm rounded" placeholder="0.0" id="innovation-score">
+                                    </div>
+                                    <textarea rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm" placeholder="Comentarios sobre innovación..."></textarea>
+                                </div>
+
+                                <!-- Técnico -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h5 class="font-medium text-gray-dark">Calidad Técnica</h5>
+                                        <span class="text-sm text-gray-medium">30%</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="text-sm text-gray-medium">Puntuación:</span>
+                                        <div class="flex space-x-1" id="technical-stars">
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="1" onclick="setRating('technical', 1)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="2" onclick="setRating('technical', 2)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="3" onclick="setRating('technical', 3)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="4" onclick="setRating('technical', 4)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="5" onclick="setRating('technical', 5)"></i>
+                                        </div>
+                                        <input type="number" min="0" max="10" step="0.1" class="score-input w-20 px-2 py-1 text-sm rounded" placeholder="0.0" id="technical-score">
+                                    </div>
+                                    <textarea rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm" placeholder="Comentarios sobre implementación técnica..."></textarea>
+                                </div>
+
+                                <!-- Impacto -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h5 class="font-medium text-gray-dark">Impacto y Viabilidad</h5>
+                                        <span class="text-sm text-gray-medium">25%</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="text-sm text-gray-medium">Puntuación:</span>
+                                        <div class="flex space-x-1" id="impact-stars">
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="1" onclick="setRating('impact', 1)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="2" onclick="setRating('impact', 2)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="3" onclick="setRating('impact', 3)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="4" onclick="setRating('impact', 4)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="5" onclick="setRating('impact', 5)"></i>
+                                        </div>
+                                        <input type="number" min="0" max="10" step="0.1" class="score-input w-20 px-2 py-1 text-sm rounded" placeholder="0.0" id="impact-score">
+                                    </div>
+                                    <textarea rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm" placeholder="Comentarios sobre impacto y viabilidad..."></textarea>
+                                </div>
+
+                                <!-- Presentación -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h5 class="font-medium text-gray-dark">Presentación</h5>
+                                        <span class="text-sm text-gray-medium">20%</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="text-sm text-gray-medium">Puntuación:</span>
+                                        <div class="flex space-x-1" id="presentation-stars">
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="1" onclick="setRating('presentation', 1)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="2" onclick="setRating('presentation', 2)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="3" onclick="setRating('presentation', 3)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="4" onclick="setRating('presentation', 4)"></i>
+                                            <i class="fas fa-star rating-star text-gray-300" data-rating="5" onclick="setRating('presentation', 5)"></i>
+                                        </div>
+                                        <input type="number" min="0" max="10" step="0.1" class="score-input w-20 px-2 py-1 text-sm rounded" placeholder="0.0" id="presentation-score">
+                                    </div>
+                                    <textarea rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm" placeholder="Comentarios sobre la presentación..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation Summary -->
+                    <div class="space-y-6">
+                        <!-- Overall Score -->
+                        <div class="bg-primary-blue text-white rounded-lg p-4">
+                            <h5 class="font-semibold mb-3">Puntuación Final</h5>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2" id="finalScore">0.0</div>
+                                <div class="text-sm opacity-80">de 10.0</div>
+                            </div>
+                            <div class="mt-4 space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span>Innovación (25%)</span>
+                                    <span id="innovationWeight">0.0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Técnico (30%)</span>
+                                    <span id="technicalWeight">0.0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Impacto (25%)</span>
+                                    <span id="impactWeight">0.0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Presentación (20%)</span>
+                                    <span id="presentationWeight">0.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Team Info -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h5 class="font-semibold text-gray-dark mb-3">Equipo</h5>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-secondary-cyan rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                        MG
+                                    </div>
+                                    <span class="text-sm text-gray-dark">María González - Leader</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                        JR
+                                    </div>
+                                    <span class="text-sm text-gray-dark">Juan Rodríguez - Backend</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                        AL
+                                    </div>
+                                    <span class="text-sm text-gray-dark">Ana López - Frontend</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                        CS
+                                    </div>
+                                    <span class="text-sm text-gray-dark">Carlos Silva - Design</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Links -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h5 class="font-semibold text-gray-dark mb-3">Enlaces del Proyecto</h5>
+                            <div class="space-y-2">
+                                <a href="#" class="flex items-center text-primary-blue hover:text-blue-800 text-sm">
+                                    <i class="fab fa-github mr-2"></i>Código Fuente
+                                </a>
+                                <a href="#" class="flex items-center text-secondary-cyan hover:text-cyan-600 text-sm">
+                                    <i class="fas fa-external-link-alt mr-2"></i>Demo en Vivo
+                                </a>
+                                <a href="#" class="flex items-center text-accent-pink hover:text-pink-600 text-sm">
+                                    <i class="fas fa-file-pdf mr-2"></i>Presentación
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Comments -->
+                <div class="mt-6">
+                    <h4 class="text-lg font-semibold text-gray-dark mb-3">Comentarios Generales</h4>
+                    <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Proporciona feedback constructivo y sugerencias para el equipo..."></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-4 p-6 border-t border-gray-200">
+                <button onclick="closeEvaluationModal()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+                    Cancelar
+                </button>
+                <button onclick="saveDraft()" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
+                    <i class="fas fa-save mr-2"></i>Guardar Borrador
+                </button>
+                <button onclick="submitEvaluation()" class="px-6 py-3 bg-primary-blue hover:bg-blue-800 text-white rounded-lg font-medium transition-colors">
+                    <i class="fas fa-check mr-2"></i>Enviar Evaluación
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script th:src="@{/js/jurado-dashboard-script/dashboard-jurado.js}"></script>
 </body>
 </html>
