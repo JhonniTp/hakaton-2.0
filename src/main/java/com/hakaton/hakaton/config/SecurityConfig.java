@@ -1,11 +1,11 @@
 package com.hakaton.hakaton.config;
 
-import com.hakaton.hakaton.service.impl.UserDetailsServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
@@ -26,12 +28,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        logger.info("Configurando SecurityFilterChain...");
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/login", "/auth/google", "/img/**", "/css/**", "/js/**", "/cdn-cgi/**").permitAll()
@@ -42,7 +40,11 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .successHandler(customAuthenticationSuccessHandler)
+                .failureUrl("/login?error") 
                 .permitAll()
             )
             .logout(logout -> logout
@@ -52,6 +54,7 @@ public class SecurityConfig {
             )
             .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google"));
 
+        logger.info("SecurityFilterChain configurado.");
         return http.build();
     }
 }
