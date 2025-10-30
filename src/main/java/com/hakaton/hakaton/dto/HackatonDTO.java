@@ -26,7 +26,7 @@ public class HackatonDTO {
   private String urlImg;
 
   @NotNull(message = "La fecha de inicio es obligatoria")
-  @Future(message = "La fecha de inicio debe ser en el futuro")
+  @FutureOrPresent(message = "La fecha de inicio debe ser en el presente o futuro")
   private LocalDateTime fechaInicio;
 
   @NotNull(message = "La fecha de fin es obligatoria")

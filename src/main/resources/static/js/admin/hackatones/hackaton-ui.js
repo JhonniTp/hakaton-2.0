@@ -161,23 +161,27 @@ const HackatonUI = (() => {
      * Obtiene los datos del formulario
      */
     obtenerDatosFormulario: () => {
+      const descripcion = document
+        .getElementById("hackaton-description")
+        .value.trim();
+      const urlImg = document.getElementById("hackaton-image").value.trim();
+      const idCategoria = document.getElementById("hackaton-category").value;
+      const maxParticipantes = document.getElementById(
+        "hackaton-max-participants"
+      ).value;
+      const teamSize = document.getElementById("hackaton-team-size").value;
+
       return {
         nombre: document.getElementById("hackaton-name").value.trim(),
-        idCategoria: parseInt(
-          document.getElementById("hackaton-category").value
-        ),
-        descripcion: document
-          .getElementById("hackaton-description")
-          .value.trim(),
-        urlImg: document.getElementById("hackaton-image").value.trim(),
+        idCategoria: idCategoria ? parseInt(idCategoria) : null,
+        descripcion: descripcion || null, // null si está vacío
+        urlImg: urlImg || null, // null si está vacío
         fechaInicio: document.getElementById("hackaton-start-date").value,
         fechaFin: document.getElementById("hackaton-end-date").value,
-        maximoParticipantes: parseInt(
-          document.getElementById("hackaton-max-participants").value
-        ),
-        grupoCantidadParticipantes: parseInt(
-          document.getElementById("hackaton-team-size").value
-        ),
+        maximoParticipantes: maxParticipantes
+          ? parseInt(maxParticipantes)
+          : null,
+        grupoCantidadParticipantes: teamSize ? parseInt(teamSize) : null,
       };
     },
 

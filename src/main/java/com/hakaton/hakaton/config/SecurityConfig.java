@@ -56,7 +56,8 @@ public class SecurityConfig {
                                                 "/auth/google",
                                                 "/auth/register",
                                                 "/auth/check-email",
-                                                "/admin/hackatones/**"));
+                                                "/admin/hackatones/**",
+                                                "/admin/usuarios/**"));
 
                 logger.info("SecurityFilterChain configurado.");
                 return http.build();

@@ -12,14 +12,21 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     Optional<UsuarioModel> findByCorreoElectronico(String correoElectronico);
+
     Optional<UsuarioModel> findByGoogleId(String googleId);
+
     boolean existsByCorreoElectronico(String correoElectronico);
 
     boolean existsByTelefono(String telefono);
+
     boolean existsByGoogleId(String googleId);
+
     boolean existsByDocumentoDni(String documentoDni);
-    
+
     @Modifying
     @Query("UPDATE UsuarioModel u SET u.rol = :rol WHERE u.idUsuario = :id")
     void actualizarRol(@Param("id") Long id, @Param("rol") UsuarioModel.Rol rol);
+
+    // Buscar usuarios por rol
+    java.util.List<UsuarioModel> findByRol(UsuarioModel.Rol rol);
 }

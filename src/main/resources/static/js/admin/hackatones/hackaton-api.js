@@ -14,9 +14,24 @@ const HackatonAPI = (() => {
       const error = await response
         .json()
         .catch(() => ({ message: "Error desconocido" }));
-      throw new Error(
-        error.message || `HTTP error! status: ${response.status}`
-      );
+
+      console.log("🔍 Error del servidor:", error);
+
+      // Si hay errores de validación específicos
+      if (error.errors) {
+        const erroresFormateados = Object.entries(error.errors)
+          .map(([campo, mensaje]) => `${campo}: ${mensaje}`)
+          .join("\n");
+        throw new Error(`Errores de validación:\n${erroresFormateados}`);
+      }
+
+      // Si hay un mensaje de error general
+      if (error.message) {
+        throw new Error(error.message);
+      }
+
+      // Error genérico
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     return response.json();
   };
@@ -76,6 +91,12 @@ const HackatonAPI = (() => {
      */
     crear: async (hackatonData) => {
       try {
+        console.log("📤 Enviando petición POST a:", BASE_URL);
+        console.log(
+          "📦 Datos del hackaton:",
+          JSON.stringify(hackatonData, null, 2)
+        );
+
         const response = await fetch(BASE_URL, {
           method: "POST",
           headers: {
@@ -83,9 +104,18 @@ const HackatonAPI = (() => {
           },
           body: JSON.stringify(hackatonData),
         });
-        return await handleFetchError(response);
+
+        console.log(
+          "📨 Respuesta del servidor:",
+          response.status,
+          response.statusText
+        );
+
+        const data = await handleFetchError(response);
+        console.log("✅ Datos parseados:", data);
+        return data;
       } catch (error) {
-        console.error("Error al crear hackatón:", error);
+        console.error("❌ Error al crear hackatón:", error);
         throw error;
       }
     },

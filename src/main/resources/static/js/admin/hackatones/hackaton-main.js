@@ -107,19 +107,27 @@ const HackatonController = (() => {
         const id = document.getElementById("hackaton-id").value;
         const datos = HackatonUI.obtenerDatosFormulario();
 
-        // Validación básica
-        if (
-          !datos.nombre ||
-          !datos.idCategoria ||
-          !datos.fechaInicio ||
-          !datos.fechaFin
-        ) {
+        // Validación detallada
+        const camposFaltantes = [];
+        if (!datos.nombre) camposFaltantes.push("Nombre");
+        if (!datos.idCategoria) camposFaltantes.push("Categoría");
+        if (!datos.fechaInicio) camposFaltantes.push("Fecha de Inicio");
+        if (!datos.fechaFin) camposFaltantes.push("Fecha de Fin");
+        if (!datos.maximoParticipantes)
+          camposFaltantes.push("Máximo de Participantes");
+        if (!datos.grupoCantidadParticipantes)
+          camposFaltantes.push("Tamaño de Equipos");
+
+        if (camposFaltantes.length > 0) {
           HackatonUI.mostrarNotificacion(
-            "Por favor complete todos los campos obligatorios",
+            `Por favor complete: ${camposFaltantes.join(", ")}`,
             "warning"
           );
           return;
         }
+
+        // Log para debugging
+        console.log("Datos a enviar:", datos);
 
         let resultado;
         if (id) {
@@ -142,10 +150,27 @@ const HackatonController = (() => {
         await cargarHackatones();
       } catch (error) {
         console.error("Error al guardar:", error);
-        HackatonUI.mostrarNotificacion(
-          error.message || "Error al guardar el hackatón",
-          "error"
-        );
+
+        // Intentar extraer mensaje de error más específico
+        let mensaje = "Error al guardar el hackatón";
+        if (error.message) {
+          mensaje = error.message;
+        }
+
+        // Si hay errores de validación específicos
+        if (error.message && error.message.includes("{")) {
+          try {
+            const errorObj = JSON.parse(error.message);
+            if (errorObj.errors) {
+              const errores = Object.values(errorObj.errors).join(", ");
+              mensaje = `Errores de validación: ${errores}`;
+            }
+          } catch (e) {
+            // Si no se puede parsear, usar el mensaje original
+          }
+        }
+
+        HackatonUI.mostrarNotificacion(mensaje, "error");
       }
     },
 
