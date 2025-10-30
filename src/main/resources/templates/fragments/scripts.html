@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <!-- Fragment: Scripts del login -->
+    <th:block th:fragment="login-scripts">
+      <script
+        type="module"
+        th:src="@{/js/login-gmail-script/login-gmail-google.js}"
+      ></script>
+      <script th:src="@{/js/validacion/login-validacion.js}"></script>
+      <script>
+        const errorMessage = document.getElementById("error-message");
+        if (errorMessage) {
+          setTimeout(() => {
+            errorMessage.style.display = "none";
+          }, 2500);
+        }
+      </script>
+    </th:block>
+  </body>
+</html>

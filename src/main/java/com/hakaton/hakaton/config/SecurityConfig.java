@@ -31,31 +31,29 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configurando SecurityFilterChain...");
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/login", "/auth/google", "/img/**", "/css/**", "/js/**", "/cdn-cgi/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
-                .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
-                .requestMatchers("/jurado/**").hasRole("JURADO")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .successHandler(customAuthenticationSuccessHandler)
-                .failureUrl("/login?error") 
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            )
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google"));
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/login", "/auth/google", "/auth/register", "/auth/check-email",
+                                "/img/**", "/css/**", "/js/**", "/cdn-cgi/**")
+                        .permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
+                        .requestMatchers("/jurado/**").hasRole("JURADO")
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureUrl("/login?error")
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google", "/auth/register", "/auth/check-email"));
 
         logger.info("SecurityFilterChain configurado.");
         return http.build();
     }
 }
-

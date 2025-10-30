@@ -1,114 +1,20 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base}"
+>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EduPortal - Sistema Académico</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: "#1e40af",
-              secondary: "#7c3aed",
-              accent: "#059669",
-              academic: {
-                50: "#eff6ff",
-                100: "#dbeafe",
-                500: "#3b82f6",
-                600: "#2563eb",
-                700: "#1d4ed8",
-                800: "#1e40af",
-                900: "#1e3a8a",
-              },
-            },
-            fontFamily: {
-              academic: ["Inter", "system-ui", "sans-serif"],
-            },
-          },
-        },
-      };
-    </script>
-    <link rel="stylesheet" th:href="@{/css/login-style.css}" />
+    <title>Iniciar Sesión</title>
   </head>
-  <body class="font-academic bg-gray-50 academic-pattern min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-14 sm:h-16">
-          <div class="flex items-center space-x-2 sm:space-x-3">
-            <div
-              class="w-8 h-8 sm:w-10 sm:h-10 gradient-bg rounded-lg sm:rounded-xl flex items-center justify-center"
-            >
-              <svg
-                class="w-4 h-4 sm:w-6 sm:h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <h1 class="text-lg sm:text-xl font-bold text-gray-900">
-                EduPortal
-              </h1>
-              <p class="text-xs text-gray-500 hidden sm:block">
-                Sistema Académico Institucional
-              </p>
-            </div>
-          </div>
-          <div class="hidden md:flex items-center space-x-4">
-            <div class="flex items-center space-x-2 text-sm text-gray-600">
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-              <span class="hidden lg:inline"
-                >Soporte: laquesoporte@certus.edu.pe</span
-              >
-              <span class="lg:hidden">Soporte</span>
-            </div>
-          </div>
-          <!-- Mobile support button -->
-          <button
-            onclick="showSupport()"
-            class="md:hidden p-2 text-gray-600 hover:text-gray-900"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </header>
+
+  <body>
     <!-- Main Content -->
-    <main class="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <main
+      layout:fragment="content"
+      class="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8"
+    >
       <div class="max-w-7xl w-full mx-auto">
         <div
           class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center"
@@ -242,7 +148,9 @@
       </div>
     </main>
 
-    <!-- Scripts -->
-    <div th:replace="~{fragments/scripts :: login-scripts}"></div>
+    <!-- Scripts específicos del login -->
+    <th:block layout:fragment="extra-scripts">
+      <div th:replace="~{fragments/scripts :: login-scripts}"></div>
+    </th:block>
   </body>
 </html>

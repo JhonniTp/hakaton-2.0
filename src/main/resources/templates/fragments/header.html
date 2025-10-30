@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <!-- Fragment: Header del sitio -->
+    <header
+      th:fragment="navbar"
+      class="bg-white shadow-sm border-b border-gray-200"
+    >
+      <nav
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        aria-label="Navegación principal"
+      >
+        <div class="flex justify-between items-center h-14 sm:h-16">
+          <!-- Logo y título -->
+          <a
+            href="#"
+            class="flex items-center space-x-2 sm:space-x-3 no-underline"
+          >
+            <div
+              class="w-8 h-8 sm:w-10 sm:h-10 gradient-bg rounded-lg sm:rounded-xl flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 sm:w-6 sm:h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                ></path>
+              </svg>
+            </div>
+            <hgroup>
+              <h1 class="text-lg sm:text-xl font-bold text-gray-900">
+                EduPortal
+              </h1>
+              <p class="text-xs text-gray-500 hidden sm:block">
+                Sistema Académico Institucional
+              </p>
+            </hgroup>
+          </a>
+
+          <!-- Información de soporte (Desktop) -->
+          <address
+            class="hidden md:flex items-center space-x-2 text-sm text-gray-600 not-italic"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span class="hidden lg:inline"
+              >Soporte:
+              <a
+                href="mailto:laquesoporte@certus.edu.pe"
+                class="hover:text-academic-600"
+                >laquesoporte@certus.edu.pe</a
+              ></span
+            >
+            <span class="lg:hidden">Soporte</span>
+          </address>
+
+          <!-- Botón de soporte móvil -->
+          <button
+            type="button"
+            onclick="showSupport()"
+            class="md:hidden p-2 text-gray-600 hover:text-gray-900"
+            aria-label="Mostrar información de soporte"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+  </body>
+</html>

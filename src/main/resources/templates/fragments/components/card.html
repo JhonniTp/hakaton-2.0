@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <!-- Fragment: Card con gradiente de icono -->
+    <article
+      th:fragment="form-card(id, iconPath, title, subtitle, extraClass, showCard)"
+      th:id="${id}"
+      th:classappend="${extraClass}"
+      th:class="${showCard} ? 'glass-effect rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 form-container slide-in' : 'glass-effect rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 form-container slide-in hidden'"
+    >
+      <header class="text-center mb-6 sm:mb-8">
+        <div
+          class="w-12 h-12 sm:w-16 sm:h-16 gradient-bg rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4"
+        >
+          <svg
+            class="w-6 h-6 sm:w-7 sm:h-7 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              th:attr="d=${iconPath}"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            ></path>
+          </svg>
+        </div>
+        <h2
+          class="text-lg sm:text-xl font-bold text-gray-900"
+          th:text="${title}"
+        >
+          Título
+        </h2>
+        <p class="text-xs sm:text-sm text-gray-600 mt-2" th:text="${subtitle}">
+          Subtítulo
+        </p>
+      </header>
+
+      <div th:replace="${content}">
+        <!-- Contenido dinámico -->
+      </div>
+    </article>
+
+    <!-- Fragment: Separador con texto -->
+    <div th:fragment="divider(text)" class="relative">
+      <hr class="border-t border-gray-300" />
+      <span
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-2 bg-white text-sm text-gray-500"
+        th:text="${text}"
+      >
+        o
+      </span>
+    </div>
+  </body>
+</html>
