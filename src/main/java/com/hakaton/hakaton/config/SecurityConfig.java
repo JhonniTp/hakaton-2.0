@@ -14,46 +14,51 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+        private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+        private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    public SecurityConfig(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
-        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
-    }
+        public SecurityConfig(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+                this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        logger.info("Configurando SecurityFilterChain...");
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login", "/auth/google", "/auth/register", "/auth/check-email",
-                                "/img/**", "/css/**", "/js/**", "/cdn-cgi/**")
-                        .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
-                        .requestMatchers("/jurado/**").hasRole("JURADO")
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .successHandler(customAuthenticationSuccessHandler)
-                        .failureUrl("/login?error")
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google", "/auth/register", "/auth/check-email"));
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                logger.info("Configurando SecurityFilterChain...");
+                http
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers("/", "/login", "/auth/google", "/auth/register",
+                                                                "/auth/check-email",
+                                                                "/img/**", "/css/**", "/js/**", "/cdn-cgi/**")
+                                                .permitAll()
+                                                .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                                                .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
+                                                .requestMatchers("/jurado/**").hasRole("JURADO")
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .loginProcessingUrl("/login")
+                                                .usernameParameter("username")
+                                                .passwordParameter("password")
+                                                .successHandler(customAuthenticationSuccessHandler)
+                                                .failureUrl("/login?error")
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/login?logout")
+                                                .permitAll())
+                                .csrf(csrf -> csrf.ignoringRequestMatchers(
+                                                "/auth/google",
+                                                "/auth/register",
+                                                "/auth/check-email",
+                                                "/admin/hackatones/**"));
 
-        logger.info("SecurityFilterChain configurado.");
-        return http.build();
-    }
+                logger.info("SecurityFilterChain configurado.");
+                return http.build();
+        }
 }

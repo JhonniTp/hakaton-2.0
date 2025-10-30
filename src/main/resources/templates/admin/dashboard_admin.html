@@ -1,796 +1,994 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CERTUS HACKATON - Panel Administrativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-blue': '#031F56',
-                        'secondary-cyan': '#00BAD6',
-                        'accent-pink': '#D62C8E',
-                        'primary-white': '#FFFFFF',
-                        'gray-light': '#F8FAFC',
-                        'gray-medium': '#64748B',
-                        'gray-dark': '#334155'
-                    },
-                    fontFamily: {
-                        'inter': ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary-blue": "#031F56",
+              "secondary-cyan": "#00BAD6",
+              "accent-pink": "#D62C8E",
+              "primary-white": "#FFFFFF",
+              "gray-light": "#F8FAFC",
+              "gray-medium": "#64748B",
+              "gray-dark": "#334155",
+            },
+            fontFamily: {
+              inter: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
     </script>
-    
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .sidebar-gradient {
-            background: linear-gradient(135deg, #031F56 0%, #1E293B 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .stat-icon-bg-cyan {
-            background: linear-gradient(135deg, #00BAD6 0%, #0891B2 100%);
-        }
-        
-        .stat-icon-bg-pink {
-            background: linear-gradient(135deg, #D62C8E 0%, #BE185D 100%);
-        }
-        
-        .nav-link-active {
-            background: rgba(0, 186, 214, 0.1);
-            border-right: 3px solid #00BAD6;
-        }
-        
-        .hackathon-image {
-            background: linear-gradient(135deg, #031F56 0%, #00BAD6 100%);
-        }
-        
-        .gradient-overlay {
-            background: linear-gradient(to bottom, rgba(3, 31, 86, 0.7), rgba(0, 186, 214, 0.7));
-        }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      .sidebar-gradient {
+        background: linear-gradient(135deg, #031f56 0%, #1e293b 100%);
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .stat-icon-bg-cyan {
+        background: linear-gradient(135deg, #00bad6 0%, #0891b2 100%);
+      }
+
+      .stat-icon-bg-pink {
+        background: linear-gradient(135deg, #d62c8e 0%, #be185d 100%);
+      }
+
+      .nav-link-active {
+        background: rgba(0, 186, 214, 0.1);
+        border-right: 3px solid #00bad6;
+      }
+
+      .hackathon-image {
+        background: linear-gradient(135deg, #031f56 0%, #00bad6 100%);
+      }
+
+      .gradient-overlay {
+        background: linear-gradient(
+          to bottom,
+          rgba(3, 31, 86, 0.7),
+          rgba(0, 186, 214, 0.7)
+        );
+      }
     </style>
-</head>
-<body class="bg-gray-light font-inter">
+  </head>
+  <body class="bg-gray-light font-inter">
     <!-- Sidebar -->
-    <div class="fixed inset-y-0 left-0 z-50 w-64 sidebar-gradient transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0" id="sidebar">
-        <!-- Logo Header -->
-        <div class="flex items-center justify-center h-20 px-6 border-b border-gray-700" style="margin-top: 4%">
-            <div class="text-center">
-                <img th:src="@{/img/certuslogo.png}" alt="Logo de la Hackaton" width="150">
-                <h2 class="text-lg font-semibold text-secondary-cyan">HACKATON</h2>
-            </div>
+    <div
+      class="fixed inset-y-0 left-0 z-50 w-64 sidebar-gradient transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0"
+      id="sidebar"
+    >
+      <!-- Logo Header -->
+      <div
+        class="flex items-center justify-center h-20 px-6 border-b border-gray-700"
+        style="margin-top: 4%"
+      >
+        <div class="text-center">
+          <img
+            th:src="@{/img/certuslogo.png}"
+            alt="Logo de la Hackaton"
+            width="150"
+          />
+          <h2 class="text-lg font-semibold text-secondary-cyan">HACKATON</h2>
         </div>
-        
-        <!-- Navigation Menu -->
-        <nav class="mt-8 px-4">
-            <div class="space-y-2">
-                <a href="#" onclick="showSection('dashboard')" class="nav-link nav-link-active flex items-center px-4 py-3 text-primary-white rounded-lg transition-colors duration-200 hover:bg-gray-700" id="nav-dashboard">
-                    <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-                
-                <a href="#" onclick="showSection('hackathons')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-hackathons">
-                    <i class="fas fa-trophy w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Gestión de Hackatones</span>
-                </a>
-                
-                <a href="#" onclick="showSection('participants')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-participants">
-                    <i class="fas fa-users w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Participantes</span>
-                </a>
-                
-                <a href="#" onclick="showSection('teams')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-teams">
-                    <i class="fas fa-user-friends w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Equipos</span>
-                </a>
-                
-                <a href="#" onclick="showSection('judges')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-judges">
-                    <i class="fas fa-gavel w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Gestión de Jurados</span>
-                </a>
-                
-                <a href="#" onclick="showSection('evaluations')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-evaluations">
-                    <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Evaluaciones</span>
-                </a>
-                
-                <a href="#" onclick="showSection('reports')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-reports">
-                    <i class="fas fa-file-alt w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Reportes</span>
-                </a>
-                
-                <a href="#" onclick="showSection('settings')" class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white" id="nav-settings">
-                    <i class="fas fa-cog w-5 h-5 mr-3"></i>
-                    <span class="font-medium">Configuración</span>
-                </a>
-            </div>
-        </nav>
-        
-        <!-- User Profile -->
-        <div class="absolute bottom-0 w-full p-4 border-t border-gray-700">
-            <div class="flex items-center">
-                <div class="w-10 h-10 bg-secondary-cyan rounded-full flex items-center justify-center text-primary-white font-semibold">
-                    AP
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-primary-white">Admin Principal</p>
-                    <p class="text-xs text-gray-400">admin@certus.edu.pe</p>
-                </div>
-            </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="mt-8 px-4">
+        <div class="space-y-2">
+          <a
+            href="#"
+            onclick="showSection('dashboard')"
+            class="nav-link nav-link-active flex items-center px-4 py-3 text-primary-white rounded-lg transition-colors duration-200 hover:bg-gray-700"
+            id="nav-dashboard"
+          >
+            <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
+            <span class="font-medium">Dashboard</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('hackathons')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-hackathons"
+          >
+            <i class="fas fa-trophy w-5 h-5 mr-3"></i>
+            <span class="font-medium">Gestión de Hackatones</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('participants')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-participants"
+          >
+            <i class="fas fa-users w-5 h-5 mr-3"></i>
+            <span class="font-medium">Participantes</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('teams')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-teams"
+          >
+            <i class="fas fa-user-friends w-5 h-5 mr-3"></i>
+            <span class="font-medium">Equipos</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('judges')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-judges"
+          >
+            <i class="fas fa-gavel w-5 h-5 mr-3"></i>
+            <span class="font-medium">Gestión de Jurados</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('evaluations')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-evaluations"
+          >
+            <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
+            <span class="font-medium">Evaluaciones</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('reports')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-reports"
+          >
+            <i class="fas fa-file-alt w-5 h-5 mr-3"></i>
+            <span class="font-medium">Reportes</span>
+          </a>
+
+          <a
+            href="#"
+            onclick="showSection('settings')"
+            class="nav-link flex items-center px-4 py-3 text-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-700 hover:text-primary-white"
+            id="nav-settings"
+          >
+            <i class="fas fa-cog w-5 h-5 mr-3"></i>
+            <span class="font-medium">Configuración</span>
+          </a>
         </div>
+      </nav>
+
+      <!-- User Profile -->
+      <div class="absolute bottom-0 w-full p-4 border-t border-gray-700">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 bg-secondary-cyan rounded-full flex items-center justify-center text-primary-white font-semibold"
+          >
+            AP
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-primary-white">
+              Admin Principal
+            </p>
+            <p class="text-xs text-gray-400">admin@certus.edu.pe</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Main Content -->
     <div class="lg:ml-64">
-        <!-- Top Navigation Bar -->
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="flex items-center justify-between px-4 lg:px-6 py-4">
-                <div class="flex items-center">
-                    <button class="lg:hidden text-gray-600 hover:text-gray-900 mr-4" onclick="toggleSidebar()">
-                        <i class="fas fa-bars text-xl"></i>
+      <!-- Top Navigation Bar -->
+      <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="flex items-center justify-between px-4 lg:px-6 py-4">
+          <div class="flex items-center">
+            <button
+              class="lg:hidden text-gray-600 hover:text-gray-900 mr-4"
+              onclick="toggleSidebar()"
+            >
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1
+              class="text-xl lg:text-2xl font-bold text-gray-dark"
+              id="pageTitle"
+            >
+              Dashboard Administrativo
+            </h1>
+          </div>
+
+          <div class="flex items-center space-x-2 lg:space-x-4">
+            <button
+              class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <i class="fas fa-bell text-lg"></i>
+              <span
+                class="absolute -top-1 -right-1 w-5 h-5 bg-accent-pink text-white text-xs rounded-full flex items-center justify-center"
+                >3</span
+              >
+            </button>
+
+            <div class="relative">
+              <button
+                class="flex items-center space-x-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                onclick="toggleUserMenu()"
+              >
+                <div
+                  class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                >
+                  AP
+                </div>
+                <i class="fas fa-chevron-down text-sm hidden lg:block"></i>
+              </button>
+
+              <!-- User Dropdown Menu -->
+              <div
+                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden"
+                id="userMenu"
+              >
+                <div class="py-2">
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <i class="fas fa-user w-4 mr-2"></i>Mi Perfil
+                  </a>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <i class="fas fa-cog w-4 mr-2"></i>Configuración
+                  </a>
+                  <hr class="my-2" />
+                  <form
+                    th:action="@{/logout}"
+                    method="post"
+                    style="display: inline"
+                  >
+                    <button
+                      type="submit"
+                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <i class="fas fa-sign-out-alt w-4 mr-2"></i>Cerrar Sesión
                     </button>
-                    <h1 class="text-xl lg:text-2xl font-bold text-gray-dark" id="pageTitle">Dashboard Administrativo</h1>
+                  </form>
                 </div>
-                
-                <div class="flex items-center space-x-2 lg:space-x-4">
-                    <button class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-                        <i class="fas fa-bell text-lg"></i>
-                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-accent-pink text-white text-xs rounded-full flex items-center justify-center">3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <main class="p-4 lg:p-6" id="mainContent">
+        <!-- Dashboard Content -->
+        <div id="dashboard-section">
+          <!-- Stats Cards -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8"
+          >
+            <!-- Hackatones Activos -->
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-medium mb-1">
+                    Hackatones Activos
+                  </p>
+                  <p class="text-2xl lg:text-3xl font-bold text-gray-dark">3</p>
+                  <p class="text-sm text-green-600 mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i>+2 este mes
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-cyan rounded-lg flex items-center justify-center"
+                >
+                  <i class="fas fa-trophy text-white text-lg lg:text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Participantes Registrados -->
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-medium mb-1">
+                    Participantes
+                  </p>
+                  <p class="text-2xl lg:text-3xl font-bold text-gray-dark">
+                    247
+                  </p>
+                  <p class="text-sm text-green-600 mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i>+45 esta semana
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-pink rounded-lg flex items-center justify-center"
+                >
+                  <i class="fas fa-users text-white text-lg lg:text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Proyectos Entregados -->
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-medium mb-1">
+                    Proyectos
+                  </p>
+                  <p class="text-2xl lg:text-3xl font-bold text-gray-dark">
+                    89
+                  </p>
+                  <p class="text-sm text-green-600 mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i>+12 hoy
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-cyan rounded-lg flex items-center justify-center"
+                >
+                  <i
+                    class="fas fa-project-diagram text-white text-lg lg:text-xl"
+                  ></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Evaluaciones Pendientes -->
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-medium mb-1">
+                    Evaluaciones
+                  </p>
+                  <p class="text-2xl lg:text-3xl font-bold text-gray-dark">
+                    23
+                  </p>
+                  <p class="text-sm text-red-600 mt-2">
+                    <i class="fas fa-clock mr-1"></i>Pendientes
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-pink rounded-lg flex items-center justify-center"
+                >
+                  <i
+                    class="fas fa-clipboard-check text-white text-lg lg:text-xl"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Dashboard Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Hackatones Recientes -->
+            <div class="lg:col-span-2">
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div
+                  class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 lg:p-6 border-b border-gray-200 space-y-4 sm:space-y-0"
+                >
+                  <h3 class="text-lg font-semibold text-gray-dark">
+                    Hackatones Recientes
+                  </h3>
+                  <button
+                    class="w-full sm:w-auto bg-secondary-cyan hover:bg-cyan-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                    onclick="openModal('createHackathonModal')"
+                  >
+                    <i class="fas fa-plus mr-2"></i>Crear Hackaton
+                  </button>
+                </div>
+                <div class="p-4 lg:p-6">
+                  <div class="space-y-6">
+                    <!-- Hackaton Card 1 -->
+                    <div
+                      class="border border-gray-200 rounded-lg overflow-hidden card-hover"
+                    >
+                      <!-- Hackathon Image -->
+                      <div class="relative h-32 lg:h-40 hackathon-image">
+                        <div class="absolute inset-0 gradient-overlay"></div>
+                        <div
+                          class="absolute inset-0 flex items-center justify-center"
+                        >
+                          <i
+                            class="fas fa-code text-white text-4xl lg:text-5xl opacity-50"
+                          ></i>
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                          <h4 class="text-lg lg:text-xl font-semibold">
+                            HackTech 2024
+                          </h4>
+                          <p class="text-sm opacity-90">15-17 Marzo 2024</p>
+                        </div>
+                      </div>
+                      <div class="p-4">
+                        <div class="grid grid-cols-3 gap-4 mb-4">
+                          <div class="text-center">
+                            <p
+                              class="text-xl lg:text-2xl font-bold text-secondary-cyan"
+                            >
+                              89
+                            </p>
+                            <p class="text-xs text-gray-medium">
+                              Participantes
+                            </p>
+                          </div>
+                          <div class="text-center">
+                            <p
+                              class="text-xl lg:text-2xl font-bold text-secondary-cyan"
+                            >
+                              23
+                            </p>
+                            <p class="text-xs text-gray-medium">Equipos</p>
+                          </div>
+                          <div class="text-center">
+                            <p
+                              class="text-xl lg:text-2xl font-bold text-secondary-cyan"
+                            >
+                              18
+                            </p>
+                            <p class="text-xs text-gray-medium">Proyectos</p>
+                          </div>
+                        </div>
+                        <div
+                          class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0"
+                        >
+                          <span
+                            class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium"
+                            >Activo</span
+                          >
+                          <div class="flex space-x-2">
+                            <button
+                              onclick="openModal('viewDetailsModal')"
+                              class="text-secondary-cyan hover:text-cyan-600 font-medium text-sm"
+                            >
+                              Ver Detalles
+                            </button>
+                            <button
+                              onclick="openModal('editHackathonModal')"
+                              class="text-gray-medium hover:text-gray-dark font-medium text-sm"
+                            >
+                              Editar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Hackaton Card 2 -->
+                    <div
+                      class="border border-gray-200 rounded-lg overflow-hidden card-hover"
+                    >
+                      <!-- Hackathon Image -->
+                      <div
+                        class="relative h-32 lg:h-40 bg-gradient-to-r from-accent-pink to-secondary-cyan"
+                      >
+                        <div class="absolute inset-0 gradient-overlay"></div>
+                        <div
+                          class="absolute inset-0 flex items-center justify-center"
+                        >
+                          <i
+                            class="fas fa-lightbulb text-white text-4xl lg:text-5xl opacity-50"
+                          ></i>
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                          <h4 class="text-lg lg:text-xl font-semibold">
+                            Innovation Challenge
+                          </h4>
+                          <p class="text-sm opacity-90">22-24 Marzo 2024</p>
+                        </div>
+                      </div>
+                      <div class="p-4">
+                        <div class="grid grid-cols-3 gap-4 mb-4">
+                          <div class="text-center">
+                            <p
+                              class="text-xl lg:text-2xl font-bold text-accent-pink"
+                            >
+                              156
+                            </p>
+                            <p class="text-xs text-gray-medium">
+                              Participantes
+                            </p>
+                          </div>
+                          <div class="text-center">
+                            <p
+                              class="text-xl lg:text-2xl font-bold text-accent-pink"
+                            >
+                              39
+                            </p>
+                            <p class="text-xs text-gray-medium">Equipos</p>
+                          </div>
+                          <div class="text-center">
+                            <p
+                              class="text-xl lg:text-2xl font-bold text-accent-pink"
+                            >
+                              0
+                            </p>
+                            <p class="text-xs text-gray-medium">Proyectos</p>
+                          </div>
+                        </div>
+                        <div
+                          class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0"
+                        >
+                          <span
+                            class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium"
+                            >Próximo</span
+                          >
+                          <div class="flex space-x-2">
+                            <button
+                              onclick="openModal('viewDetailsModal')"
+                              class="text-accent-pink hover:text-pink-600 font-medium text-sm"
+                            >
+                              Ver Detalles
+                            </button>
+                            <button
+                              onclick="openModal('editHackathonModal')"
+                              class="text-gray-medium hover:text-gray-dark font-medium text-sm"
+                            >
+                              Editar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="lg:col-span-1 space-y-6">
+              <!-- Actividad Reciente -->
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="p-4 lg:p-6 border-b border-gray-200">
+                  <h3 class="text-lg font-semibold text-gray-dark">
+                    Actividad Reciente
+                  </h3>
+                </div>
+                <div class="p-4 lg:p-6">
+                  <div class="space-y-4">
+                    <!-- Activity Item 1 -->
+                    <div class="flex items-start space-x-3">
+                      <div
+                        class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"
+                      >
+                        <i class="fas fa-user-plus text-green-600 text-sm"></i>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-dark">
+                          Nuevo participante
+                        </p>
+                        <p class="text-sm text-gray-medium">
+                          María González se unió a HackTech 2024
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">Hace 5 minutos</p>
+                      </div>
+                    </div>
+
+                    <!-- Activity Item 2 -->
+                    <div class="flex items-start space-x-3">
+                      <div
+                        class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"
+                      >
+                        <i class="fas fa-upload text-blue-600 text-sm"></i>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-dark">
+                          Proyecto entregado
+                        </p>
+                        <p class="text-sm text-gray-medium">
+                          Equipo "CodeMasters" subió su proyecto
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">
+                          Hace 15 minutos
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- Activity Item 3 -->
+                    <div class="flex items-start space-x-3">
+                      <div
+                        class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0"
+                      >
+                        <i class="fas fa-star text-yellow-600 text-sm"></i>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-dark">
+                          Evaluación completada
+                        </p>
+                        <p class="text-sm text-gray-medium">
+                          Dr. Rodríguez evaluó "EcoApp"
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">Hace 1 hora</p>
+                      </div>
+                    </div>
+
+                    <!-- Activity Item 4 -->
+                    <div class="flex items-start space-x-3">
+                      <div
+                        class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0"
+                      >
+                        <i class="fas fa-users text-purple-600 text-sm"></i>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-dark">
+                          Equipo formado
+                        </p>
+                        <p class="text-sm text-gray-medium">
+                          Nuevo equipo "InnovatorsHub" creado
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">Hace 2 horas</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="p-4 lg:p-6 border-b border-gray-200">
+                  <h3 class="text-lg font-semibold text-gray-dark">
+                    Acciones Rápidas
+                  </h3>
+                </div>
+                <div class="p-4 lg:p-6">
+                  <div class="space-y-3">
+                    <button
+                      onclick="openModal('createHackathonModal')"
+                      class="w-full bg-secondary-cyan hover:bg-cyan-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+                    >
+                      <i class="fas fa-plus mr-2"></i>Crear Hackaton
                     </button>
-                    
-                    <div class="relative">
-                        <button class="flex items-center space-x-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" onclick="toggleUserMenu()">
-                            <div class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                AP
-                            </div>
-                            <i class="fas fa-chevron-down text-sm hidden lg:block"></i>
-                        </button>
-                        
-                        <!-- User Dropdown Menu -->
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden" id="userMenu">
-                            <div class="py-2">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-user w-4 mr-2"></i>Mi Perfil
-                                </a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-cog w-4 mr-2"></i>Configuración
-                                </a>
-                                <hr class="my-2">
-                                <form th:action="@{/logout}" method="post" style="display: inline;">
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                        <i class="fas fa-sign-out-alt w-4 mr-2"></i>Cerrar Sesión
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <button
+                      onclick="showSection('judges')"
+                      class="w-full bg-accent-pink hover:bg-pink-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+                    >
+                      <i class="fas fa-gavel mr-2"></i>Gestionar Jurados
+                    </button>
+                    <button
+                      class="w-full bg-gray-100 hover:bg-gray-200 text-gray-dark py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+                    >
+                      <i class="fas fa-download mr-2"></i>Exportar Datos
+                    </button>
+                  </div>
                 </div>
+              </div>
             </div>
-        </header>
+          </div>
+        </div>
 
-        <!-- Main Content Area -->
-        <main class="p-4 lg:p-6" id="mainContent">
-            <!-- Dashboard Content -->
-            <div id="dashboard-section">
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
-                    <!-- Hackatones Activos -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-medium mb-1">Hackatones Activos</p>
-                                <p class="text-2xl lg:text-3xl font-bold text-gray-dark">3</p>
-                                <p class="text-sm text-green-600 mt-2">
-                                    <i class="fas fa-arrow-up mr-1"></i>+2 este mes
-                                </p>
-                            </div>
-                            <div class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-cyan rounded-lg flex items-center justify-center">
-                                <i class="fas fa-trophy text-white text-lg lg:text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Participantes Registrados -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-medium mb-1">Participantes</p>
-                                <p class="text-2xl lg:text-3xl font-bold text-gray-dark">247</p>
-                                <p class="text-sm text-green-600 mt-2">
-                                    <i class="fas fa-arrow-up mr-1"></i>+45 esta semana
-                                </p>
-                            </div>
-                            <div class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-pink rounded-lg flex items-center justify-center">
-                                <i class="fas fa-users text-white text-lg lg:text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Proyectos Entregados -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-medium mb-1">Proyectos</p>
-                                <p class="text-2xl lg:text-3xl font-bold text-gray-dark">89</p>
-                                <p class="text-sm text-green-600 mt-2">
-                                    <i class="fas fa-arrow-up mr-1"></i>+12 hoy
-                                </p>
-                            </div>
-                            <div class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-cyan rounded-lg flex items-center justify-center">
-                                <i class="fas fa-project-diagram text-white text-lg lg:text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Evaluaciones Pendientes -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-medium mb-1">Evaluaciones</p>
-                                <p class="text-2xl lg:text-3xl font-bold text-gray-dark">23</p>
-                                <p class="text-sm text-red-600 mt-2">
-                                    <i class="fas fa-clock mr-1"></i>Pendientes
-                                </p>
-                            </div>
-                            <div class="w-10 h-10 lg:w-12 lg:h-12 stat-icon-bg-pink rounded-lg flex items-center justify-center">
-                                <i class="fas fa-clipboard-check text-white text-lg lg:text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Dashboard Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Hackatones Recientes -->
-                    <div class="lg:col-span-2">
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 lg:p-6 border-b border-gray-200 space-y-4 sm:space-y-0">
-                                <h3 class="text-lg font-semibold text-gray-dark">Hackatones Recientes</h3>
-                                <button class="w-full sm:w-auto bg-secondary-cyan hover:bg-cyan-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200" onclick="openModal('createHackathonModal')">
-                                    <i class="fas fa-plus mr-2"></i>Crear Hackaton
-                                </button>
-                            </div>
-                            <div class="p-4 lg:p-6">
-                                <div class="space-y-6">
-                                    <!-- Hackaton Card 1 -->
-                                    <div class="border border-gray-200 rounded-lg overflow-hidden card-hover">
-                                        <!-- Hackathon Image -->
-                                        <div class="relative h-32 lg:h-40 hackathon-image">
-                                            <div class="absolute inset-0 gradient-overlay"></div>
-                                            <div class="absolute inset-0 flex items-center justify-center">
-                                                <i class="fas fa-code text-white text-4xl lg:text-5xl opacity-50"></i>
-                                            </div>
-                                            <div class="absolute bottom-4 left-4 text-white">
-                                                <h4 class="text-lg lg:text-xl font-semibold">HackTech 2024</h4>
-                                                <p class="text-sm opacity-90">15-17 Marzo 2024</p>
-                                            </div>
-                                        </div>
-                                        <div class="p-4">
-                                            <div class="grid grid-cols-3 gap-4 mb-4">
-                                                <div class="text-center">
-                                                    <p class="text-xl lg:text-2xl font-bold text-secondary-cyan">89</p>
-                                                    <p class="text-xs text-gray-medium">Participantes</p>
-                                                </div>
-                                                <div class="text-center">
-                                                    <p class="text-xl lg:text-2xl font-bold text-secondary-cyan">23</p>
-                                                    <p class="text-xs text-gray-medium">Equipos</p>
-                                                </div>
-                                                <div class="text-center">
-                                                    <p class="text-xl lg:text-2xl font-bold text-secondary-cyan">18</p>
-                                                    <p class="text-xs text-gray-medium">Proyectos</p>
-                                                </div>
-                                            </div>
-                                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
-                                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Activo</span>
-                                                <div class="flex space-x-2">
-                                                    <button onclick="openModal('viewDetailsModal')" class="text-secondary-cyan hover:text-cyan-600 font-medium text-sm">Ver Detalles</button>
-                                                    <button onclick="openModal('editHackathonModal')" class="text-gray-medium hover:text-gray-dark font-medium text-sm">Editar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Hackaton Card 2 -->
-                                    <div class="border border-gray-200 rounded-lg overflow-hidden card-hover">
-                                        <!-- Hackathon Image -->
-                                        <div class="relative h-32 lg:h-40 bg-gradient-to-r from-accent-pink to-secondary-cyan">
-                                            <div class="absolute inset-0 gradient-overlay"></div>
-                                            <div class="absolute inset-0 flex items-center justify-center">
-                                                <i class="fas fa-lightbulb text-white text-4xl lg:text-5xl opacity-50"></i>
-                                            </div>
-                                            <div class="absolute bottom-4 left-4 text-white">
-                                                <h4 class="text-lg lg:text-xl font-semibold">Innovation Challenge</h4>
-                                                <p class="text-sm opacity-90">22-24 Marzo 2024</p>
-                                            </div>
-                                        </div>
-                                        <div class="p-4">
-                                            <div class="grid grid-cols-3 gap-4 mb-4">
-                                                <div class="text-center">
-                                                    <p class="text-xl lg:text-2xl font-bold text-accent-pink">156</p>
-                                                    <p class="text-xs text-gray-medium">Participantes</p>
-                                                </div>
-                                                <div class="text-center">
-                                                    <p class="text-xl lg:text-2xl font-bold text-accent-pink">39</p>
-                                                    <p class="text-xs text-gray-medium">Equipos</p>
-                                                </div>
-                                                <div class="text-center">
-                                                    <p class="text-xl lg:text-2xl font-bold text-accent-pink">0</p>
-                                                    <p class="text-xs text-gray-medium">Proyectos</p>
-                                                </div>
-                                            </div>
-                                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
-                                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Próximo</span>
-                                                <div class="flex space-x-2">
-                                                    <button onclick="openModal('viewDetailsModal')" class="text-accent-pink hover:text-pink-600 font-medium text-sm">Ver Detalles</button>
-                                                    <button onclick="openModal('editHackathonModal')" class="text-gray-medium hover:text-gray-dark font-medium text-sm">Editar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div class="lg:col-span-1 space-y-6">
-                        <!-- Actividad Reciente -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                            <div class="p-4 lg:p-6 border-b border-gray-200">
-                                <h3 class="text-lg font-semibold text-gray-dark">Actividad Reciente</h3>
-                            </div>
-                            <div class="p-4 lg:p-6">
-                                <div class="space-y-4">
-                                    <!-- Activity Item 1 -->
-                                    <div class="flex items-start space-x-3">
-                                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <i class="fas fa-user-plus text-green-600 text-sm"></i>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-dark">Nuevo participante</p>
-                                            <p class="text-sm text-gray-medium">María González se unió a HackTech 2024</p>
-                                            <p class="text-xs text-gray-400 mt-1">Hace 5 minutos</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Activity Item 2 -->
-                                    <div class="flex items-start space-x-3">
-                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <i class="fas fa-upload text-blue-600 text-sm"></i>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-dark">Proyecto entregado</p>
-                                            <p class="text-sm text-gray-medium">Equipo "CodeMasters" subió su proyecto</p>
-                                            <p class="text-xs text-gray-400 mt-1">Hace 15 minutos</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Activity Item 3 -->
-                                    <div class="flex items-start space-x-3">
-                                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <i class="fas fa-star text-yellow-600 text-sm"></i>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-dark">Evaluación completada</p>
-                                            <p class="text-sm text-gray-medium">Dr. Rodríguez evaluó "EcoApp"</p>
-                                            <p class="text-xs text-gray-400 mt-1">Hace 1 hora</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Activity Item 4 -->
-                                    <div class="flex items-start space-x-3">
-                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <i class="fas fa-users text-purple-600 text-sm"></i>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-dark">Equipo formado</p>
-                                            <p class="text-sm text-gray-medium">Nuevo equipo "InnovatorsHub" creado</p>
-                                            <p class="text-xs text-gray-400 mt-1">Hace 2 horas</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quick Actions -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                            <div class="p-4 lg:p-6 border-b border-gray-200">
-                                <h3 class="text-lg font-semibold text-gray-dark">Acciones Rápidas</h3>
-                            </div>
-                            <div class="p-4 lg:p-6">
-                                <div class="space-y-3">
-                                    <button onclick="openModal('createHackathonModal')" class="w-full bg-secondary-cyan hover:bg-cyan-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                                        <i class="fas fa-plus mr-2"></i>Crear Hackaton
-                                    </button>
-                                    <button onclick="showSection('judges')" class="w-full bg-accent-pink hover:bg-pink-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                                        <i class="fas fa-gavel mr-2"></i>Gestionar Jurados
-                                    </button>
-                                    <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-dark py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                                        <i class="fas fa-download mr-2"></i>Exportar Datos
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- jurados por hacer Section -->
+        <div id="judges-section" class="hidden">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div
+              class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 lg:p-6 border-b border-gray-200 space-y-4 sm:space-y-0"
+            >
+              <h3 class="text-lg font-semibold text-gray-dark">
+                Gestión de Jurados
+              </h3>
+              <button
+                class="w-full sm:w-auto bg-accent-pink hover:bg-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                onclick="openModal('addJudgeModal')"
+              >
+                <i class="fas fa-plus mr-2"></i>Agregar Jurado
+              </button>
             </div>
-
-            <!-- jurados por hacer Section -->
-            <div id="judges-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 lg:p-6 border-b border-gray-200 space-y-4 sm:space-y-0">
-                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de Jurados</h3>
-                        <button class="w-full sm:w-auto bg-accent-pink hover:bg-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200" onclick="openModal('addJudgeModal')">
-                            <i class="fas fa-plus mr-2"></i>Agregar Jurado
-                        </button>
+            <div class="p-4 lg:p-6">
+              <!-- Judges Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Judge Card 1 -->
+                <div class="bg-gray-50 rounded-lg p-6 card-hover">
+                  <div class="flex items-center space-x-4 mb-4">
+                    <div
+                      class="w-16 h-16 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-bold text-xl"
+                    >
+                      DR
                     </div>
-                    <div class="p-4 lg:p-6">
-                        <!-- Judges Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <!-- Judge Card 1 -->
-                            <div class="bg-gray-50 rounded-lg p-6 card-hover">
-                                <div class="flex items-center space-x-4 mb-4">
-                                    <div class="w-16 h-16 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-bold text-xl">
-                                        DR
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-dark">Dr. Roberto Martínez</h4>
-                                        <p class="text-sm text-gray-medium">Especialista en IA</p>
-                                    </div>
-                                </div>
-                                <div class="space-y-2 mb-4">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Evaluaciones:</span>
-                                        <span class="font-medium text-gray-dark">15</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Promedio:</span>
-                                        <span class="font-medium text-secondary-cyan">8.5</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Estado:</span>
-                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Activo</span>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-3 rounded text-sm font-medium transition-colors">
-                                        Ver Perfil
-                                    </button>
-                                    <button class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-dark py-2 px-3 rounded text-sm font-medium transition-colors">
-                                        Editar
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Judge Card 2 -->
-                            <div class="bg-gray-50 rounded-lg p-6 card-hover">
-                                <div class="flex items-center space-x-4 mb-4">
-                                    <div class="w-16 h-16 bg-accent-pink rounded-full flex items-center justify-center text-white font-bold text-xl">
-                                        AG
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-dark">Ana García</h4>
-                                        <p class="text-sm text-gray-medium">Desarrollo Web</p>
-                                    </div>
-                                </div>
-                                <div class="space-y-2 mb-4">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Evaluaciones:</span>
-                                        <span class="font-medium text-gray-dark">12</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Promedio:</span>
-                                        <span class="font-medium text-accent-pink">7.8</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Estado:</span>
-                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Activo</span>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="flex-1 bg-accent-pink hover:bg-pink-600 text-white py-2 px-3 rounded text-sm font-medium transition-colors">
-                                        Ver Perfil
-                                    </button>
-                                    <button class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-dark py-2 px-3 rounded text-sm font-medium transition-colors">
-                                        Editar
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Judge Card 3 -->
-                            <div class="bg-gray-50 rounded-lg p-6 card-hover">
-                                <div class="flex items-center space-x-4 mb-4">
-                                    <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold text-xl">
-                                        CL
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-dark">Carlos López</h4>
-                                        <p class="text-sm text-gray-medium">UX/UI Design</p>
-                                    </div>
-                                </div>
-                                <div class="space-y-2 mb-4">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Evaluaciones:</span>
-                                        <span class="font-medium text-gray-dark">8</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Promedio:</span>
-                                        <span class="font-medium text-primary-blue">9.2</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-medium">Estado:</span>
-                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">Ocupado</span>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="flex-1 bg-primary-blue hover:bg-blue-800 text-white py-2 px-3 rounded text-sm font-medium transition-colors">
-                                        Ver Perfil
-                                    </button>
-                                    <button class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-dark py-2 px-3 rounded text-sm font-medium transition-colors">
-                                        Editar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                      <h4 class="font-semibold text-gray-dark">
+                        Dr. Roberto Martínez
+                      </h4>
+                      <p class="text-sm text-gray-medium">Especialista en IA</p>
                     </div>
+                  </div>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Evaluaciones:</span>
+                      <span class="font-medium text-gray-dark">15</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Promedio:</span>
+                      <span class="font-medium text-secondary-cyan">8.5</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Estado:</span>
+                      <span
+                        class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs"
+                        >Activo</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button
+                      class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-3 rounded text-sm font-medium transition-colors"
+                    >
+                      Ver Perfil
+                    </button>
+                    <button
+                      class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-dark py-2 px-3 rounded text-sm font-medium transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
                 </div>
-            </div>
 
-            <!-- Sección de Gestión de Hackatones
+                <!-- Judge Card 2 -->
+                <div class="bg-gray-50 rounded-lg p-6 card-hover">
+                  <div class="flex items-center space-x-4 mb-4">
+                    <div
+                      class="w-16 h-16 bg-accent-pink rounded-full flex items-center justify-center text-white font-bold text-xl"
+                    >
+                      AG
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-gray-dark">Ana García</h4>
+                      <p class="text-sm text-gray-medium">Desarrollo Web</p>
+                    </div>
+                  </div>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Evaluaciones:</span>
+                      <span class="font-medium text-gray-dark">12</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Promedio:</span>
+                      <span class="font-medium text-accent-pink">7.8</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Estado:</span>
+                      <span
+                        class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs"
+                        >Activo</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button
+                      class="flex-1 bg-accent-pink hover:bg-pink-600 text-white py-2 px-3 rounded text-sm font-medium transition-colors"
+                    >
+                      Ver Perfil
+                    </button>
+                    <button
+                      class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-dark py-2 px-3 rounded text-sm font-medium transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Judge Card 3 -->
+                <div class="bg-gray-50 rounded-lg p-6 card-hover">
+                  <div class="flex items-center space-x-4 mb-4">
+                    <div
+                      class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold text-xl"
+                    >
+                      CL
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-gray-dark">Carlos López</h4>
+                      <p class="text-sm text-gray-medium">UX/UI Design</p>
+                    </div>
+                  </div>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Evaluaciones:</span>
+                      <span class="font-medium text-gray-dark">8</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Promedio:</span>
+                      <span class="font-medium text-primary-blue">9.2</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-medium">Estado:</span>
+                      <span
+                        class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs"
+                        >Ocupado</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button
+                      class="flex-1 bg-primary-blue hover:bg-blue-800 text-white py-2 px-3 rounded text-sm font-medium transition-colors"
+                    >
+                      Ver Perfil
+                    </button>
+                    <button
+                      class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-dark py-2 px-3 rounded text-sm font-medium transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Gestión de Hackatones
             ! Tarea pendiente hackatones
             -->
-            <div id="hackathons-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200 flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de Hackatones</h3>
-                        <button onclick="openHackatonModal()" class="bg-primary-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                            <i class="fas fa-plus mr-2"></i> Nuevo Hackatón
-                        </button>
-                    </div>
-                    
-                    <div class="p-4 lg:p-6">
-                        <!-- Filtros y búsqueda -->
-                        <div class="mb-6 flex flex-col md:flex-row gap-4">
-                            <div class="relative flex-grow">
-                                <input type="text" id="hackaton-search" placeholder="Buscar hackatones..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
-                            </div>
-                            <select id="hackaton-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                <option value="all">Todos los estados</option>
-                                <option value="proximo">Próximos</option>
-                                <option value="en_curso">En curso</option>
-                                <option value="finalizado">Finalizados</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Tabla de hackatones -->
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fechas</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participantes</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="hackaton-table-body">
-                                    <!-- Los hackatones se cargarán dinámicamente aquí -->
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Paginación -->
-                        <div class="mt-6 flex justify-between items-center">
-                            <div class="text-sm text-gray-500">
-                                Mostrando <span id="hackaton-start">0</span> a <span id="hackaton-end">0</span> de <span id="hackaton-total">0</span> resultados
-                            </div>
-                            <div class="flex space-x-2">
-                                <button id="hackaton-prev" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button id="hackaton-next" class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal para Crear/Editar Hackaton -->
-                <div id="hackaton-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-                    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-dark" id="hackaton-modal-title">Nuevo Hackatón</h3>
-                        </div>
-                        <form id="hackaton-form" class="p-6 space-y-4">
-                            <input type="hidden" id="hackaton-id">
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="hackaton-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                                    <input type="text" id="hackaton-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label for="hackaton-category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-                                    <select id="hackaton-category" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                        <!-- Las categorías se cargarán dinámicamente -->
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label for="hackaton-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                                <textarea id="hackaton-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent"></textarea>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="hackaton-image" class="block text-sm font-medium text-gray-700 mb-1">URL de la Imagen</label>
-                                    <input type="url" id="hackaton-image" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label for="hackaton-judge" class="block text-sm font-medium text-gray-700 mb-1">Jurado Asignado</label>
-                                    <select id="hackaton-judge" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                        <option value="">Seleccionar jurado</option>
-                                        <!-- Los jurados se cargarán dinámicamente -->
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="hackaton-start-date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
-                                    <input type="datetime-local" id="hackaton-start-date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label for="hackaton-end-date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Fin</label>
-                                    <input type="datetime-local" id="hackaton-end-date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="hackaton-max-participants" class="block text-sm font-medium text-gray-700 mb-1">Máximo de Participantes</label>
-                                    <input type="number" id="hackaton-max-participants" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label for="hackaton-team-size" class="block text-sm font-medium text-gray-700 mb-1">Tamaño de Equipos</label>
-                                    <input type="number" id="hackaton-team-size" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label for="hackaton-status" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                                <select id="hackaton-status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                                    <option value="proximo">Próximo</option>
-                                    <option value="en_curso">En curso</option>
-                                    <option value="finalizado">Finalizado</option>
-                                </select>
-                            </div>
-                        </form>
-                        <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
-                            <button onclick="closeHackatonModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">Cancelar</button>
-                            <button onclick="saveHackaton()" class="px-4 py-2 bg-primary-blue text-white rounded-md hover:bg-blue-700">Guardar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal de Confirmación para Eliminar -->
-                <div id="hackaton-delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-                    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-1/3 p-6">
-                        <h3 class="text-lg font-semibold text-gray-dark mb-4">Confirmar Eliminación</h3>
-                        <p class="text-gray-600 mb-6">¿Estás seguro de que deseas eliminar este hackatón? Esta acción no se puede deshacer.</p>
-                        <div class="flex justify-end space-x-3">
-                            <button onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">Cancelar</button>
-                            <button onclick="confirmDeleteHackaton()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
+        <div id="hackathons-section" class="hidden">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div
+              class="p-4 lg:p-6 border-b border-gray-200 flex justify-between items-center"
+            >
+              <h3 class="text-lg font-semibold text-gray-dark">
+                Gestión de Hackatones
+              </h3>
+              <button
+                onclick="openHackatonModal()"
+                class="bg-primary-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center"
+              >
+                <i class="fas fa-plus mr-2"></i> Nuevo Hackatón
+              </button>
             </div>
 
-            <!-- Sección de Gestión de Usuarios
+            <div class="p-4 lg:p-6">
+              <!-- Filtros y búsqueda (usando fragmento) -->
+              <div
+                th:replace="admin/hackatones/filtros-hackatones :: filtros-hackatones"
+              ></div>
+
+              <!-- Tabla de hackatones (usando fragmento) -->
+              <div
+                th:replace="admin/hackatones/tabla-hackatones :: tabla-hackatones"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Modal para Crear/Editar Hackaton (usando fragmento) -->
+          <div
+            th:replace="admin/hackatones/modal-hackaton :: modal-hackaton"
+          ></div>
+
+          <!-- Modal de Confirmación para Eliminar (usando fragmento) -->
+          <div
+            th:replace="admin/hackatones/modal-eliminar-hackaton :: modal-eliminar-hackaton"
+          ></div>
+
+          <!-- Modal para Crear Categoría (usando fragmento) -->
+          <div
+            th:replace="admin/hackatones/modal-categoria :: modal-categoria"
+          ></div>
+        </div>
+
+        <!-- Sección de Gestión de Usuarios
             TODO: Se esta completando la tarea de gestión de usuarios. En curso...
             -->
-            <div id="participants-section" class="hidden">
-                
-                <!-- Vista de Lista de Usuarios -->
-                <div id="user-list-view">
-                    <div th:replace="admin/lista-view/lista-usuario :: lista-usuario"></div>
-                </div>
+        <div id="participants-section" class="hidden">
+          <!-- Vista de Lista de Usuarios -->
+          <div id="user-list-view">
+            <div
+              th:replace="admin/lista-view/lista-usuario :: lista-usuario"
+            ></div>
+          </div>
 
-                <!-- Vista de Formulario de Usuario
+          <!-- Vista de Formulario de Usuario
                 TODO:En procesos... 
                 -->
-                <div id="user-form-view" class="hidden">
-                        <!-- Incluir el formulario -->
-                    <div th:replace="admin/formulario-registro-view/formulario-usuario :: formulario-usuario"></div>
-                </div>
-            </div>
+          <div id="user-form-view" class="hidden">
+            <!-- Incluir el formulario -->
+            <div
+              th:replace="admin/formulario-registro-view/formulario-usuario :: formulario-usuario"
+            ></div>
+          </div>
+        </div>
 
-            <!-- Sección para equiposs 
+        <!-- Sección para equiposs 
             ! Tarea pendiente: Gestión de Equipos
             -->
-            <div id="teams-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de Equipos</h3>
-                    </div>
-                    <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
-                    </div>
-                </div>
+        <div id="teams-section" class="hidden">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-4 lg:p-6 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-dark">
+                Gestión de Equipos
+              </h3>
             </div>
+            <div class="p-4 lg:p-6">
+              <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+            </div>
+          </div>
+        </div>
 
-            <!-- Sección para evaluaciones 
+        <!-- Sección para evaluaciones 
             ! Tarea pendiente: Gestión de Evaluaciones
             -->
-            <div id="evaluations-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Gestión de Evaluaciones</h3>
-                    </div>
-                    <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
-                    </div>
-                </div>
+        <div id="evaluations-section" class="hidden">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-4 lg:p-6 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-dark">
+                Gestión de Evaluaciones
+              </h3>
             </div>
+            <div class="p-4 lg:p-6">
+              <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+            </div>
+          </div>
+        </div>
 
-            <!-- Sección para reportes 
+        <!-- Sección para reportes 
             ! Tarea pendiente: Reportes
             -->
-            <div id="reports-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Reportes</h3>
-                    </div>
-                    <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
-                    </div>
-                </div>
+        <div id="reports-section" class="hidden">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-4 lg:p-6 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-dark">Reportes</h3>
             </div>
+            <div class="p-4 lg:p-6">
+              <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+            </div>
+          </div>
+        </div>
 
-            <!-- Sección para configuración 
+        <!-- Sección para configuración 
             ! Tarea pendiente: Configuración
             -->
-            <div id="settings-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Configuración</h3>
-                    </div>
-                    <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
-                    </div>
-                </div>
+        <div id="settings-section" class="hidden">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-4 lg:p-6 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-dark">
+                Configuración
+              </h3>
             </div>
-        </main>
+            <div class="p-4 lg:p-6">
+              <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
+    <script th:src="@{/js/dashboard-admin-script/funciones-vista.js}"></script>
+    <script
+      th:src="@{/js/dashboard-admin-script/logica-interactiva.js}"
+    ></script>
 
-<script th:src="@{/js/dashboard-admin-script/funciones-vista.js}"></script>
-<script th:src="@{/js/dashboard-admin-script/logica-interactiva.js}"></script>
-
-
-</body>
+    <!-- Scripts para la gestión de hackatones (módulos) -->
+    <script th:src="@{/js/admin/hackatones/hackaton-api.js}"></script>
+    <script th:src="@{/js/admin/hackatones/hackaton-ui.js}"></script>
+    <script th:src="@{/js/admin/hackatones/hackaton-main.js}"></script>
+  </body>
 </html>

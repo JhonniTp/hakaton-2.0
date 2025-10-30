@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <!-- Fragmento: Filtros y búsqueda de hackatones -->
+    <div th:fragment="filtros-hackatones">
+      <div class="mb-6 flex flex-col md:flex-row gap-4">
+        <div class="relative flex-grow">
+          <input
+            type="text"
+            id="hackaton-search"
+            placeholder="Buscar hackatones..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
+          />
+          <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+        </div>
+        <select
+          id="hackaton-filter"
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
+        >
+          <option value="all">Todos los estados</option>
+          <option value="PROXIMO">Próximos</option>
+          <option value="EN_CURSO">En curso</option>
+          <option value="FINALIZADO">Finalizados</option>
+        </select>
+      </div>
+    </div>
+  </body>
+</html>
