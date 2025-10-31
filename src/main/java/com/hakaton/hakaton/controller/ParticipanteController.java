@@ -15,6 +15,6 @@ public class ParticipanteController {
     @GetMapping("/dashboard")
     public String mostrarDashboard(@AuthenticationPrincipal UsuarioModel usuario, Model model) {
         model.addAttribute("usuario", usuario);
-        return "participante/dashboard_participantes"; // mantén el nombre tal como está tu plantilla
+        return "participante/dashboard_participantes";
     }
 }
