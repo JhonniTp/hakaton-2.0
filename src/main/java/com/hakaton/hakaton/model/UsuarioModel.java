@@ -1,6 +1,23 @@
 package com.hakaton.hakaton.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,13 +25,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 
 @Entity
 @Table(name = "usuarios")
@@ -124,10 +134,38 @@ public class UsuarioModel implements UserDetails {
         return true;
     }
 
-
     @Transient
     public String getNombreCompleto() {
         return nombre + " " + apellido;
+    }
+
+    @Transient
+    public String getIniciales() {
+        try {
+            if (nombre != null && !nombre.isBlank() && apellido != null && !apellido.isBlank()) {
+                return ("" + Character.toUpperCase(nombre.charAt(0)) + Character.toUpperCase(apellido.charAt(0)));
+            }
+
+            if (correoElectronico != null && correoElectronico.contains("@")) {
+                String localPart = correoElectronico.split("@")[0];
+                String[] partes = localPart.split("[\\.\\-_]");
+                StringBuilder sb = new StringBuilder();
+                for (String p : partes) {
+                    if (!p.isBlank()) {
+                        sb.append(Character.toUpperCase(p.charAt(0)));
+                    }
+                    if (sb.length() >= 2) {
+                        break;
+                    }
+                }
+                if (sb.length() > 0) {
+                    return sb.length() == 1 ? sb.toString() : sb.toString().substring(0, 2);
+                }
+            }
+        } catch (Exception e) {
+            return "U";
+        }
+        return "U";
     }
 
     public boolean esAdministrador() {

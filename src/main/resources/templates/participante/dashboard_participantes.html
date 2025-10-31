@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,10 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -30,9 +32,10 @@
             }
         }
     </script>
-    
-<link rel="stylesheet" th:href="@{/css/participante-dashboard-style/dashboard_participante.css}">
+
+    <link rel="stylesheet" th:href="@{/css/participante-dashboard-style/dashboard_participante.css}">
 </head>
+
 <body class="bg-gray-light font-inter">
     <!-- Floating Navigation -->
     <nav class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 floating-nav rounded-full px-6 py-3 shadow-2xl">
@@ -44,53 +47,80 @@
                 </div>
                 <span class="font-bold text-gradient text-lg hidden sm:block">CERTUS</span>
             </div>
-            
+
             <!-- Navigation Items -->
             <div class="flex items-center space-x-6">
-                <button onclick="showSection('dashboard')" class="nav-item px-3 py-2 rounded-full text-sm font-medium text-primary-blue hover:text-secondary-cyan transition-colors active-nav" id="nav-dashboard">
+                <button onclick="showSection('dashboard')"
+                    class="nav-item px-3 py-2 rounded-full text-sm font-medium text-primary-blue hover:text-secondary-cyan transition-colors active-nav"
+                    id="nav-dashboard">
                     <i class="fas fa-home mr-2"></i><span class="hidden sm:inline">Dashboard</span>
                 </button>
-                
-                <button onclick="showSection('hackathons')" class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors" id="nav-hackathons">
+
+                <button onclick="showSection('hackathons')"
+                    class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors"
+                    id="nav-hackathons">
                     <i class="fas fa-trophy mr-2"></i><span class="hidden sm:inline">Explorar</span>
                 </button>
-                
-                <button onclick="showSection('teams')" class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors" id="nav-teams">
+
+                <button onclick="showSection('teams')"
+                    class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors"
+                    id="nav-teams">
                     <i class="fas fa-users mr-2"></i><span class="hidden sm:inline">Equipos</span>
                 </button>
-                
-                <button onclick="showSection('profile')" class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors" id="nav-profile">
+
+                <button onclick="showSection('profile')"
+                    class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors"
+                    id="nav-profile">
                     <i class="fas fa-user mr-2"></i><span class="hidden sm:inline">Perfil</span>
                 </button>
             </div>
-            
+
             <!-- User Avatar -->
             <div class="relative">
-                <button onclick="toggleUserMenu()" class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white font-semibold text-sm pulse-glow">
+                <button onclick="toggleUserMenu()"
+                    class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white font-semibold text-sm pulse-glow"
+                    th:text="${usuario.iniciales}">
                     MG
                 </button>
-                
+
+
                 <!-- User Dropdown Menu -->
-                <div class="absolute right-0 mt-3 w-48 glass-card rounded-xl shadow-xl border border-gray-200 hidden" id="userMenu">
+                <div class="absolute right-0 mt-3 w-48 glass-card rounded-xl shadow-xl border border-gray-200 hidden"
+                    id="userMenu">
                     <div class="py-3">
                         <div class="px-4 py-2 border-b border-gray-200">
-                            <p class="text-sm font-semibold text-gray-dark">María González</p>
-                            <p class="text-xs text-gray-medium">Estudiante</p>
+                            <!-- Nombre completo dinámico -->
+                            <p class="text-sm font-semibold text-gray-dark"
+                                th:text="${usuario.nombre + ' ' + usuario.apellido}">
+                                Nombre Usuario
+                            </p>
+                            <!-- Rol (formato capitalizado) -->
+                            <p class="text-xs text-gray-medium"
+                                th:text="${#strings.capitalize(usuario.rol.toString().toLowerCase())}">
+                                Rol
+                            </p>
                         </div>
-                        <a href="#" onclick="showSection('profile')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg mx-2 mt-2">
+
+                        <a href="#" onclick="showSection('profile')"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg mx-2 mt-2">
                             <i class="fas fa-user w-4 mr-2"></i>Mi Perfil
                         </a>
+
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg mx-2">
                             <i class="fas fa-cog w-4 mr-2"></i>Configuración
                         </a>
+
                         <hr class="my-2">
+
                         <form th:action="@{/logout}" method="post" style="display: inline;">
-                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <button type="submit"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <i class="fas fa-sign-out-alt w-4 mr-2"></i>Cerrar Sesión
                             </button>
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </nav>
@@ -100,8 +130,10 @@
         <!-- Floating Background Elements -->
         <div class="fixed inset-0 overflow-hidden pointer-events-none">
             <div class="absolute top-20 left-10 w-32 h-32 gradient-bg rounded-full opacity-10 floating-element"></div>
-            <div class="absolute top-40 right-20 w-24 h-24 bg-accent-pink rounded-full opacity-10 floating-element" style="animation-delay: -2s;"></div>
-            <div class="absolute bottom-20 left-1/4 w-40 h-40 bg-secondary-cyan rounded-full opacity-10 floating-element" style="animation-delay: -4s;"></div>
+            <div class="absolute top-40 right-20 w-24 h-24 bg-accent-pink rounded-full opacity-10 floating-element"
+                style="animation-delay: -2s;"></div>
+            <div class="absolute bottom-20 left-1/4 w-40 h-40 bg-secondary-cyan rounded-full opacity-10 floating-element"
+                style="animation-delay: -4s;"></div>
             <div class="absolute top-1/3 right-10 w-20 h-20 morphing-blob bg-primary-blue opacity-10"></div>
         </div>
 
@@ -116,26 +148,32 @@
                             <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
                                 <div class="text-white">
                                     <h1 class="text-4xl lg:text-6xl font-bold mb-4">
-                                        ¡Hola, María! 
+                                        ¡Hola, <span th:text="${usuario.nombre + ' ' + usuario.apellido}">Nombre
+                                            Apellido</span>!
                                         <span class="inline-block animate-bounce">🚀</span>
                                     </h1>
+
                                     <p class="text-xl lg:text-2xl opacity-90 mb-6">
-                                        Tienes <span class="font-bold">2 hackatones activos</span> y 
+                                        Tienes <span class="font-bold">2 hackatones activos</span> y
                                         <span class="font-bold">1 proyecto</span> en desarrollo
                                     </p>
                                     <div class="flex flex-wrap gap-4">
-                                        <button onclick="showSection('hackathons')" class="glass-card text-primary-blue px-8 py-4 rounded-2xl font-semibold hover:scale-105 transition-transform neon-glow">
+                                        <button onclick="showSection('hackathons')"
+                                            class="glass-card text-primary-blue px-8 py-4 rounded-2xl font-semibold hover:scale-105 transition-transform neon-glow">
                                             <i class="fas fa-search mr-2"></i>Explorar Hackatones
                                         </button>
-                                        <button onclick="showSection('teams')" class="border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:text-primary-blue transition-all">
+                                        <button onclick="showSection('teams')"
+                                            class="border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:text-primary-blue transition-all">
                                             <i class="fas fa-users mr-2"></i>Crear Equipo
                                         </button>
                                     </div>
                                 </div>
                                 <div class="mt-8 lg:mt-0">
                                     <div class="relative">
-                                        <div class="w-32 h-32 lg:w-40 lg:h-40 progress-ring rounded-full p-1 floating-element">
-                                            <div class="w-full h-full bg-white rounded-full flex items-center justify-center">
+                                        <div
+                                            class="w-32 h-32 lg:w-40 lg:h-40 progress-ring rounded-full p-1 floating-element">
+                                            <div
+                                                class="w-full h-full bg-white rounded-full flex items-center justify-center">
                                                 <div class="text-center">
                                                     <div class="text-3xl lg:text-4xl font-bold text-gradient">8.5</div>
                                                     <div class="text-sm text-gray-medium">Puntuación</div>
@@ -147,8 +185,12 @@
                             </div>
                         </div>
                         <!-- Decorative Elements -->
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-32 translate-x-32"></div>
-                        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-24 -translate-x-24"></div>
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-32 translate-x-32">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-24 -translate-x-24">
+                        </div>
                     </div>
                 </div>
 
@@ -156,7 +198,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                     <div class="glass-card rounded-3xl p-6 card-hover neon-glow">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center floating-element">
+                            <div
+                                class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center floating-element">
                                 <i class="fas fa-trophy text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
@@ -172,7 +215,8 @@
 
                     <div class="glass-card rounded-3xl p-6 card-hover">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-16 h-16 bg-accent-pink rounded-2xl flex items-center justify-center floating-element" style="animation-delay: -1s;">
+                            <div class="w-16 h-16 bg-accent-pink rounded-2xl flex items-center justify-center floating-element"
+                                style="animation-delay: -1s;">
                                 <i class="fas fa-project-diagram text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
@@ -188,7 +232,8 @@
 
                     <div class="glass-card rounded-3xl p-6 card-hover">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-16 h-16 bg-primary-blue rounded-2xl flex items-center justify-center floating-element" style="animation-delay: -2s;">
+                            <div class="w-16 h-16 bg-primary-blue rounded-2xl flex items-center justify-center floating-element"
+                                style="animation-delay: -2s;">
                                 <i class="fas fa-medal text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
@@ -204,7 +249,8 @@
 
                     <div class="glass-card rounded-3xl p-6 card-hover">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center floating-element" style="animation-delay: -3s;">
+                            <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center floating-element"
+                                style="animation-delay: -3s;">
                                 <i class="fas fa-crown text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
@@ -229,7 +275,8 @@
                                     <h3 class="text-2xl font-bold text-gradient">Mis Hackatones Activos</h3>
                                     <p class="text-gray-medium mt-1">Proyectos en desarrollo</p>
                                 </div>
-                                <button onclick="showSection('hackathons')" class="glass-card text-secondary-cyan hover:text-cyan-600 font-medium text-sm px-4 py-2 rounded-xl transition-all hover:scale-105">
+                                <button onclick="showSection('hackathons')"
+                                    class="glass-card text-secondary-cyan hover:text-cyan-600 font-medium text-sm px-4 py-2 rounded-xl transition-all hover:scale-105">
                                     Ver todos <i class="fas fa-arrow-right ml-2"></i>
                                 </button>
                             </div>
@@ -239,7 +286,8 @@
                                     <div class="glass-card rounded-2xl overflow-hidden card-hover">
                                         <div class="relative h-40 gradient-bg">
                                             <div class="absolute inset-0 flex items-center justify-center">
-                                                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center floating-element">
+                                                <div
+                                                    class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center floating-element">
                                                     <i class="fas fa-code text-white text-3xl"></i>
                                                 </div>
                                             </div>
@@ -250,7 +298,8 @@
                                                 </p>
                                             </div>
                                             <div class="absolute top-6 right-6">
-                                                <span class="glass-card bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium pulse-glow">
+                                                <span
+                                                    class="glass-card bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium pulse-glow">
                                                     🔥 Activo
                                                 </span>
                                             </div>
@@ -258,11 +307,13 @@
                                         <div class="p-6">
                                             <div class="mb-6">
                                                 <div class="flex justify-between text-sm mb-3">
-                                                    <span class="text-gray-medium font-medium">Progreso del proyecto</span>
+                                                    <span class="text-gray-medium font-medium">Progreso del
+                                                        proyecto</span>
                                                     <span class="font-bold text-gradient">75%</span>
                                                 </div>
                                                 <div class="w-full bg-gray-200 rounded-full h-3">
-                                                    <div class="gradient-bg h-3 rounded-full transition-all duration-1000" style="width: 75%"></div>
+                                                    <div class="gradient-bg h-3 rounded-full transition-all duration-1000"
+                                                        style="width: 75%"></div>
                                                 </div>
                                             </div>
                                             <div class="flex items-center justify-between">
@@ -276,7 +327,8 @@
                                                         48h restantes
                                                     </span>
                                                 </div>
-                                                <button onclick="openModal('projectModal')" class="gradient-bg text-white px-6 py-3 rounded-xl font-medium transition-all hover:scale-105 neon-glow">
+                                                <button onclick="openModal('projectModal')"
+                                                    class="gradient-bg text-white px-6 py-3 rounded-xl font-medium transition-all hover:scale-105 neon-glow">
                                                     <i class="fas fa-rocket mr-2"></i>Ver Proyecto
                                                 </button>
                                             </div>
@@ -285,9 +337,11 @@
 
                                     <!-- Active Hackathon 2 -->
                                     <div class="glass-card rounded-2xl overflow-hidden card-hover">
-                                        <div class="relative h-40 bg-gradient-to-r from-accent-pink via-secondary-cyan to-primary-blue">
+                                        <div
+                                            class="relative h-40 bg-gradient-to-r from-accent-pink via-secondary-cyan to-primary-blue">
                                             <div class="absolute inset-0 flex items-center justify-center">
-                                                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center floating-element" style="animation-delay: -2s;">
+                                                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center floating-element"
+                                                    style="animation-delay: -2s;">
                                                     <i class="fas fa-lightbulb text-white text-3xl"></i>
                                                 </div>
                                             </div>
@@ -298,7 +352,8 @@
                                                 </p>
                                             </div>
                                             <div class="absolute top-6 right-6">
-                                                <span class="glass-card bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                                                <span
+                                                    class="glass-card bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium">
                                                     ⏳ Próximo
                                                 </span>
                                             </div>
@@ -306,11 +361,13 @@
                                         <div class="p-6">
                                             <div class="mb-6">
                                                 <div class="flex justify-between text-sm mb-3">
-                                                    <span class="text-gray-medium font-medium">Preparación del equipo</span>
+                                                    <span class="text-gray-medium font-medium">Preparación del
+                                                        equipo</span>
                                                     <span class="font-bold text-gradient">25%</span>
                                                 </div>
                                                 <div class="w-full bg-gray-200 rounded-full h-3">
-                                                    <div class="bg-yellow-500 h-3 rounded-full transition-all duration-1000" style="width: 25%"></div>
+                                                    <div class="bg-yellow-500 h-3 rounded-full transition-all duration-1000"
+                                                        style="width: 25%"></div>
                                                 </div>
                                             </div>
                                             <div class="flex items-center justify-between">
@@ -324,7 +381,8 @@
                                                         22-24 Marzo
                                                     </span>
                                                 </div>
-                                                <button onclick="openModal('teamModal')" class="bg-accent-pink text-white px-6 py-3 rounded-xl font-medium transition-all hover:scale-105 hover:bg-pink-600">
+                                                <button onclick="openModal('teamModal')"
+                                                    class="bg-accent-pink text-white px-6 py-3 rounded-xl font-medium transition-all hover:scale-105 hover:bg-pink-600">
                                                     <i class="fas fa-users mr-2"></i>Ver Equipo
                                                 </button>
                                             </div>
@@ -351,7 +409,7 @@
                                             <p class="text-xs text-gray-medium">HackTech 2024 - Vence en 2 días</p>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex items-start space-x-3">
                                         <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
                                         <div class="flex-1">
@@ -359,20 +417,23 @@
                                             <p class="text-xs text-gray-medium">HackTech 2024 - Vence en 3 días</p>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex items-start space-x-3">
                                         <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                                         <div class="flex-1">
                                             <p class="text-sm font-medium text-gray-dark">Formar equipo completo</p>
-                                            <p class="text-xs text-gray-medium">Innovation Challenge - Vence en 5 días</p>
+                                            <p class="text-xs text-gray-medium">Innovation Challenge - Vence en 5 días
+                                            </p>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex items-start space-x-3">
                                         <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                                         <div class="flex-1">
-                                            <p class="text-sm font-medium text-gray-dark">Revisar reglas del hackaton</p>
-                                            <p class="text-xs text-gray-medium">Innovation Challenge - Vence en 1 semana</p>
+                                            <p class="text-sm font-medium text-gray-dark">Revisar reglas del hackaton
+                                            </p>
+                                            <p class="text-xs text-gray-medium">Innovation Challenge - Vence en 1 semana
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -387,7 +448,8 @@
                             <div class="p-4 lg:p-6">
                                 <div class="space-y-4">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                        <div
+                                            class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
                                             <i class="fas fa-trophy text-yellow-600"></i>
                                         </div>
                                         <div>
@@ -395,9 +457,10 @@
                                             <p class="text-xs text-gray-medium">EcoHack 2024</p>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <div
+                                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                                             <i class="fas fa-star text-blue-600"></i>
                                         </div>
                                         <div>
@@ -405,9 +468,10 @@
                                             <p class="text-xs text-gray-medium">TechFest 2024</p>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                        <div
+                                            class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                                             <i class="fas fa-users text-green-600"></i>
                                         </div>
                                         <div>
@@ -425,19 +489,22 @@
             <!-- Explorar Hackatones Section -->
             <div id="hackathons-section" class="hidden">
                 <div class="mb-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                    <div
+                        class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-dark">Explorar Hackatones</h2>
                             <p class="text-gray-medium">Descubre y únete a los próximos eventos</p>
                         </div>
                         <div class="flex space-x-4">
-                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                            <select
+                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                                 <option>Todos los estados</option>
                                 <option>Próximos</option>
                                 <option>Activos</option>
                                 <option>Finalizados</option>
                             </select>
-                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                            <select
+                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                                 <option>Todas las categorías</option>
                                 <option>Tecnología</option>
                                 <option>Innovación</option>
@@ -456,7 +523,9 @@
                                 <i class="fas fa-rocket text-white text-5xl opacity-50"></i>
                             </div>
                             <div class="absolute top-4 right-4">
-                                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Inscripciones Abiertas</span>
+                                <span
+                                    class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Inscripciones
+                                    Abiertas</span>
                             </div>
                             <div class="absolute bottom-4 left-4 text-white">
                                 <h4 class="text-xl font-bold">SpaceHack 2024</h4>
@@ -465,7 +534,8 @@
                         </div>
                         <div class="p-6">
                             <p class="text-gray-medium text-sm mb-4">
-                                Desarrolla soluciones innovadoras para la exploración espacial y tecnologías aeroespaciales.
+                                Desarrolla soluciones innovadoras para la exploración espacial y tecnologías
+                                aeroespaciales.
                             </p>
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-4 text-sm text-gray-medium">
@@ -474,10 +544,12 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <button onclick="openModal('hackathonDetailsModal')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
+                                <button onclick="openModal('hackathonDetailsModal')"
+                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
                                     Ver Detalles
                                 </button>
-                                <button onclick="joinHackathon('SpaceHack 2024')" class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                                <button onclick="joinHackathon('SpaceHack 2024')"
+                                    class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
                                     Inscribirse
                                 </button>
                             </div>
@@ -492,7 +564,8 @@
                                 <i class="fas fa-leaf text-white text-5xl opacity-50"></i>
                             </div>
                             <div class="absolute top-4 right-4">
-                                <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">Próximamente</span>
+                                <span
+                                    class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">Próximamente</span>
                             </div>
                             <div class="absolute bottom-4 left-4 text-white">
                                 <h4 class="text-xl font-bold">EcoTech Challenge</h4>
@@ -501,7 +574,8 @@
                         </div>
                         <div class="p-6">
                             <p class="text-gray-medium text-sm mb-4">
-                                Crea tecnologías sostenibles para combatir el cambio climático y proteger el medio ambiente.
+                                Crea tecnologías sostenibles para combatir el cambio climático y proteger el medio
+                                ambiente.
                             </p>
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-4 text-sm text-gray-medium">
@@ -510,10 +584,12 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <button onclick="openModal('hackathonDetailsModal')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
+                                <button onclick="openModal('hackathonDetailsModal')"
+                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
                                     Ver Detalles
                                 </button>
-                                <button onclick="joinHackathon('EcoTech Challenge')" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                                <button onclick="joinHackathon('EcoTech Challenge')"
+                                    class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
                                     Inscribirse
                                 </button>
                             </div>
@@ -528,7 +604,8 @@
                                 <i class="fas fa-brain text-white text-5xl opacity-50"></i>
                             </div>
                             <div class="absolute top-4 right-4">
-                                <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">Finalizado</span>
+                                <span
+                                    class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">Finalizado</span>
                             </div>
                             <div class="absolute bottom-4 left-4 text-white">
                                 <h4 class="text-xl font-bold">AI Innovation Fest</h4>
@@ -537,7 +614,8 @@
                         </div>
                         <div class="p-6">
                             <p class="text-gray-medium text-sm mb-4">
-                                Desarrolla aplicaciones de inteligencia artificial para resolver problemas del mundo real.
+                                Desarrolla aplicaciones de inteligencia artificial para resolver problemas del mundo
+                                real.
                             </p>
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-4 text-sm text-gray-medium">
@@ -546,10 +624,12 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <button onclick="openModal('hackathonDetailsModal')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
+                                <button onclick="openModal('hackathonDetailsModal')"
+                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
                                     Ver Resultados
                                 </button>
-                                <button class="flex-1 bg-gray-300 text-gray-500 py-2 px-4 rounded-lg font-medium cursor-not-allowed">
+                                <button
+                                    class="flex-1 bg-gray-300 text-gray-500 py-2 px-4 rounded-lg font-medium cursor-not-allowed">
                                     Finalizado
                                 </button>
                             </div>
@@ -561,12 +641,14 @@
             <!-- Mi Equipo Section -->
             <div id="teams-section" class="hidden">
                 <div class="mb-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                    <div
+                        class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-dark">Mi Equipo</h2>
                             <p class="text-gray-medium">Gestiona tus equipos y colaboraciones</p>
                         </div>
-                        <button onclick="openModal('createTeamModal')" class="bg-secondary-cyan hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <button onclick="openModal('createTeamModal')"
+                            class="bg-secondary-cyan hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                             <i class="fas fa-plus mr-2"></i>Crear Equipo
                         </button>
                     </div>
@@ -577,7 +659,8 @@
                     <div class="team-card border border-gray-200 rounded-xl p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-bold">
+                                <div
+                                    class="w-12 h-12 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-bold">
                                     CM
                                 </div>
                                 <div>
@@ -585,22 +668,27 @@
                                     <p class="text-sm text-gray-medium">HackTech 2024</p>
                                 </div>
                             </div>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Activo</span>
+                            <span
+                                class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Activo</span>
                         </div>
-                        
+
                         <div class="mb-4">
                             <h4 class="text-sm font-medium text-gray-dark mb-2">Miembros del equipo (4/4)</h4>
                             <div class="flex -space-x-2">
-                                <div class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
                                     MG
                                 </div>
-                                <div class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
                                     JR
                                 </div>
-                                <div class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
                                     AL
                                 </div>
-                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
                                     CS
                                 </div>
                             </div>
@@ -617,10 +705,12 @@
                         </div>
 
                         <div class="flex space-x-2">
-                            <button onclick="openModal('teamDetailsModal')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
+                            <button onclick="openModal('teamDetailsModal')"
+                                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
                                 Ver Detalles
                             </button>
-                            <button onclick="openModal('projectModal')" class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                            <button onclick="openModal('projectModal')"
+                                class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
                                 Ver Proyecto
                             </button>
                         </div>
@@ -630,7 +720,8 @@
                     <div class="team-card border border-gray-200 rounded-xl p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 bg-accent-pink rounded-full flex items-center justify-center text-white font-bold">
+                                <div
+                                    class="w-12 h-12 bg-accent-pink rounded-full flex items-center justify-center text-white font-bold">
                                     IH
                                 </div>
                                 <div>
@@ -638,22 +729,27 @@
                                     <p class="text-sm text-gray-medium">Innovation Challenge</p>
                                 </div>
                             </div>
-                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Formando</span>
+                            <span
+                                class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Formando</span>
                         </div>
-                        
+
                         <div class="mb-4">
                             <h4 class="text-sm font-medium text-gray-dark mb-2">Miembros del equipo (2/4)</h4>
                             <div class="flex -space-x-2">
-                                <div class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
                                     MG
                                 </div>
-                                <div class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
                                     DR
                                 </div>
-                                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xs font-semibold border-2 border-white">
                                     <i class="fas fa-plus"></i>
                                 </div>
-                                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xs font-semibold border-2 border-white">
+                                <div
+                                    class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xs font-semibold border-2 border-white">
                                     <i class="fas fa-plus"></i>
                                 </div>
                             </div>
@@ -670,10 +766,12 @@
                         </div>
 
                         <div class="flex space-x-2">
-                            <button onclick="openModal('inviteModal')" class="flex-1 bg-accent-pink hover:bg-pink-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                            <button onclick="openModal('inviteModal')"
+                                class="flex-1 bg-accent-pink hover:bg-pink-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
                                 Invitar Miembros
                             </button>
-                            <button onclick="openModal('teamDetailsModal')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
+                            <button onclick="openModal('teamDetailsModal')"
+                                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
                                 Ver Detalles
                             </button>
                         </div>
@@ -681,25 +779,29 @@
                 </div>
             </div>
 
-            <!-- Mi Perfil Section -->
-            <div id="profile-section" class="hidden">
-                <div class="max-w-4xl mx-auto">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <!-- Profile Header -->
-                        <div class="relative h-32 hackathon-gradient">
-                            <div class="absolute inset-0 gradient-overlay"></div>
-                            <div class="absolute bottom-4 left-6">
-                                <div class="flex items-end space-x-4">
-                                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-secondary-cyan font-bold text-2xl border-4 border-white">
-                                        MG
-                                    </div>
-                                    <div class="text-white pb-2">
-                                        <h2 class="text-2xl font-bold">María González</h2>
-                                        <p class="text-sm opacity-90">Estudiante de Ingeniería de Sistemas</p>
-                                    </div>
-                                </div>
-                            </div>
+  <!-- Mi Perfil Section -->
+<div id="profile-section" class="hidden">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Profile Header -->
+            <div class="relative h-32 hackathon-gradient">
+                <div class="absolute inset-0 gradient-overlay"></div>
+                <div class="absolute bottom-4 left-6">
+                    <div class="flex items-end space-x-4">
+                        <div
+                            class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-secondary-cyan font-bold text-2xl border-4 border-white"
+                            th:text="${usuario.iniciales}">
                         </div>
+                        <div class="pb-2">
+                            <h2 class="text-2xl font-bold text-gray-700" 
+                                th:text="${usuario.nombreCompleto}"></h2>
+                            <p class="text-sm font-semibold text-cyan-500" 
+                                th:text="${#strings.toLowerCase(usuario.rol)}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
                         <!-- Profile Content -->
                         <div class="p-6">
@@ -711,20 +813,28 @@
                                         <h3 class="text-lg font-semibold text-gray-dark mb-4">Información Personal</h3>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">Nombre Completo</label>
-                                                <input type="text" value="María González Rodríguez" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Nombre
+                                                    Completo</label>
+                                                <input type="text" value="María González Rodríguez"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">Email</label>
-                                                <input type="email" value="maria.gonzalez@certus.edu.pe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-dark mb-2">Email</label>
+                                                <input type="email" value="maria.gonzalez@certus.edu.pe"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">Teléfono</label>
-                                                <input type="tel" value="+51 987 654 321" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-dark mb-2">Teléfono</label>
+                                                <input type="tel" value="+51 987 654 321"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">Carrera</label>
-                                                <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-dark mb-2">Carrera</label>
+                                                <select
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                                                     <option selected>Ingeniería de Sistemas</option>
                                                     <option>Ingeniería de Software</option>
                                                     <option>Ciencias de la Computación</option>
@@ -738,14 +848,22 @@
                                     <div>
                                         <h3 class="text-lg font-semibold text-gray-dark mb-4">Habilidades</h3>
                                         <div class="flex flex-wrap gap-2 mb-4">
-                                            <span class="bg-secondary-cyan text-white px-3 py-1 rounded-full text-sm">JavaScript</span>
-                                            <span class="bg-accent-pink text-white px-3 py-1 rounded-full text-sm">React</span>
-                                            <span class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm">Python</span>
-                                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Node.js</span>
-                                            <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">UI/UX Design</span>
-                                            <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">Machine Learning</span>
+                                            <span
+                                                class="bg-secondary-cyan text-white px-3 py-1 rounded-full text-sm">JavaScript</span>
+                                            <span
+                                                class="bg-accent-pink text-white px-3 py-1 rounded-full text-sm">React</span>
+                                            <span
+                                                class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm">Python</span>
+                                            <span
+                                                class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Node.js</span>
+                                            <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">UI/UX
+                                                Design</span>
+                                            <span
+                                                class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">Machine
+                                                Learning</span>
                                         </div>
-                                        <button onclick="openModal('skillsModal')" class="text-secondary-cyan hover:text-cyan-600 font-medium text-sm">
+                                        <button onclick="openModal('skillsModal')"
+                                            class="text-secondary-cyan hover:text-cyan-600 font-medium text-sm">
                                             <i class="fas fa-plus mr-1"></i>Agregar habilidad
                                         </button>
                                     </div>
@@ -753,12 +871,15 @@
                                     <!-- Bio -->
                                     <div>
                                         <h3 class="text-lg font-semibold text-gray-dark mb-4">Biografía</h3>
-                                        <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="Cuéntanos sobre ti, tus intereses y experiencia...">Estudiante apasionada por la tecnología y la innovación. Me especializo en desarrollo web full-stack y tengo experiencia en proyectos de machine learning. Disfruto trabajando en equipo y resolviendo problemas complejos a través de la programación.</textarea>
+                                        <textarea rows="4"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent"
+                                            placeholder="Cuéntanos sobre ti, tus intereses y experiencia...">Estudiante apasionada por la tecnología y la innovación. Me especializo en desarrollo web full-stack y tengo experiencia en proyectos de machine learning. Disfruto trabajando en equipo y resolviendo problemas complejos a través de la programación.</textarea>
                                     </div>
 
                                     <!-- Save Button -->
                                     <div class="flex justify-end">
-                                        <button onclick="saveProfile()" class="bg-secondary-cyan hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                        <button onclick="saveProfile()"
+                                            class="bg-secondary-cyan hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                                             <i class="fas fa-save mr-2"></i>Guardar Cambios
                                         </button>
                                     </div>
@@ -794,7 +915,8 @@
                                         <h4 class="font-semibold text-gray-dark mb-4">Logros</h4>
                                         <div class="space-y-3">
                                             <div class="flex items-center space-x-3">
-                                                <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                                                <div
+                                                    class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
                                                     <i class="fas fa-trophy text-white text-xs"></i>
                                                 </div>
                                                 <div>
@@ -802,9 +924,10 @@
                                                     <p class="text-xs text-gray-medium">EcoHack 2024</p>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="flex items-center space-x-3">
-                                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                                <div
+                                                    class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                                                     <i class="fas fa-star text-white text-xs"></i>
                                                 </div>
                                                 <div>
@@ -812,9 +935,10 @@
                                                     <p class="text-xs text-gray-medium">TechFest 2024</p>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="flex items-center space-x-3">
-                                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                                <div
+                                                    class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                                                     <i class="fas fa-users text-white text-xs"></i>
                                                 </div>
                                                 <div>
@@ -835,7 +959,8 @@
                                             <p class="text-xs text-gray-medium text-center mb-3">
                                                 Comparte tu perfil escaneando este código
                                             </p>
-                                            <button onclick="downloadQR()" class="gradient-bg text-white px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-transform">
+                                            <button onclick="downloadQR()"
+                                                class="gradient-bg text-white px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-transform">
                                                 <i class="fas fa-download mr-2"></i>Descargar QR
                                             </button>
                                         </div>
@@ -849,19 +974,22 @@
                                                 <label class="block text-sm font-medium text-gray-dark mb-2">
                                                     <i class="fab fa-github mr-2 text-gray-dark"></i>GitHub
                                                 </label>
-                                                <input type="url" placeholder="https://github.com/usuario" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
+                                                <input type="url" placeholder="https://github.com/usuario"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-dark mb-2">
                                                     <i class="fab fa-linkedin mr-2 text-blue-600"></i>LinkedIn
                                                 </label>
-                                                <input type="url" placeholder="https://linkedin.com/in/usuario" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
+                                                <input type="url" placeholder="https://linkedin.com/in/usuario"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-dark mb-2">
                                                     <i class="fas fa-globe mr-2 text-green-600"></i>Portfolio
                                                 </label>
-                                                <input type="url" placeholder="https://miportfolio.com" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
+                                                <input type="url" placeholder="https://miportfolio.com"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
                                             </div>
                                         </div>
                                     </div>
@@ -909,25 +1037,31 @@
     </div>
 
     <!-- Mobile Sidebar Overlay -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" id="sidebarOverlay"
+        onclick="toggleSidebar()"></div>
 
     <!-- Modals -->
     <!-- Join Hackathon Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="joinHackathonModal">
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
+        id="joinHackathonModal">
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
             <div class="p-6">
                 <div class="flex items-center justify-center w-16 h-16 mx-auto bg-secondary-cyan rounded-full mb-4">
                     <i class="fas fa-trophy text-white text-2xl"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-dark text-center mb-2" id="hackathonName">Inscribirse a Hackaton</h3>
+                <h3 class="text-lg font-semibold text-gray-dark text-center mb-2" id="hackathonName">Inscribirse a
+                    Hackaton</h3>
                 <p class="text-gray-medium text-center mb-6">
-                    ¿Estás seguro de que quieres inscribirte a este hackaton? Podrás formar o unirte a un equipo después de la inscripción.
+                    ¿Estás seguro de que quieres inscribirte a este hackaton? Podrás formar o unirte a un equipo después
+                    de la inscripción.
                 </p>
                 <div class="flex space-x-4">
-                    <button onclick="closeModal('joinHackathonModal')" class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+                    <button onclick="closeModal('joinHackathonModal')"
+                        class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
                         Cancelar
                     </button>
-                    <button onclick="confirmJoinHackathon()" class="flex-1 px-4 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
+                    <button onclick="confirmJoinHackathon()"
+                        class="flex-1 px-4 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
                         Inscribirse
                     </button>
                 </div>
@@ -936,7 +1070,8 @@
     </div>
 
     <!-- Create Team Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="createTeamModal">
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
+        id="createTeamModal">
         <div class="bg-white rounded-xl shadow-xl max-w-lg w-full">
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-dark">Crear Nuevo Equipo</h3>
@@ -948,12 +1083,15 @@
                 <form class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-dark mb-2">Nombre del Equipo</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="Ej: CodeMasters">
+                        <input type="text"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent"
+                            placeholder="Ej: CodeMasters">
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-dark mb-2">Hackaton</label>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                        <select
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
                             <option>Seleccionar hackaton...</option>
                             <option>HackTech 2024</option>
                             <option>Innovation Challenge</option>
@@ -963,26 +1101,36 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-dark mb-2">Descripción del Equipo</label>
-                        <textarea rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="Describe tu equipo y qué tipo de miembros buscas..."></textarea>
+                        <textarea rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent"
+                            placeholder="Describe tu equipo y qué tipo de miembros buscas..."></textarea>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-dark mb-2">Habilidades Requeridas</label>
                         <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="bg-secondary-cyan text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-cyan-600">Frontend</span>
-                            <span class="bg-accent-pink text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-pink-600">Backend</span>
-                            <span class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-blue-800">UI/UX</span>
-                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-green-600">Mobile</span>
+                            <span
+                                class="bg-secondary-cyan text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-cyan-600">Frontend</span>
+                            <span
+                                class="bg-accent-pink text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-pink-600">Backend</span>
+                            <span
+                                class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-blue-800">UI/UX</span>
+                            <span
+                                class="bg-green-500 text-white px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-green-600">Mobile</span>
                         </div>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent" placeholder="Agregar habilidad personalizada...">
+                        <input type="text"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent"
+                            placeholder="Agregar habilidad personalizada...">
                     </div>
                 </form>
             </div>
             <div class="flex justify-end space-x-4 p-6 border-t border-gray-200">
-                <button onclick="closeModal('createTeamModal')" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+                <button onclick="closeModal('createTeamModal')"
+                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
                     Cancelar
                 </button>
-                <button onclick="createTeam()" class="px-6 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
+                <button onclick="createTeam()"
+                    class="px-6 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
                     <i class="fas fa-plus mr-2"></i>Crear Equipo
                 </button>
             </div>
@@ -990,7 +1138,8 @@
     </div>
 
     <!-- Project Modal -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" id="projectModal">
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
+        id="projectModal">
         <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-dark">EcoApp - Proyecto HackTech 2024</h3>
@@ -1005,19 +1154,25 @@
                         <div>
                             <h4 class="text-lg font-semibold text-gray-dark mb-3">Descripción del Proyecto</h4>
                             <p class="text-gray-medium leading-relaxed">
-                                EcoApp es una aplicación móvil que ayuda a los usuarios a reducir su huella de carbono mediante 
-                                el seguimiento de sus actividades diarias y la sugerencia de alternativas más sostenibles. 
-                                La app utiliza machine learning para personalizar las recomendaciones según los hábitos del usuario.
+                                EcoApp es una aplicación móvil que ayuda a los usuarios a reducir su huella de carbono
+                                mediante
+                                el seguimiento de sus actividades diarias y la sugerencia de alternativas más
+                                sostenibles.
+                                La app utiliza machine learning para personalizar las recomendaciones según los hábitos
+                                del usuario.
                             </p>
                         </div>
 
                         <div>
                             <h4 class="text-lg font-semibold text-gray-dark mb-3">Tecnologías Utilizadas</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">React Native</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">React
+                                    Native</span>
                                 <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Node.js</span>
-                                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">MongoDB</span>
-                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">TensorFlow</span>
+                                <span
+                                    class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">MongoDB</span>
+                                <span
+                                    class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">TensorFlow</span>
                                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Firebase</span>
                             </div>
                         </div>
@@ -1025,18 +1180,28 @@
                         <div>
                             <h4 class="text-lg font-semibold text-gray-dark mb-3">Características Principales</h4>
                             <ul class="space-y-2 text-gray-medium">
-                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Seguimiento de huella de carbono en tiempo real</li>
-                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Recomendaciones personalizadas con IA</li>
-                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Gamificación con logros y desafíos</li>
-                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Comunidad para compartir tips ecológicos</li>
-                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Integración con dispositivos IoT</li>
+                                <li class="flex items-center"><i
+                                        class="fas fa-check text-green-500 mr-2"></i>Seguimiento de huella de carbono en
+                                    tiempo real</li>
+                                <li class="flex items-center"><i
+                                        class="fas fa-check text-green-500 mr-2"></i>Recomendaciones personalizadas con
+                                    IA</li>
+                                <li class="flex items-center"><i
+                                        class="fas fa-check text-green-500 mr-2"></i>Gamificación con logros y desafíos
+                                </li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Comunidad
+                                    para compartir tips ecológicos</li>
+                                <li class="flex items-center"><i
+                                        class="fas fa-check text-green-500 mr-2"></i>Integración con dispositivos IoT
+                                </li>
                             </ul>
                         </div>
 
                         <div>
                             <h4 class="text-lg font-semibold text-gray-dark mb-3">Enlaces del Proyecto</h4>
                             <div class="flex space-x-4">
-                                <a href="#" class="flex items-center text-secondary-cyan hover:text-cyan-600 font-medium">
+                                <a href="#"
+                                    class="flex items-center text-secondary-cyan hover:text-cyan-600 font-medium">
                                     <i class="fab fa-github mr-2"></i>Código Fuente
                                 </a>
                                 <a href="#" class="flex items-center text-accent-pink hover:text-pink-600 font-medium">
@@ -1090,7 +1255,8 @@
                             <h5 class="font-semibold text-gray-dark mb-3">Equipo CodeMasters</h5>
                             <div class="space-y-3">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                    <div
+                                        class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white text-xs font-semibold">
                                         MG
                                     </div>
                                     <div>
@@ -1099,7 +1265,8 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                    <div
+                                        class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold">
                                         JR
                                     </div>
                                     <div>
@@ -1108,7 +1275,8 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                    <div
+                                        class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold">
                                         AL
                                     </div>
                                     <div>
@@ -1117,7 +1285,8 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                                    <div
+                                        class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
                                         CS
                                     </div>
                                     <div>
@@ -1140,16 +1309,19 @@
                 </div>
             </div>
             <div class="flex justify-end space-x-4 p-6 border-t border-gray-200">
-                <button onclick="closeModal('projectModal')" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+                <button onclick="closeModal('projectModal')"
+                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
                     Cerrar
                 </button>
-                <button class="px-6 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
+                <button
+                    class="px-6 py-3 bg-secondary-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors">
                     <i class="fas fa-edit mr-2"></i>Editar Proyecto
                 </button>
             </div>
         </div>
     </div>
 
-<script th:src="@{/js/participante-dashboard-script/dashboard-participante.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/dashboard-participante.js}"></script>
 </body>
+
 </html>
