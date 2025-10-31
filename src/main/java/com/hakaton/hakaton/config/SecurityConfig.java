@@ -32,7 +32,7 @@ public class SecurityConfig {
         logger.info("Configurando SecurityFilterChain...");
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/login", "/auth/google", "/img/**", "/css/**", "/js/**", "/cdn-cgi/**").permitAll()
+                .requestMatchers("/", "/login", "/register", "/auth/google", "/img/**", "/css/**", "/js/**", "/cdn-cgi/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
                 .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
                 .requestMatchers("/jurado/**").hasRole("JURADO")

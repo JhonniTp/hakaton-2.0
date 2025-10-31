@@ -63,7 +63,7 @@ public class UsuarioModel implements UserDetails {
     private String documentoDni;
 
     @Size(max = 255, message = "El teléfono no puede exceder los 255 caracteres")
-    @Column(name = "telefono", length = 255)
+    @Column(name = "telefono", length = 255, unique = true)
     private String telefono;
 
     @Column(name = "google_id", unique = true, length = 255, nullable = true)
