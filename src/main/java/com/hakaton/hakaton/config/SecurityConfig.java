@@ -33,6 +33,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/login", "/register", "/auth/google", "/img/**", "/css/**", "/js/**", "/cdn-cgi/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
                 .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
                 .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
                 .requestMatchers("/jurado/**").hasRole("JURADO")
@@ -52,7 +53,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google"));
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google", "/api/**"));
 
         logger.info("SecurityFilterChain configurado.");
         return http.build();
