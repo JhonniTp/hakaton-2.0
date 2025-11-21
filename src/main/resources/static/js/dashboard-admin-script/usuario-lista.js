@@ -1,4 +1,3 @@
-// Variables globales para la lista de usuarios
 let todosLosUsuarios = [];
 let usuariosFiltrados = [];
 let usuarioIdParaEliminar = null;
@@ -344,6 +343,7 @@ function mostrarDetallesUsuario(id) {
     
     if (modal) {
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
     }
 }
@@ -352,6 +352,7 @@ function mostrarDetallesUsuario(id) {
 function cerrarModalDetalles() {
     const modal = document.getElementById('user-details-modal');
     if (modal) {
+        modal.classList.remove('flex');
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
     }

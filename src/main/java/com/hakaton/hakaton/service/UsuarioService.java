@@ -7,19 +7,12 @@ import java.util.Optional;
 
 
 public interface UsuarioService {
-
     List<UsuarioModel> obtenerTodosLosUsuarios();
-    
     Optional<UsuarioModel> obtenerUsuarioPorId(Long id);
-    
     UsuarioModel crearUsuario(UsuarioDTO usuarioDTO);
-    
     UsuarioModel actualizarUsuario(Long id, UsuarioDTO usuarioDTO);
-    
     void eliminarUsuario(Long id);
-    
     boolean existeCorreoElectronico(String correoElectronico);
-    
     boolean existeTelefono(String telefono);
 
 }

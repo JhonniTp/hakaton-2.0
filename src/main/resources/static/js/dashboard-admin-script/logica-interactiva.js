@@ -40,6 +40,20 @@ function showSection(sectionName) {
     };
     document.getElementById('pageTitle').textContent = titles[sectionName];
 
+    if (sectionName === 'hackathons') {
+        if (typeof cargarHackatones === 'function') {
+            cargarHackatones();
+        }
+    } else if (sectionName === 'participants') {
+        if (typeof cargarUsuarios === 'function') {
+            cargarUsuarios();
+        }
+    } else if (sectionName === 'judges') {
+        if (typeof cargarAsignaciones === 'function') {
+            cargarAsignaciones();
+        }
+    }
+
     if (window.innerWidth < 1024) {
         toggleSidebar();
     }

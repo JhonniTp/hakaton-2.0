@@ -41,7 +41,6 @@ public class RegistrationController {
         String dni = formData.get("documentoDni");
         String perfil = formData.get("perfilExperiencia");
 
-        // Validación 
         if (nombre == null || nombre.isBlank() || apellido == null || apellido.isBlank() ||
             correo == null || correo.isBlank() || telefono == null || telefono.isBlank() ||
             password == null || password.isBlank()) {
@@ -61,7 +60,6 @@ public class RegistrationController {
             return "redirect:/login#register";
         }
 
-        // Validacion de telefono
         if (!telefono.matches("^\\+51[0-9]{9}$")) {
             redirectAttributes.addFlashAttribute("registrationError", "El formato del teléfono es inválido. Debe empezar con +51 seguido de 9 dígitos.");
             redirectAttributes.addFlashAttribute("formData", formData);
@@ -74,7 +72,6 @@ public class RegistrationController {
             return "redirect:/login#register";
         }
 
-        // Creacion del Usuario
         UsuarioModel nuevoUsuario = new UsuarioModel();
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setApellido(apellido);
@@ -83,7 +80,6 @@ public class RegistrationController {
         nuevoUsuario.setContrasenaHash(passwordEncoder.encode(password));
         nuevoUsuario.setRol(UsuarioModel.Rol.PARTICIPANTE);
 
-        // Campos opcionales
         if (dni != null && !dni.isBlank()) {
              if (usuarioRepository.existsByDocumentoDni(dni)) {
                 redirectAttributes.addFlashAttribute("registrationError", "El DNI ya está registrado.");
@@ -96,7 +92,6 @@ public class RegistrationController {
             nuevoUsuario.setPerfilExperiencia(perfil);
         }
 
-        // Guardar en base de datos 
         try {
             usuarioRepository.save(nuevoUsuario);
             redirectAttributes.addFlashAttribute("registrationSuccess", "¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");

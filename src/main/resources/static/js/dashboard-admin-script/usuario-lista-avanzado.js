@@ -1,6 +1,3 @@
-
-// FUNCIONALIDADES AVANZADAS PARA TABLA DE USUARIOS
-
 let usuariosSeleccionados = new Set();
 
 let ordenActual = { campo: null, direccion: 'asc' };
@@ -48,8 +45,6 @@ function actualizarIconosOrdenamiento(campoActivo) {
     });
 }
 
-
-// SELECCIÓN MÚLTIPLE
 function toggleSeleccionarTodos(checkbox) {
     const checkboxes = document.querySelectorAll('.user-checkbox');
     checkboxes.forEach(cb => {
@@ -142,6 +137,7 @@ function eliminarSeleccionados() {
     
     if (modal) {
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
     }
 }
@@ -150,6 +146,7 @@ function eliminarSeleccionados() {
 function cerrarModalEliminarLote() {
     const modal = document.getElementById('delete-bulk-modal');
     if (modal) {
+        modal.classList.remove('flex');
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
@@ -211,6 +208,7 @@ function cambiarRolSeleccionados() {
     
     if (modal) {
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
     }
 }
@@ -218,6 +216,7 @@ function cambiarRolSeleccionados() {
 function cerrarModalCambiarRol() {
     const modal = document.getElementById('change-role-modal');
     if (modal) {
+        modal.classList.remove('flex');
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
@@ -282,9 +281,6 @@ async function confirmarCambioRol() {
         mostrarMensajeError('Error al cambiar el rol de los usuarios');
     }
 }
-
-// EXPORTAR A EXCEL
-
 function exportarAExcel() {
     const datosExportar = usuariosFiltrados.map((usuario, index) => ({
         'N°': index + 1,
@@ -352,9 +348,6 @@ function descargarCSV(contenido, nombreArchivo) {
     setTimeout(() => URL.revokeObjectURL(url), 100);
 }
 
-
-// PANEL DE ESTADÍSTICAS
-
 function actualizarEstadisticas() {
     const total = todosLosUsuarios.length;
     const admins = todosLosUsuarios.filter(u => u.rol === 'ADMINISTRADOR').length;
@@ -366,9 +359,6 @@ function actualizarEstadisticas() {
     document.getElementById('stat-jurado').textContent = jurados;
     document.getElementById('stat-participante').textContent = participantes;
 }
-
-// BÚSQUEDA CON RESALTADO
-
 
 function resaltarTexto(texto, busqueda) {
     if (!busqueda || busqueda.trim() === '') return texto;
