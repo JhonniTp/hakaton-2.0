@@ -52,6 +52,10 @@ function showSection(sectionName) {
         if (typeof cargarAsignaciones === 'function') {
             cargarAsignaciones();
         }
+    } else if (sectionName === 'teams') {
+        if (typeof cargarEquipos === 'function') {
+            cargarEquipos();
+        }
     }
 
     if (window.innerWidth < 1024) {
