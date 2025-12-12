@@ -125,4 +125,10 @@ public class HackatonServiceImpl implements HackatonService {
     public boolean existeNombre(String nombre) {
         return hackatonRepository.existsByNombre(nombre);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HackatonModel> obtenerHackatonesRecientes() {
+        return hackatonRepository.findTop2ByOrderByFechaCreacionDesc();
+    }
 }

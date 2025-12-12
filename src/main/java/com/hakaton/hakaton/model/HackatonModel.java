@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "hackatones")
+@EntityListeners(com.hakaton.hakaton.event.ActividadEventListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,7 +50,7 @@ public class HackatonModel {
     @Min(value = 1, message = "Debe haber al menos 1 participante como máximo")
     @Column(name = "maximo_participantes", nullable = false)
     private Integer maximoParticipantes;
-    
+
     @NotNull(message = "La cantidad de participantes por grupo es obligatoria")
     @Min(value = 1, message = "Los grupos deben tener al menos 1 participante")
     @Column(name = "grupo_cantidad_participantes", nullable = false)
@@ -69,13 +69,11 @@ public class HackatonModel {
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
-
     public enum Estado {
         PROXIMO,
         EN_CURSO,
         FINALIZADO
     }
-    
 
     @PrePersist
     protected void onCreate() {

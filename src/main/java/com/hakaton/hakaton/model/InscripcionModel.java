@@ -8,9 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "inscripciones")
+@EntityListeners(com.hakaton.hakaton.event.ActividadEventListener.class)
 @Getter
 @Setter
 @NoArgsConstructor

@@ -47,6 +47,10 @@ public class HackatonDTO {
 
     private LocalDateTime fechaCreacion;
 
+    private boolean estaInscrito;
+    private int participantesActuales;
+    private int lugaresDisponibles;
+
     public HackatonDTO(HackatonModel hackaton) {
         this.idHackaton = hackaton.getIdHackaton();
         this.nombre = hackaton.getNombre();

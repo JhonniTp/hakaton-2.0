@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "proyectos")
+@EntityListeners(com.hakaton.hakaton.event.ActividadEventListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -52,7 +52,6 @@ public class ProyectoModel {
 
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EvaluacionModel> evaluaciones = new ArrayList<>();
-
 
     public ProyectoModel(String nombreProyecto, EquipoModel equipo) {
         this.nombreProyecto = nombreProyecto;

@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +21,7 @@ public class EquipoDTO {
     private LocalDateTime fechaCreacion;
     private Integer cantidadMiembros;
     private String nombreLider;
+    private String estadoHackathon;
 
     public EquipoDTO(EquipoModel equipo) {
         this.idEquipo = equipo.getIdEquipo();

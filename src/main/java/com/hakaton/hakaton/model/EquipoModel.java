@@ -17,6 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "equipos")
+@EntityListeners(com.hakaton.hakaton.event.ActividadEventListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,7 +39,7 @@ public class EquipoModel {
     private HackatonModel hackaton;
 
     @Size(max = 255, message = "La URL de la imagen no puede exceder los 255 caracteres")
-    @Column(name = "img_url")
+    @Column(name = "img_url", nullable = true)
     private String imgUrl;
 
     @Column(name = "fecha_creacion", nullable = false, updatable = false)

@@ -27,4 +27,10 @@ public interface HackatonRepository extends JpaRepository<HackatonModel, Long> {
 
     @Query("SELECT h FROM HackatonModel h WHERE h.idHackaton != :id AND LOWER(h.nombre) = LOWER(:nombre)")
     boolean existsByNombreAndIdNot(@Param("nombre") String nombre, @Param("id") Long id);
+
+    List<HackatonModel> findTop2ByOrderByFechaCreacionDesc();
+
+    long countByEstado(HackatonModel.Estado estado);
+
+    long countByFechaCreacionAfter(LocalDateTime fecha);
 }

@@ -11,9 +11,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "evaluaciones")
+@EntityListeners(com.hakaton.hakaton.event.ActividadEventListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -57,8 +57,8 @@ public class EvaluacionModel {
         this.fechaEvaluacion = LocalDateTime.now();
     }
 
-
-    public EvaluacionModel(BigDecimal puntuacion, UsuarioModel jurado, CriterioEvaluacionModel criterio, ProyectoModel proyecto) {
+    public EvaluacionModel(BigDecimal puntuacion, UsuarioModel jurado, CriterioEvaluacionModel criterio,
+            ProyectoModel proyecto) {
         this.puntuacion = puntuacion;
         this.jurado = jurado;
         this.criterio = criterio;

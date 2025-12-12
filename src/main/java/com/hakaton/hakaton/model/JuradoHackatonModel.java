@@ -8,9 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "jurados_hackatones")
+@EntityListeners(com.hakaton.hakaton.event.ActividadEventListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,12 +34,10 @@ public class JuradoHackatonModel {
     @Column(name = "fecha_asignacion", nullable = false, updatable = false)
     private LocalDateTime fechaAsignacion;
 
-
     @PrePersist
     protected void onCreate() {
         this.fechaAsignacion = LocalDateTime.now();
     }
-
 
     public JuradoHackatonModel(UsuarioModel jurado, HackatonModel hackaton) {
         this.jurado = jurado;

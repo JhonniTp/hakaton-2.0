@@ -31,32 +31,31 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configurando SecurityFilterChain...");
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/login", "/register", "/auth/google", "/img/**", "/css/**", "/js/**", "/cdn-cgi/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
-                .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
-                .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
-                .requestMatchers("/jurado/**").hasRole("JURADO")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .successHandler(customAuthenticationSuccessHandler)
-                .failureUrl("/login?error") 
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            )
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google", "/api/**"));
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/login", "/register", "/auth/google", "/img/**", "/css/**", "/js/**",
+                                "/cdn-cgi/**")
+                        .permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/participante/**").hasRole("PARTICIPANTE")
+                        .requestMatchers("/jurado/**").hasRole("JURADO")
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureUrl("/login?error")
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/google", "/api/**", "/participante/api/**",
+                        "/jurado/api/**", "/admin/api/**"));
 
         logger.info("SecurityFilterChain configurado.");
         return http.build();
     }
 }
-

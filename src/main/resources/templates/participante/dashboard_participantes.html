@@ -34,6 +34,61 @@
     </script>
 
     <link rel="stylesheet" th:href="@{/css/participante-dashboard-style/dashboard_participante.css}">
+    
+    <style>
+        /* Estilos para botones de filtro */
+        .filter-btn, .project-filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background-color: white;
+            border: 2px solid #e5e7eb;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .project-filter-btn:hover {
+            border-color: #00BAD6;
+            color: #00BAD6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 186, 214, 0.1);
+        }
+        
+        .filter-btn.active, .project-filter-btn.active {
+            background: linear-gradient(135deg, #00BAD6 0%, #0099B8 100%);
+            color: white;
+            border-color: #00BAD6;
+            box-shadow: 0 4px 12px rgba(0, 186, 214, 0.3);
+        }
+        
+        /* Animaciones para tarjetas */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-animated {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        /* Hover effects mejorados */
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 
 <body class="bg-gray-light font-inter">
@@ -68,10 +123,22 @@
                     <i class="fas fa-users mr-2"></i><span class="hidden sm:inline">Equipos</span>
                 </button>
 
+                <button onclick="showSection('projects')"
+                    class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors"
+                    id="nav-projects">
+                    <i class="fas fa-briefcase mr-2"></i><span class="hidden sm:inline">Proyectos</span>
+                </button>
+
                 <button onclick="showSection('profile')"
                     class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors"
                     id="nav-profile">
                     <i class="fas fa-user mr-2"></i><span class="hidden sm:inline">Perfil</span>
+                </button>
+                
+                <button onclick="showSection('leaderboard')"
+                    class="nav-item px-3 py-2 rounded-full text-sm font-medium text-gray-medium hover:text-secondary-cyan transition-colors"
+                    id="nav-leaderboard">
+                    <i class="fas fa-ranking-star mr-2"></i><span class="hidden sm:inline">Ranking</span>
                 </button>
             </div>
 
@@ -153,7 +220,7 @@
                                         <span class="inline-block animate-bounce">🚀</span>
                                     </h1>
 
-                                    <p class="text-xl lg:text-2xl opacity-90 mb-6">
+                                    <p class="text-xl lg:text-2xl opacity-90 mb-6 mensaje-bienvenida">
                                         Tienes <span class="font-bold">2 hackatones activos</span> y
                                         <span class="font-bold">1 proyecto</span> en desarrollo
                                     </p>
@@ -203,7 +270,7 @@
                                 <i class="fas fa-trophy text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
-                                <div class="text-3xl font-bold text-gradient">2</div>
+                                <div class="text-3xl font-bold text-gradient stats-hackathons-activos">0</div>
                                 <div class="text-sm text-gray-medium">Activos</div>
                             </div>
                         </div>
@@ -220,7 +287,7 @@
                                 <i class="fas fa-project-diagram text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
-                                <div class="text-3xl font-bold text-gradient">5</div>
+                                <div class="text-3xl font-bold text-gradient stats-proyectos-total">0</div>
                                 <div class="text-sm text-gray-medium">Total</div>
                             </div>
                         </div>
@@ -237,7 +304,7 @@
                                 <i class="fas fa-medal text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
-                                <div class="text-3xl font-bold text-gradient">8.5</div>
+                                <div class="text-3xl font-bold text-gradient stats-puntuacion">0.0</div>
                                 <div class="text-sm text-gray-medium">Promedio</div>
                             </div>
                         </div>
@@ -254,7 +321,7 @@
                                 <i class="fas fa-crown text-white text-2xl"></i>
                             </div>
                             <div class="text-right">
-                                <div class="text-3xl font-bold text-gradient">#12</div>
+                                <div class="text-3xl font-bold text-gradient stats-ranking">-</div>
                                 <div class="text-sm text-gray-medium">Posición</div>
                             </div>
                         </div>
@@ -280,115 +347,8 @@
                                     Ver todos <i class="fas fa-arrow-right ml-2"></i>
                                 </button>
                             </div>
-                            <div class="p-8">
-                                <div class="space-y-8">
-                                    <!-- Active Hackathon 1 -->
-                                    <div class="glass-card rounded-2xl overflow-hidden card-hover">
-                                        <div class="relative h-40 gradient-bg">
-                                            <div class="absolute inset-0 flex items-center justify-center">
-                                                <div
-                                                    class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center floating-element">
-                                                    <i class="fas fa-code text-white text-3xl"></i>
-                                                </div>
-                                            </div>
-                                            <div class="absolute bottom-6 left-6 text-white">
-                                                <h4 class="text-2xl font-bold mb-1">HackTech 2024</h4>
-                                                <p class="text-sm opacity-90 flex items-center">
-                                                    <i class="fas fa-clock mr-2"></i>Termina en 2 días
-                                                </p>
-                                            </div>
-                                            <div class="absolute top-6 right-6">
-                                                <span
-                                                    class="glass-card bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium pulse-glow">
-                                                    🔥 Activo
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="p-6">
-                                            <div class="mb-6">
-                                                <div class="flex justify-between text-sm mb-3">
-                                                    <span class="text-gray-medium font-medium">Progreso del
-                                                        proyecto</span>
-                                                    <span class="font-bold text-gradient">75%</span>
-                                                </div>
-                                                <div class="w-full bg-gray-200 rounded-full h-3">
-                                                    <div class="gradient-bg h-3 rounded-full transition-all duration-1000"
-                                                        style="width: 75%"></div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center space-x-6 text-sm text-gray-medium">
-                                                    <span class="flex items-center">
-                                                        <i class="fas fa-users mr-2 text-secondary-cyan"></i>
-                                                        <strong>CodeMasters</strong>
-                                                    </span>
-                                                    <span class="flex items-center">
-                                                        <i class="fas fa-fire mr-2 text-accent-pink"></i>
-                                                        48h restantes
-                                                    </span>
-                                                </div>
-                                                <button onclick="openModal('projectModal')"
-                                                    class="gradient-bg text-white px-6 py-3 rounded-xl font-medium transition-all hover:scale-105 neon-glow">
-                                                    <i class="fas fa-rocket mr-2"></i>Ver Proyecto
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Active Hackathon 2 -->
-                                    <div class="glass-card rounded-2xl overflow-hidden card-hover">
-                                        <div
-                                            class="relative h-40 bg-gradient-to-r from-accent-pink via-secondary-cyan to-primary-blue">
-                                            <div class="absolute inset-0 flex items-center justify-center">
-                                                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center floating-element"
-                                                    style="animation-delay: -2s;">
-                                                    <i class="fas fa-lightbulb text-white text-3xl"></i>
-                                                </div>
-                                            </div>
-                                            <div class="absolute bottom-6 left-6 text-white">
-                                                <h4 class="text-2xl font-bold mb-1">Innovation Challenge</h4>
-                                                <p class="text-sm opacity-90 flex items-center">
-                                                    <i class="fas fa-calendar mr-2"></i>Comienza en 5 días
-                                                </p>
-                                            </div>
-                                            <div class="absolute top-6 right-6">
-                                                <span
-                                                    class="glass-card bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium">
-                                                    ⏳ Próximo
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="p-6">
-                                            <div class="mb-6">
-                                                <div class="flex justify-between text-sm mb-3">
-                                                    <span class="text-gray-medium font-medium">Preparación del
-                                                        equipo</span>
-                                                    <span class="font-bold text-gradient">25%</span>
-                                                </div>
-                                                <div class="w-full bg-gray-200 rounded-full h-3">
-                                                    <div class="bg-yellow-500 h-3 rounded-full transition-all duration-1000"
-                                                        style="width: 25%"></div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center space-x-6 text-sm text-gray-medium">
-                                                    <span class="flex items-center">
-                                                        <i class="fas fa-users mr-2 text-accent-pink"></i>
-                                                        <strong>InnovatorsHub</strong>
-                                                    </span>
-                                                    <span class="flex items-center">
-                                                        <i class="fas fa-calendar-alt mr-2 text-primary-blue"></i>
-                                                        22-24 Marzo
-                                                    </span>
-                                                </div>
-                                                <button onclick="openModal('teamModal')"
-                                                    class="bg-accent-pink text-white px-6 py-3 rounded-xl font-medium transition-all hover:scale-105 hover:bg-pink-600">
-                                                    <i class="fas fa-users mr-2"></i>Ver Equipo
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="p-8" id="hackathons-activos-container">
+                                <!-- Los hackathons activos se cargan dinámicamente -->
                             </div>
                         </div>
                     </div>
@@ -400,7 +360,7 @@
                             <div class="p-4 lg:p-6 border-b border-gray-200">
                                 <h3 class="text-lg font-semibold text-gray-dark">Próximas Tareas</h3>
                             </div>
-                            <div class="p-4 lg:p-6">
+                            <div class="p-4 lg:p-6" id="tareas-pendientes-container">
                                 <div class="space-y-4">
                                     <div class="flex items-start space-x-3">
                                         <div class="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
@@ -445,7 +405,7 @@
                             <div class="p-4 lg:p-6 border-b border-gray-200">
                                 <h3 class="text-lg font-semibold text-gray-dark">Logros Recientes</h3>
                             </div>
-                            <div class="p-4 lg:p-6">
+                            <div class="p-4 lg:p-6" id="logros-container">
                                 <div class="space-y-4">
                                     <div class="flex items-center space-x-3">
                                         <div
@@ -488,319 +448,124 @@
 
             <!-- Explorar Hackatones Section -->
             <div id="hackathons-section" class="hidden">
-                <div class="mb-6">
-                    <div
-                        class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                <div class="mb-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-dark">Explorar Hackatones</h2>
-                            <p class="text-gray-medium">Descubre y únete a los próximos eventos</p>
+                            <h2 class="text-3xl font-bold text-gray-dark flex items-center">
+                                <i class="fas fa-trophy text-secondary-cyan mr-3"></i>
+                                Explorar Hackatones
+                            </h2>
+                            <p class="text-gray-medium mt-2">Descubre y únete a los próximos eventos tecnológicos</p>
                         </div>
-                        <div class="flex space-x-4">
-                            <select
-                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                                <option>Todos los estados</option>
-                                <option>Próximos</option>
-                                <option>Activos</option>
-                                <option>Finalizados</option>
-                            </select>
-                            <select
-                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                                <option>Todas las categorías</option>
-                                <option>Tecnología</option>
-                                <option>Innovación</option>
-                                <option>Sostenibilidad</option>
-                            </select>
+                    </div>
+                    
+                    <!-- Filtros mejorados -->
+                    <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+                        <div class="flex flex-wrap gap-3">
+                            <button class="filter-btn active" data-filter="todos">
+                                <i class="fas fa-globe mr-2"></i>Todos
+                            </button>
+                            <button class="filter-btn" data-filter="proximos">
+                                <i class="fas fa-calendar-alt mr-2"></i>Próximos
+                            </button>
+                            <button class="filter-btn" data-filter="activos">
+                                <i class="fas fa-fire mr-2"></i>Activos
+                            </button>
+                            <button class="filter-btn" data-filter="finalizados">
+                                <i class="fas fa-check-circle mr-2"></i>Finalizados
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Hackathon Card 1 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden card-hover">
-                        <div class="relative h-48 hackathon-gradient">
-                            <div class="absolute inset-0 gradient-overlay"></div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <i class="fas fa-rocket text-white text-5xl opacity-50"></i>
-                            </div>
-                            <div class="absolute top-4 right-4">
-                                <span
-                                    class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Inscripciones
-                                    Abiertas</span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h4 class="text-xl font-bold">SpaceHack 2024</h4>
-                                <p class="text-sm opacity-90">1-3 Abril 2024</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-medium text-sm mb-4">
-                                Desarrolla soluciones innovadoras para la exploración espacial y tecnologías
-                                aeroespaciales.
-                            </p>
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-4 text-sm text-gray-medium">
-                                    <span><i class="fas fa-users mr-1"></i>156 inscritos</span>
-                                    <span><i class="fas fa-trophy mr-1"></i>$50,000</span>
-                                </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button onclick="openModal('hackathonDetailsModal')"
-                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Ver Detalles
-                                </button>
-                                <button onclick="joinHackathon('SpaceHack 2024')"
-                                    class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Inscribirse
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hackathon Card 2 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden card-hover">
-                        <div class="relative h-48 bg-gradient-to-r from-green-500 to-blue-500">
-                            <div class="absolute inset-0 gradient-overlay"></div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <i class="fas fa-leaf text-white text-5xl opacity-50"></i>
-                            </div>
-                            <div class="absolute top-4 right-4">
-                                <span
-                                    class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">Próximamente</span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h4 class="text-xl font-bold">EcoTech Challenge</h4>
-                                <p class="text-sm opacity-90">15-17 Abril 2024</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-medium text-sm mb-4">
-                                Crea tecnologías sostenibles para combatir el cambio climático y proteger el medio
-                                ambiente.
-                            </p>
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-4 text-sm text-gray-medium">
-                                    <span><i class="fas fa-users mr-1"></i>89 inscritos</span>
-                                    <span><i class="fas fa-trophy mr-1"></i>$30,000</span>
-                                </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button onclick="openModal('hackathonDetailsModal')"
-                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Ver Detalles
-                                </button>
-                                <button onclick="joinHackathon('EcoTech Challenge')"
-                                    class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Inscribirse
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hackathon Card 3 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden card-hover">
-                        <div class="relative h-48 bg-gradient-to-r from-purple-500 to-pink-500">
-                            <div class="absolute inset-0 gradient-overlay"></div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <i class="fas fa-brain text-white text-5xl opacity-50"></i>
-                            </div>
-                            <div class="absolute top-4 right-4">
-                                <span
-                                    class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">Finalizado</span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h4 class="text-xl font-bold">AI Innovation Fest</h4>
-                                <p class="text-sm opacity-90">1-3 Marzo 2024</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-medium text-sm mb-4">
-                                Desarrolla aplicaciones de inteligencia artificial para resolver problemas del mundo
-                                real.
-                            </p>
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-4 text-sm text-gray-medium">
-                                    <span><i class="fas fa-users mr-1"></i>234 participantes</span>
-                                    <span><i class="fas fa-trophy mr-1"></i>$75,000</span>
-                                </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button onclick="openModal('hackathonDetailsModal')"
-                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Ver Resultados
-                                </button>
-                                <button
-                                    class="flex-1 bg-gray-300 text-gray-500 py-2 px-4 rounded-lg font-medium cursor-not-allowed">
-                                    Finalizado
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div id="hackathons-disponibles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Los hackathons se cargan dinámicamente desde hackathons-explorar.js -->
                 </div>
             </div>
 
             <!-- Mi Equipo Section -->
             <div id="teams-section" class="hidden">
-                <div class="mb-6">
-                    <div
-                        class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                <div class="mb-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-dark">Mi Equipo</h2>
-                            <p class="text-gray-medium">Gestiona tus equipos y colaboraciones</p>
+                            <h2 class="text-3xl font-bold text-gray-dark flex items-center">
+                                <i class="fas fa-users text-purple-600 mr-3"></i>
+                                Mis Equipos
+                            </h2>
+                            <p class="text-gray-medium mt-2">Gestiona tus equipos y colaboraciones</p>
                         </div>
-                        <button onclick="openModal('createTeamModal')"
-                            class="bg-secondary-cyan hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                            <i class="fas fa-plus mr-2"></i>Crear Equipo
+                        <button onclick="mostrarFormularioCrearEquipo()"
+                            class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="fas fa-plus mr-2"></i>Crear Equipo Nuevo
                         </button>
                     </div>
+                    
+                    <!-- Stats cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-blue-600 text-sm font-medium">Total Equipos</p>
+                                    <p id="stat-total-equipos" class="text-2xl font-bold text-blue-800">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-200 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-users text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-green-600 text-sm font-medium">Equipos Activos</p>
+                                    <p id="stat-equipos-activos" class="text-2xl font-bold text-green-800">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-200 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-fire text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-purple-600 text-sm font-medium">Proyectos</p>
+                                    <p id="stat-proyectos-equipo" class="text-2xl font-bold text-purple-800">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-purple-200 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-folder text-purple-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Team Card 1 -->
-                    <div class="team-card border border-gray-200 rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-3">
-                                <div
-                                    class="w-12 h-12 bg-secondary-cyan rounded-full flex items-center justify-center text-white font-bold">
-                                    CM
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-dark">CodeMasters</h3>
-                                    <p class="text-sm text-gray-medium">HackTech 2024</p>
-                                </div>
-                            </div>
-                            <span
-                                class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Activo</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <h4 class="text-sm font-medium text-gray-dark mb-2">Miembros del equipo (4/4)</h4>
-                            <div class="flex -space-x-2">
-                                <div
-                                    class="w-8 h-8 bg-secondary-cyan rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
-                                    MG
-                                </div>
-                                <div
-                                    class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
-                                    JR
-                                </div>
-                                <div
-                                    class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
-                                    AL
-                                </div>
-                                <div
-                                    class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
-                                    CS
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-medium">Progreso del proyecto</span>
-                                <span class="font-medium text-gray-dark">75%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="progress-bar h-2 rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-
-                        <div class="flex space-x-2">
-                            <button onclick="openModal('teamDetailsModal')"
-                                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
-                                Ver Detalles
-                            </button>
-                            <button onclick="openModal('projectModal')"
-                                class="flex-1 bg-secondary-cyan hover:bg-cyan-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                Ver Proyecto
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Team Card 2 -->
-                    <div class="team-card border border-gray-200 rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-3">
-                                <div
-                                    class="w-12 h-12 bg-accent-pink rounded-full flex items-center justify-center text-white font-bold">
-                                    IH
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-dark">InnovatorsHub</h3>
-                                    <p class="text-sm text-gray-medium">Innovation Challenge</p>
-                                </div>
-                            </div>
-                            <span
-                                class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Formando</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <h4 class="text-sm font-medium text-gray-dark mb-2">Miembros del equipo (2/4)</h4>
-                            <div class="flex -space-x-2">
-                                <div
-                                    class="w-8 h-8 bg-accent-pink rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
-                                    MG
-                                </div>
-                                <div
-                                    class="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white">
-                                    DR
-                                </div>
-                                <div
-                                    class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xs font-semibold border-2 border-white">
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                                <div
-                                    class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xs font-semibold border-2 border-white">
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-medium">Preparación</span>
-                                <span class="font-medium text-gray-dark">25%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 25%"></div>
-                            </div>
-                        </div>
-
-                        <div class="flex space-x-2">
-                            <button onclick="openModal('inviteModal')"
-                                class="flex-1 bg-accent-pink hover:bg-pink-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                Invitar Miembros
-                            </button>
-                            <button onclick="openModal('teamDetailsModal')"
-                                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-dark py-2 px-4 rounded-lg font-medium transition-colors">
-                                Ver Detalles
-                            </button>
-                        </div>
-                    </div>
+                <div id="mis-equipos-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Los equipos se cargan dinámicamente desde equipos.js -->
                 </div>
             </div>
 
-  <!-- Mi Perfil Section -->
-<div id="profile-section" class="hidden">
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <!-- Profile Header -->
-            <div class="relative h-32 hackathon-gradient">
-                <div class="absolute inset-0 gradient-overlay"></div>
-                <div class="absolute bottom-4 left-6">
-                    <div class="flex items-end space-x-4">
-                        <div
-                            class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-secondary-cyan font-bold text-2xl border-4 border-white"
-                            th:text="${usuario.iniciales}">
+            <!-- Mi Perfil Section -->
+            <div id="profile-section" class="hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <!-- Profile Header -->
+                        <div class="relative h-32 hackathon-gradient">
+                            <div class="absolute inset-0 gradient-overlay"></div>
+                            <div class="absolute bottom-4 left-6">
+                                <div class="flex items-end space-x-4">
+                                    <div id="perfil-header-iniciales" class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-secondary-cyan font-bold text-2xl border-4 border-white">
+                                        YN
+                                    </div>
+                                    <div class="pb-2">
+                                        <h2 id="perfil-header-nombre" class="text-2xl font-bold text-gray-700">
+                                            Cargando...
+                                        </h2>
+                                        <p id="perfil-header-rol" class="text-sm font-semibold text-cyan-500">
+                                            participante
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="pb-2">
-                            <h2 class="text-2xl font-bold text-gray-700" 
-                                th:text="${usuario.nombreCompleto}"></h2>
-                            <p class="text-sm font-semibold text-cyan-500" 
-                                th:text="${#strings.toLowerCase(usuario.rol)}"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
                         <!-- Profile Content -->
@@ -813,33 +578,29 @@
                                         <h3 class="text-lg font-semibold text-gray-dark mb-4">Información Personal</h3>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">Nombre
-                                                    Completo</label>
-                                                <input type="text" value="María González Rodríguez"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Nombre</label>
+                                                <input type="text" id="perfil-nombre" readonly
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                                             </div>
                                             <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-dark mb-2">Email</label>
-                                                <input type="email" value="maria.gonzalez@certus.edu.pe"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Email</label>
+                                                <input type="email" id="perfil-correo" readonly
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                                             </div>
                                             <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-dark mb-2">Teléfono</label>
-                                                <input type="tel" value="+51 987 654 321"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Teléfono</label>
+                                                <input type="tel" id="perfil-telefono" readonly
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                                             </div>
                                             <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-dark mb-2">Carrera</label>
-                                                <select
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent">
-                                                    <option selected>Ingeniería de Sistemas</option>
-                                                    <option>Ingeniería de Software</option>
-                                                    <option>Ciencias de la Computación</option>
-                                                    <option>Diseño Gráfico</option>
-                                                </select>
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Carrera</label>
+                                                <input type="text" id="perfil-carrera" readonly
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-dark mb-2">Ciclo</label>
+                                                <input type="text" id="perfil-ciclo" readonly
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                                             </div>
                                         </div>
                                     </div>
@@ -847,40 +608,35 @@
                                     <!-- Skills -->
                                     <div>
                                         <h3 class="text-lg font-semibold text-gray-dark mb-4">Habilidades</h3>
-                                        <div class="flex flex-wrap gap-2 mb-4">
-                                            <span
-                                                class="bg-secondary-cyan text-white px-3 py-1 rounded-full text-sm">JavaScript</span>
-                                            <span
-                                                class="bg-accent-pink text-white px-3 py-1 rounded-full text-sm">React</span>
-                                            <span
-                                                class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm">Python</span>
-                                            <span
-                                                class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Node.js</span>
-                                            <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">UI/UX
-                                                Design</span>
-                                            <span
-                                                class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">Machine
-                                                Learning</span>
+                                        <div id="perfil-habilidades" class="flex flex-wrap gap-2 mb-4">
+                                            <!-- Las habilidades se cargan dinámicamente -->
                                         </div>
-                                        <button onclick="openModal('skillsModal')"
-                                            class="text-secondary-cyan hover:text-cyan-600 font-medium text-sm">
-                                            <i class="fas fa-plus mr-1"></i>Agregar habilidad
-                                        </button>
                                     </div>
 
                                     <!-- Bio -->
                                     <div>
                                         <h3 class="text-lg font-semibold text-gray-dark mb-4">Biografía</h3>
-                                        <textarea rows="4"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-cyan focus:border-transparent"
-                                            placeholder="Cuéntanos sobre ti, tus intereses y experiencia...">Estudiante apasionada por la tecnología y la innovación. Me especializo en desarrollo web full-stack y tengo experiencia en proyectos de machine learning. Disfruto trabajando en equipo y resolviendo problemas complejos a través de la programación.</textarea>
+                                        <p id="perfil-biografia" class="text-gray-600">Cargando...</p>
+                                    </div>
+
+                                    <!-- Enlaces sociales -->
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-dark mb-4">Enlaces</h3>
+                                        <div class="flex gap-4">
+                                            <a id="perfil-github" href="#" target="_blank" class="text-gray-700 hover:text-secondary-cyan hidden">
+                                                <i class="fab fa-github text-2xl"></i>
+                                            </a>
+                                            <a id="perfil-linkedin" href="#" target="_blank" class="text-gray-700 hover:text-secondary-cyan hidden">
+                                                <i class="fab fa-linkedin text-2xl"></i>
+                                            </a>
+                                        </div>
                                     </div>
 
                                     <!-- Save Button -->
                                     <div class="flex justify-end">
-                                        <button onclick="saveProfile()"
+                                        <button onclick="editarPerfil()"
                                             class="bg-secondary-cyan hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                                            <i class="fas fa-save mr-2"></i>Guardar Cambios
+                                            <i class="fas fa-edit mr-2"></i>Editar Perfil
                                         </button>
                                     </div>
                                 </div>
@@ -892,20 +648,24 @@
                                         <h4 class="font-semibold text-gray-dark mb-4">Estadísticas</h4>
                                         <div class="space-y-3">
                                             <div class="flex justify-between">
-                                                <span class="text-sm text-gray-medium">Hackatones completados</span>
-                                                <span class="font-semibold text-gray-dark">8</span>
+                                                <span class="text-sm text-gray-medium">Hackatones participados</span>
+                                                <span id="perfil-hackathons" class="font-semibold text-gray-dark">0</span>
                                             </div>
                                             <div class="flex justify-between">
-                                                <span class="text-sm text-gray-medium">Proyectos desarrollados</span>
-                                                <span class="font-semibold text-gray-dark">12</span>
+                                                <span class="text-sm text-gray-medium">Proyectos completados</span>
+                                                <span id="perfil-proyectos" class="font-semibold text-gray-dark">0</span>
                                             </div>
                                             <div class="flex justify-between">
                                                 <span class="text-sm text-gray-medium">Puntuación promedio</span>
-                                                <span class="font-semibold text-secondary-cyan">8.5/10</span>
+                                                <span id="perfil-puntuacion" class="font-semibold text-secondary-cyan">0.0</span>
                                             </div>
                                             <div class="flex justify-between">
-                                                <span class="text-sm text-gray-medium">Ranking actual</span>
-                                                <span class="font-semibold text-accent-pink">#12</span>
+                                                <span class="text-sm text-gray-medium">Logros obtenidos</span>
+                                                <span id="perfil-logros" class="font-semibold text-green-600">0</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-medium">Posición en ranking</span>
+                                                <span id="perfil-ranking" class="font-semibold text-accent-pink">N/A</span>
                                             </div>
                                         </div>
                                     </div>
@@ -913,85 +673,18 @@
                                     <!-- Achievements -->
                                     <div class="bg-gray-50 rounded-lg p-4">
                                         <h4 class="font-semibold text-gray-dark mb-4">Logros</h4>
-                                        <div class="space-y-3">
-                                            <div class="flex items-center space-x-3">
-                                                <div
-                                                    class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                                    <i class="fas fa-trophy text-white text-xs"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-dark">3er Lugar</p>
-                                                    <p class="text-xs text-gray-medium">EcoHack 2024</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="flex items-center space-x-3">
-                                                <div
-                                                    class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                                    <i class="fas fa-star text-white text-xs"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-dark">Mejor Innovación</p>
-                                                    <p class="text-xs text-gray-medium">TechFest 2024</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="flex items-center space-x-3">
-                                                <div
-                                                    class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                                    <i class="fas fa-users text-white text-xs"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-dark">Líder de Equipo</p>
-                                                    <p class="text-xs text-gray-medium">5 hackatones</p>
-                                                </div>
-                                            </div>
+                                        <div id="perfil-logros-lista" class="space-y-3">
+                                            <!-- Los logros se cargan dinámicamente -->
                                         </div>
                                     </div>
 
                                     <!-- QR Code Section -->
-                                    <div class="glass-card rounded-2xl p-6 mb-6">
-                                        <h4 class="font-bold text-gradient mb-4 text-center">Mi Código QR</h4>
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-32 h-32 bg-white rounded-2xl p-3 shadow-lg mb-4">
-                                                <canvas id="qrCanvas" class="w-full h-full"></canvas>
-                                            </div>
-                                            <p class="text-xs text-gray-medium text-center mb-3">
-                                                Comparte tu perfil escaneando este código
-                                            </p>
-                                            <button onclick="downloadQR()"
-                                                class="gradient-bg text-white px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-transform">
-                                                <i class="fas fa-download mr-2"></i>Descargar QR
-                                            </button>
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="font-semibold text-gray-dark mb-4 text-center">Mi Código QR</h4>
+                                        <div id="qr-perfil" class="flex flex-col items-center">
+                                            <!-- QR generado dinámicamente -->
                                         </div>
-                                    </div>
-
-                                    <!-- Social Links -->
-                                    <div class="glass-card rounded-2xl p-6">
-                                        <h4 class="font-bold text-gradient mb-4">Enlaces Sociales</h4>
-                                        <div class="space-y-4">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">
-                                                    <i class="fab fa-github mr-2 text-gray-dark"></i>GitHub
-                                                </label>
-                                                <input type="url" placeholder="https://github.com/usuario"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">
-                                                    <i class="fab fa-linkedin mr-2 text-blue-600"></i>LinkedIn
-                                                </label>
-                                                <input type="url" placeholder="https://linkedin.com/in/usuario"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-dark mb-2">
-                                                    <i class="fas fa-globe mr-2 text-green-600"></i>Portfolio
-                                                </label>
-                                                <input type="url" placeholder="https://miportfolio.com"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-cyan focus:border-transparent transition-all">
-                                            </div>
-                                        </div>
+                                        <p class="text-xs text-gray-500 text-center mt-2">Código QR del perfil</p>
                                     </div>
                                 </div>
                             </div>
@@ -1013,23 +706,169 @@
             </div>
 
             <div id="projects-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Mis Proyectos</h3>
+                <div class="mb-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 mb-6">
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-dark flex items-center">
+                                <i class="fas fa-folder-open text-blue-600 mr-3"></i>
+                                Mis Proyectos
+                            </h2>
+                            <p class="text-gray-medium mt-2">Gestiona y visualiza tus proyectos de hackathons</p>
+                        </div>
                     </div>
-                    <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+                    
+                    <!-- Stats y filtros de proyectos -->
+                    <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex gap-3">
+                                <div class="px-4 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                                    <span class="text-xs text-blue-600 font-medium">Total</span>
+                                    <span id="stat-total-proyectos" class="ml-2 text-lg font-bold text-blue-800">0</span>
+                                </div>
+                                <div class="px-4 py-2 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <span class="text-xs text-yellow-600 font-medium">En Progreso</span>
+                                    <span id="stat-proyectos-progreso" class="ml-2 text-lg font-bold text-yellow-800">0</span>
+                                </div>
+                                <div class="px-4 py-2 bg-green-50 rounded-lg border border-green-200">
+                                    <span class="text-xs text-green-600 font-medium">Evaluados</span>
+                                    <span id="stat-proyectos-evaluados" class="ml-2 text-lg font-bold text-green-800">0</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="project-filter-btn active" data-estado="todos">
+                                    <i class="fas fa-th mr-2"></i>Todos
+                                </button>
+                                <button class="project-filter-btn" data-estado="EN_PROGRESO">
+                                    <i class="fas fa-spinner mr-2"></i>En Progreso
+                                </button>
+                                <button class="project-filter-btn" data-estado="EVALUADO">
+                                    <i class="fas fa-check mr-2"></i>Evaluados
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                
+                <div id="mis-proyectos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Los proyectos se cargan dinámicamente desde proyectos.js -->
+                </div>
+            </div>
+
+            <!-- Modal para Editar Proyecto -->
+            <div id="modal-editar-proyecto" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                <div class="relative top-20 mx-auto p-8 border w-full max-w-2xl shadow-2xl rounded-2xl bg-white">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Subir Enlaces del Proyecto</h3>
+                            <p class="text-sm text-gray-600 mt-1">Proporciona los enlaces para que el jurado pueda revisar tu proyecto</p>
+                        </div>
+                        <button onclick="cerrarModalEditarProyecto()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="fas fa-times text-2xl"></i>
+                        </button>
+                    </div>
+
+                    <form id="form-editar-proyecto" class="space-y-6">
+                        <input type="hidden" id="proyecto-id-editar">
+                        
+                        <!-- URL del Entregable -->
+                        <div>
+                            <label for="url-entregable" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-code-branch text-purple-600 mr-2"></i>URL del Entregable (GitHub, Drive, etc.) *
+                            </label>
+                            <input 
+                                type="url" 
+                                id="url-entregable" 
+                                name="urlEntregable"
+                                placeholder="https://github.com/tu-usuario/tu-proyecto"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                required
+                            >
+                            <p class="text-xs text-gray-500 mt-1">
+                                <i class="fas fa-info-circle"></i> Enlace al código fuente o archivos del proyecto
+                            </p>
+                        </div>
+
+                        <!-- URL de la Presentación -->
+                        <div>
+                            <label for="url-presentacion" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-file-powerpoint text-blue-600 mr-2"></i>URL de la Presentación (opcional)
+                            </label>
+                            <input 
+                                type="url" 
+                                id="url-presentacion" 
+                                name="urlPresentacion"
+                                placeholder="https://drive.google.com/presentacion o https://www.canva.com/..."
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">
+                                <i class="fas fa-info-circle"></i> Enlace a la presentación (slides, video demo, etc.)
+                            </p>
+                        </div>
+
+                        <!-- Panel de información -->
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-900 mb-2 flex items-center">
+                                <i class="fas fa-lightbulb mr-2"></i>Consejos
+                            </h4>
+                            <ul class="text-sm text-purple-800 space-y-1">
+                                <li><i class="fas fa-check-circle mr-2"></i>Asegúrate de que los enlaces sean públicos</li>
+                                <li><i class="fas fa-check-circle mr-2"></i>El código debe estar en un repositorio accesible (GitHub recomendado)</li>
+                                <li><i class="fas fa-check-circle mr-2"></i>La presentación puede estar en Drive, Canva, YouTube, etc.</li>
+                                <li><i class="fas fa-check-circle mr-2"></i>Verifica que los enlaces funcionen antes de enviar</li>
+                            </ul>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="flex gap-3 pt-4">
+                            <button 
+                                type="button" 
+                                onclick="cerrarModalEditarProyecto()"
+                                class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all"
+                            >
+                                <i class="fas fa-times mr-2"></i>Cancelar
+                            </button>
+                            <button 
+                                type="submit"
+                                class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all shadow-lg"
+                            >
+                                <i class="fas fa-upload mr-2"></i>Subir Enlaces
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
             <div id="leaderboard-section" class="hidden">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div class="p-4 lg:p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-dark">Ranking</h3>
+                <div class="mb-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-dark">Ranking General</h2>
+                            <p class="text-gray-medium">Los mejores participantes de la plataforma</p>
+                        </div>
                     </div>
-                    <div class="p-4 lg:p-6">
-                        <p class="text-gray-medium">Funcionalidad en desarrollo...</p>
+                </div>
+                
+                <!-- Estadísticas del Ranking -->
+                <div id="ranking-stats"></div>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Pos</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participante</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Hackathons</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proyectos</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Puntuación</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Logros</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ranking-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Los datos del ranking se cargan dinámicamente desde ranking.js -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -1321,7 +1160,196 @@
         </div>
     </div>
 
+    <!-- Modal para crear equipo -->
+    <div id="crear-equipo-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full transform transition-all scale-95 modal-content">
+            <div class="p-6">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Crear Nuevo Equipo</h3>
+                    </div>
+                    <button onclick="cerrarModalCrearEquipo()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Formulario -->
+                <form id="form-crear-equipo" class="space-y-4">
+                    <!-- Seleccionar Hackathon -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-trophy mr-2 text-blue-600"></i>Selecciona el Hackathon
+                        </label>
+                        <select id="hackathon-select" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all">
+                            <option value="">Cargando hackathons...</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Nombre del Equipo -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-tag mr-2 text-green-600"></i>Nombre del Equipo
+                        </label>
+                        <input type="text" id="nombre-equipo" required maxlength="100"
+                            placeholder="Ej: CodeMasters, InnovatorsHub..."
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all">
+                        <p class="text-xs text-gray-500 mt-1">Máximo 100 caracteres</p>
+                    </div>
+                    
+                    <!-- Info adicional -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-start space-x-2">
+                            <i class="fas fa-info-circle text-blue-600 mt-0.5"></i>
+                            <div class="text-sm text-blue-800">
+                                <p class="font-semibold mb-1">Información importante:</p>
+                                <ul class="list-disc list-inside space-y-1 text-xs">
+                                    <li>Serás el líder del equipo automáticamente</li>
+                                    <li>Se creará un proyecto asociado al equipo</li>
+                                    <li>Podrás invitar más miembros después</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botones -->
+                    <div class="flex space-x-3 mt-6">
+                        <button type="button" onclick="cerrarModalCrearEquipo()"
+                            class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold transition-all">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all">
+                            <i class="fas fa-check mr-2"></i>Crear Equipo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de notificaciones -->
+    <div id="notification-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all scale-95 modal-content">
+            <div class="p-6">
+                <!-- Icono -->
+                <div class="flex justify-center mb-4">
+                    <div id="modal-icon-container" class="w-16 h-16 rounded-full flex items-center justify-center">
+                        <i id="modal-icon" class="text-3xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Título -->
+                <h3 id="modal-title" class="text-2xl font-bold text-center text-gray-800 mb-2"></h3>
+                
+                <!-- Mensaje -->
+                <p id="modal-message" class="text-gray-600 text-center mb-6"></p>
+                
+                <!-- Botón -->
+                <button onclick="cerrarModal()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Perfil -->
+    <div id="modal-editar-perfil" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all scale-95 modal-content">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-2xl font-bold text-gray-800">Editar Perfil</h3>
+                        <button onclick="cerrarModalEditarPerfil()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="fas fa-times text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <form id="form-editar-perfil" class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-user mr-2 text-blue-600"></i>Nombre
+                            </label>
+                            <input type="text" id="edit-nombre" name="nombre" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-user mr-2 text-blue-600"></i>Apellido
+                            </label>
+                            <input type="text" id="edit-apellido" name="apellido" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-phone mr-2 text-green-600"></i>Teléfono
+                        </label>
+                        <input type="tel" id="edit-telefono" name="telefono"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-graduation-cap mr-2 text-purple-600"></i>Carrera
+                        </label>
+                        <input type="text" id="edit-carrera" name="carrera"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-book mr-2 text-orange-600"></i>Ciclo
+                        </label>
+                        <input type="text" id="edit-ciclo" name="ciclo" placeholder="Ej: VI, 6to"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-quote-left mr-2 text-cyan-600"></i>Biografía
+                        </label>
+                        <textarea id="edit-biografia" name="biografia" rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Cuéntanos sobre ti..."></textarea>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <p class="text-sm text-blue-800">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            El email y rol no se pueden modificar por seguridad.
+                        </p>
+                    </div>
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" onclick="cerrarModalEditarPerfil()"
+                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-3 rounded-lg font-semibold transition-all transform hover:scale-105">
+                            <i class="fas fa-save mr-2"></i>Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script th:src="@{/js/participante-dashboard-script/dashboard-participante.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/dashboard-participante-dynamic.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/hackathons-explorar.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/equipos.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/proyectos.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/perfil.js}"></script>
+    <script th:src="@{/js/participante-dashboard-script/ranking.js}"></script>
 </body>
 
 </html>
